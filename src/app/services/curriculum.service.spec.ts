@@ -94,11 +94,11 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
     expect(day1.proofUrls?.length || 0).toBe(0);
 
     // Add GitHub repo link
-    service.addProofUrl(day1.id, 'GitHub Repo', 'https://github.com/yaminii5/agentic-ai-day1');
+    service.addProofUrl(day1.id, 'GitHub Repo', 'https://github.com/agentic-ai-dev/agentic-ai-day1');
     let updated = service.dailyTasks().find(t => t.day === 1)!;
     expect(updated.proofUrls?.length).toBe(1);
     expect(updated.proofUrls![0].label).toBe('GitHub Repo');
-    expect(updated.proofUrls![0].url).toBe('https://github.com/yaminii5/agentic-ai-day1');
+    expect(updated.proofUrls![0].url).toBe('https://github.com/agentic-ai-dev/agentic-ai-day1');
 
     // Add Live Demo link
     service.addProofUrl(day1.id, 'Live Demo', 'https://agentic-ai-demo.vercel.app');
@@ -107,7 +107,7 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
     expect(updated.proofUrls![1].label).toBe('Live Demo');
 
     // Add PR / Commit link
-    service.addProofUrl(day1.id, 'PR / Commit', 'https://github.com/yaminii5/agentic-ai/pull/1');
+    service.addProofUrl(day1.id, 'PR / Commit', 'https://github.com/agentic-ai-dev/agentic-ai/pull/1');
     updated = service.dailyTasks().find(t => t.day === 1)!;
     expect(updated.proofUrls?.length).toBe(3);
 

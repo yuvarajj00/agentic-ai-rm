@@ -45,7 +45,7 @@ async function seed() {
 
     const doc = {
       _id: 'current_roadmap_state',
-      candidate: 'Yamini Karri',
+      track: 'Agentic AI Engineer',
       dailyTasks,
       milestones,
       techStack,
