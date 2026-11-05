@@ -441,7 +441,7 @@
     </div>
   </div>
 
-  <!-- CATEGORY MASTERY & DAILY ROUTINE INFO -->
+  <!-- DOMAIN COMPETENCY BREAKDOWN -->
   <div class="info-grid">
     <div class="info-card">
       <h3 class="info-card-title">DOMAIN COMPETENCY BREAKDOWN</h3>
@@ -459,121 +459,5 @@
         }
       </div>
     </div>
-
-    <div class="info-card">
-      <h3 class="info-card-title">THE 5-BLOCK DAILY ROUTINE (2.5 - 3.5 HOURS)</h3>
-      <div class="routine-steps">
-        <div class="routine-step">
-          <span class="step-num">01</span>
-          <div>
-            <strong>Recall (15m):</strong> Reconstruct yesterday's algorithm or formula from memory with zero notes.
-          </div>
-        </div>
-        <div class="routine-step">
-          <span class="step-num">02</span>
-          <div>
-            <strong>Theory (45m):</strong> Read official Scikit-Learn, PyTorch, or Python documentation.
-          </div>
-        </div>
-        <div class="routine-step">
-          <span class="step-num">03</span>
-          <div>
-            <strong>Code (75m):</strong> Build today's exercise from scratch. Observe the 20-minute struggle rule before asking AI.
-          </div>
-        </div>
-        <div class="routine-step">
-          <span class="step-num">04</span>
-          <div>
-            <strong>Project (30m):</strong> Refactor logic into modular functions in this week's milestone repository.
-          </div>
-        </div>
-        <div class="routine-step">
-          <span class="step-num">05</span>
-          <div>
-            <strong>Review (15m):</strong> Run tests, commit to GitHub, and record one concrete resolved bug.
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- CALENDAR PACING & DATE SIMULATION TESTING TOOLBAR (COLLAPSIBLE DEVELOPER TOOLS) -->
-  <div class="simulation-section">
-    <div class="sim-toggle-row">
-      <button class="sim-toggle-btn" (click)="toggleSimTools()" type="button">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
-        </svg>
-        <span>{{ showSimTools() ? 'Hide Pacing Simulation Testing' : 'Developer Pacing Simulation Tools' }}</span>
-        @if (curriculum.calendarPacing().isSimulationActive) {
-          <span class="sim-active-badge">SIM ACTIVE: {{ curriculum.calendarPacing().currentDateFormatted }}</span>
-        }
-      </button>
-    </div>
-
-    @if (showSimTools()) {
-      <div class="simulation-toolbar animate-fade">
-        <div class="sim-info">
-          <span class="sim-tag">🧪 CALENDAR PACING SIMULATION</span>
-          <span class="sim-desc">
-            Current Mode:
-            <strong>
-              {{ curriculum.calendarPacing().isSimulationActive ? 'Simulated (' + curriculum.calendarPacing().currentDateFormatted + ')' : 'Live System Time (' + curriculum.calendarPacing().currentDateFormatted + ')' }}
-            </strong>
-            • Target: <strong>Day {{ curriculum.calendarPacing().expectedDayNumber }}</strong>
-          </span>
-        </div>
-        <div class="sim-presets">
-          <button
-            class="sim-btn"
-            [class.active]="curriculum.simulationDate() === '2026-10-15'"
-            (click)="setSimDate('2026-10-15')"
-            title="Test Pre-Sprint Countdown (Oct 15, 2026)"
-          >
-            ⏱️ Pre-Sprint (Oct 15)
-          </button>
-          <button
-            class="sim-btn"
-            [class.active]="curriculum.simulationDate() === '2026-10-22'"
-            (click)="setSimDate('2026-10-22')"
-            title="Test Kickoff Day 1 (Oct 22, 2026)"
-          >
-            🚀 Kickoff (Oct 22)
-          </button>
-          <button
-            class="sim-btn"
-            [class.active]="curriculum.simulationDate() === '2026-11-05'"
-            (click)="setSimDate('2026-11-05')"
-            title="Test Behind Timetable Intimation (Nov 5, 2026)"
-          >
-            ⚠️ Day 15 Behind Test (Nov 05)
-          </button>
-          <button
-            class="sim-btn"
-            [class.active]="curriculum.simulationDate() === '2026-12-10'"
-            (click)="setSimDate('2026-12-10')"
-            title="Test Mid-Sprint (Dec 10, 2026)"
-          >
-            📊 Mid-Sprint (Dec 10)
-          </button>
-          <button
-            class="sim-btn"
-            [class.active]="curriculum.simulationDate() === '2027-02-05'"
-            (click)="setSimDate('2027-02-05')"
-            title="Test Sprint Finale (Feb 5, 2027)"
-          >
-            🏆 Day 35 Finale (Dec 9)
-          </button>
-          <button
-            class="sim-btn sim-btn-reset"
-            [class.active]="!curriculum.calendarPacing().isSimulationActive"
-            (click)="resetSimDate()"
-            title="Reset to Real-Time System Clock"
-          >
-            🔄 Live System Clock
-          </button>
-        </div>
-      </div>
-    }
   </div>
 </section>

@@ -23,9 +23,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly isAnimatingQuote = signal<boolean>(false);
   private quoteIntervalId: any = null;
 
-  // Toggle for developer simulation toolbar
-  readonly showSimTools = signal<boolean>(false);
-
   // Proof links form state
   readonly proofLabels: ProofLabel[] = PROOF_LABELS;
   selectedProofLabel: ProofLabel = 'GitHub Repo';
@@ -68,10 +65,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'Documentation': return '📄';
       default: return '🔗';
     }
-  }
-
-  toggleSimTools() {
-    this.showSimTools.update(v => !v);
   }
 
   startQuoteRotation() {
@@ -139,14 +132,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.curriculum.filterStatus.set('all');
       this.router.navigate(['/daily']);
     }
-  }
-
-  setSimDate(dateStr: string) {
-    this.curriculum.setSimulationDate(dateStr);
-  }
-
-  resetSimDate() {
-    this.curriculum.clearSimulation();
   }
 
   jumpToDay(task: DailyTask) {
