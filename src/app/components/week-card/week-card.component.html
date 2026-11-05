@@ -1,0 +1,79 @@
+<div class="week-card-container">
+  <!-- Week Header -->
+  <div class="week-header">
+    <div class="week-title-row">
+      <div class="week-num-badge">Week {{ week.week }}</div>
+      <h2 class="week-title">{{ week.name }}</h2>
+      <span class="week-dates">{{ week.start_date }} → {{ week.end_date }}</span>
+    </div>
+
+    <div class="week-progress-pill">
+      <strong>{{ completedDaysInWeek }}</strong> / 7 Days Done
+    </div>
+  </div>
+
+  <p class="week-goal">🎯 <strong>Weekly Goal:</strong> {{ week.goal }}</p>
+
+  <!-- Key Topics -->
+  <div class="topics-row">
+    <span class="topic-pill" *ngFor="let topic of week.key_topics">{{ topic }}</span>
+  </div>
+
+  <!-- Weekly Project Callout Banner -->
+  <div class="project-callout" (click)="onProjectClick()" *ngIf="linkedProject">
+    <div class="callout-left">
+      <span class="project-tag">{{ week.weekly_project_id }}</span>
+      <div class="callout-text">
+        <div class="callout-name">{{ week.weekly_project_name }}</div>
+        <div class="callout-scope">{{ week.project_scope }}</div>
+      </div>
+    </div>
+    <button type="button" class="view-project-btn">
+      View Project Spec & Proof ↗
+    </button>
+  </div>
+
+  <!-- 7 Days Grid in this week -->
+  <div class="days-grid">
+    <div
+      class="day-card"
+      *ngFor="let d of weekDays"
+      [class.completed]="isDayComplete(d.day)"
+      (click)="onDayClick(d)"
+    >
+      <div class="day-card-top">
+        <div class="day-number-badge">Day {{ d.day }}</div>
+        <span class="weekday">{{ d.weekday }}</span>
+        <button
+          type="button"
+          class="quick-check-btn"
+          [class.checked]="isDayComplete(d.day)"
+          (click)="toggleDay(d.day, $event)"
+          title="Toggle completion"
+        >
+          {{ isDayComplete(d.day) ? '✓' : '○' }}
+        </button>
+      </div>
+
+      <div class="day-card-title">{{ d.title }}</div>
+
+      <div class="day-card-bottom">
+        <span class="day-type-tag" [class.review]="d.day_type === 'integration_review'">
+          {{ d.day_type === 'learn_build' ? '🔨 Build' : '🔍 Review' }}
+        </span>
+        <span class="time-tag">{{ d.estimated_minutes }}m</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Definition of Done Collapsible / Accordion -->
+  <div class="dod-section">
+    <div class="dod-heading">✅ Week Definition of Done:</div>
+    <div class="dod-list">
+      <div class="dod-item" *ngFor="let item of week.definition_of_done">
+        <span class="bullet">▸</span> {{ item }}
+      </div>
+    </div>
+  </div>
+</div>
+

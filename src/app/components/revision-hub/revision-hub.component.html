@@ -1,0 +1,173 @@
+<div class="revision-container">
+  <!-- Top Banner -->
+  <div class="revision-banner">
+    <div class="banner-title-area">
+      <h2>🔄 Revision & Portfolio Hub</h2>
+      <p>
+        Review all 35 days, examine your saved notes, inspect submitted projects and GitHub proof links, or edit any entry after completing the curriculum.
+      </p>
+    </div>
+
+    <div class="export-actions">
+      <button type="button" class="export-btn primary" (click)="exportAsMarkdown()">
+        📋 Export Portfolio (Markdown)
+      </button>
+      <button type="button" class="export-btn secondary" (click)="exportAsJSON()">
+        💾 Export Backup (JSON)
+      </button>
+      <div *ngIf="exportSuccessMsg" class="toast-msg">{{ exportSuccessMsg }}</div>
+    </div>
+  </div>
+
+  <!-- Filter & Search Toolbar -->
+  <div class="toolbar">
+    <div class="filter-tabs">
+      <button
+        class="filter-tab-btn"
+        [class.active]="activeFilter === 'starred'"
+        (click)="activeFilter = 'starred'"
+      >
+        ⭐ Starred for Revision ({{ progressService.revisionDays().length }})
+      </button>
+      <button
+        class="filter-tab-btn"
+        [class.active]="activeFilter === 'projects'"
+        (click)="activeFilter = 'projects'"
+      >
+        🚀 5 Phase Projects ({{ progressService.submittedProjects().length }}/5 Done)
+      </button>
+      <button
+        class="filter-tab-btn"
+        [class.active]="activeFilter === 'all-completed'"
+        (click)="activeFilter = 'all-completed'"
+      >
+        ✓ Completed Days ({{ progressService.completedDaysCount() }})
+      </button>
+      <button
+        class="filter-tab-btn"
+        [class.active]="activeFilter === 'all-days'"
+        (click)="activeFilter = 'all-days'"
+      >
+        All 35 Days
+      </button>
+    </div>
+
+    <div class="search-phase-row">
+      <select [(ngModel)]="selectedPhase" class="phase-select">
+        <option [value]="0">All Weeks / Phases</option>
+        <option [value]="1">Week 1: Raw LLMs & Function Calling</option>
+        <option [value]="2">Week 2: Agentic RAG & Memory</option>
+        <option [value]="3">Week 3: LangGraph & Human-in-Loop</option>
+        <option [value]="4">Week 4: Multi-Agent Systems</option>
+        <option [value]="5">Week 5: Production & Evals</option>
+      </select>
+
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="🔍 Search notes, concepts, topics..."
+        class="search-input"
+      />
+    </div>
+  </div>
+
+  <!-- SECTION A: PROJECTS VIEW (when activeFilter === 'projects') -->
+  <div *ngIf="activeFilter === 'projects'" class="projects-revision-grid">
+    <div
+      class="project-rev-card"
+      *ngFor="let proj of phaseProjects"
+      [class.submitted]="getProjectSubmission(proj.id).isSubmitted"
+      (click)="openProject(proj)"
+    >
+      <div class="rev-card-top">
+        <span class="proj-badge">{{ proj.id }}</span>
+        <span class="proj-level">Week {{ proj.week }} • {{ proj.level }}</span>
+        <span class="status-tag" [class.done]="getProjectSubmission(proj.id).isSubmitted">
+          {{ getProjectSubmission(proj.id).isSubmitted ? '✓ Submitted' : 'Pending' }}
+        </span>
+      </div>
+
+      <h3 class="proj-name">{{ proj.name }}</h3>
+      <p class="proj-obj">{{ proj.objective }}</p>
+
+      <!-- Submitted Proof Links Preview -->
+      <div class="proofs-summary" *ngIf="getProjectSubmission(proj.id) as sub">
+        <div class="proof-row" *ngIf="sub.githubUrl">
+          <span class="p-icon">🐙</span>
+          <span class="p-link">{{ sub.githubUrl }}</span>
+        </div>
+        <div class="proof-row" *ngIf="sub.liveDemoUrl">
+          <span class="p-icon">🌐</span>
+          <span class="p-link">{{ sub.liveDemoUrl }}</span>
+        </div>
+        <div class="proof-row" *ngIf="sub.videoDemoUrl">
+          <span class="p-icon">🎥</span>
+          <span class="p-link">{{ sub.videoDemoUrl }}</span>
+        </div>
+        <div *ngIf="!sub.githubUrl && !sub.liveDemoUrl && !sub.videoDemoUrl" class="no-sub-hint">
+          Click to open and add GitHub or Demo link ✏️
+        </div>
+      </div>
+
+      <div class="rev-card-bottom">
+        <span class="rev-action-link">View Full Spec & Edit Submission ↗</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION B: DAYS LIST (when activeFilter !== 'projects') -->
+  <div *ngIf="activeFilter !== 'projects'" class="days-revision-list">
+    <div *ngIf="filteredDays.length === 0" class="empty-results">
+      <div class="empty-icon">📂</div>
+      <p *ngIf="activeFilter === 'starred'">
+        No days starred for revision yet. When studying, click the <strong>⭐ Starred for Revision</strong> button on any day you want to revisit!
+      </p>
+      <p *ngIf="activeFilter !== 'starred'">
+        No matching days found for the selected filter or search query.
+      </p>
+    </div>
+
+    <div
+      class="day-rev-item"
+      *ngFor="let day of filteredDays"
+      (click)="openDay(day)"
+    >
+      <div class="day-rev-header">
+        <div class="day-badge-col">
+          <span class="d-num">Day {{ day.day }}</span>
+          <span class="d-week">Week {{ day.week }}</span>
+        </div>
+
+        <div class="day-info-col">
+          <div class="day-title-row">
+            <h4 class="d-title">{{ day.title }}</h4>
+            <span class="star-indicator" *ngIf="getDayProgress(day.day).isFlaggedForRevision">⭐ Starred</span>
+            <span class="comp-indicator" [class.done]="getDayProgress(day.day).isCompleted">
+              {{ getDayProgress(day.day).isCompleted ? '✓ Completed' : 'In Progress' }}
+            </span>
+          </div>
+
+          <div class="d-objective">{{ day.learning_objective }}</div>
+
+          <!-- Notes Snippet Preview -->
+          <div class="notes-preview" *ngIf="getDayProgress(day.day).notes as n">
+            <span class="notes-icon">📝 Your Notes:</span>
+            <span class="notes-snippet">{{ n }}</span>
+          </div>
+
+          <!-- Proof Links Preview -->
+          <div class="proofs-pills" *ngIf="getDayProgress(day.day).proofUrls.length">
+            <span class="proof-pill" *ngFor="let p of getDayProgress(day.day).proofUrls">
+              🔗 {{ p.label }}: {{ p.url }}
+            </span>
+          </div>
+        </div>
+
+        <button type="button" class="open-detail-btn">
+          Open & Edit ↗
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+

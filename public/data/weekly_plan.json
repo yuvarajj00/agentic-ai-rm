@@ -1,0 +1,244 @@
+{
+  "plan_id": "agentic-ai-zero-to-production-5-weeks-2026",
+  "title": "Agentic AI: 5-Week Weekly Learning Plan",
+  "timezone": "Asia/Kolkata",
+  "start_date": "2026-11-05",
+  "end_date": "2026-12-09",
+  "duration_weeks": 5,
+  "daily_time_budget_minutes": 120,
+  "weekly_structure": "Days 1–6 cover concepts and implementation; day 7 is for integration, tests, review, and catch-up.",
+  "weeks": [
+    {
+      "week": 1,
+      "name": "Raw LLM and Function Calling",
+      "start_date": "2026-11-05",
+      "end_date": "2026-11-11",
+      "day_range": [
+        1,
+        7
+      ],
+      "goal": "Build a bounded tool-using agent in raw Python before using orchestration frameworks.",
+      "key_topics": [
+        "LLM API lifecycle",
+        "Tokens and context windows",
+        "Pydantic and structured outputs",
+        "Tool schemas and function calling",
+        "Tool dispatcher",
+        "ReAct-style control loop",
+        "Budgets and stop conditions"
+      ],
+      "weekly_project_id": "P1",
+      "weekly_project_name": "Zero-Framework CLI Coding Assistant",
+      "project_scope": "A CLI assistant with workspace-scoped read_file and write_file tools plus a fixed allowlisted test command. It observes test output and may attempt bounded repairs.",
+      "days": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      "week_end_evidence": [
+        "Working provider API client",
+        "Pydantic decision/final-answer models",
+        "Registered and validated tools",
+        "Bounded agent loop",
+        "CLI demo and tests",
+        "README and architecture note"
+      ],
+      "definition_of_done": [
+        "The assistant can call approved tools and use their results.",
+        "All tool inputs are validated.",
+        "The loop has iteration/time limits.",
+        "File tools are confined to a dedicated workspace and commands are allowlisted."
+      ]
+    },
+    {
+      "week": 2,
+      "name": "Agentic RAG and Memory",
+      "start_date": "2026-11-12",
+      "end_date": "2026-11-18",
+      "day_range": [
+        8,
+        14
+      ],
+      "goal": "Give an agent controlled access to a knowledge base and persistent, user-scoped memory.",
+      "key_topics": [
+        "Short-term conversation state",
+        "Embeddings and chunking",
+        "PostgreSQL with pgvector",
+        "Basic RAG and source attribution",
+        "Retrieval evaluation",
+        "CRAG-inspired relevance grading and query rewriting",
+        "Long-term semantic memory"
+      ],
+      "weekly_project_id": "P2",
+      "weekly_project_name": "Self-Correcting Research and Knowledge Agent",
+      "project_scope": "A document research agent that retrieves chunks, checks relevance, rewrites a query within a retry limit, optionally falls back to an external search adapter, cites sources, and stores explicitly selected memories.",
+      "days": [
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14
+      ],
+      "week_end_evidence": [
+        "Document ingestion script",
+        "Vector retrieval API",
+        "Golden retrieval-query set",
+        "Answer citations",
+        "Bounded retrieval correction path",
+        "User-scoped memory CRUD and retention policy"
+      ],
+      "definition_of_done": [
+        "Answers expose source references.",
+        "Insufficient evidence results in abstention or an explicit fallback.",
+        "Retrieval retries are bounded.",
+        "Persistent memories are user-scoped, inspectable, and deletable."
+      ]
+    },
+    {
+      "week": 3,
+      "name": "LangGraph, MCP, and Multi-Agent Systems",
+      "start_date": "2026-11-19",
+      "end_date": "2026-11-25",
+      "day_range": [
+        15,
+        21
+      ],
+      "goal": "Represent complex agent execution as a stateful graph and connect tools through MCP.",
+      "key_topics": [
+        "LangGraph state, nodes, and edges",
+        "Conditional routing and cycles",
+        "Checkpointing and thread IDs",
+        "Interrupts and resume",
+        "Supervisor/specialist patterns",
+        "MCP client/server concepts",
+        "Integration testing"
+      ],
+      "weekly_project_id": "P3",
+      "weekly_project_name": "LangGraph MCP Multi-Agent Research Workflow",
+      "project_scope": "A supervisor coordinates researcher, fact-checker, and writer roles. Research and verification capabilities are exposed through a local MCP server/client integration.",
+      "days": [
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21
+      ],
+      "week_end_evidence": [
+        "State graph diagram",
+        "Conditional and cyclic graph tests",
+        "Checkpoint/resume test",
+        "MCP server and client",
+        "Multi-agent role contracts",
+        "End-to-end cited report"
+      ],
+      "definition_of_done": [
+        "The graph has explicit state and bounded cycles.",
+        "A workflow can resume from a checkpoint.",
+        "The MCP client can discover and call an approved server tool.",
+        "Specialist responsibilities and handoffs are explicit."
+      ]
+    },
+    {
+      "week": 4,
+      "name": "Human-in-the-Loop, Guardrails, and Reliability",
+      "start_date": "2026-11-26",
+      "end_date": "2026-12-02",
+      "day_range": [
+        22,
+        28
+      ],
+      "goal": "Make the agent controlled, auditable, resilient to failures, and resistant to unsafe tool requests.",
+      "key_topics": [
+        "Authorization and least privilege",
+        "Human approval checkpoints",
+        "Iteration/token/time budgets",
+        "Validation and structured errors",
+        "Prompt injection defense",
+        "Idempotency and audit logs",
+        "Agent evaluations"
+      ],
+      "weekly_project_id": "P4",
+      "weekly_project_name": "Guarded Research and Publishing Pipeline",
+      "project_scope": "An extension of P3 that adds a mock publishing action, server-side permission checks, approval interrupts, bounded retries, idempotency, audit records, and adversarial tests.",
+      "days": [
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28
+      ],
+      "week_end_evidence": [
+        "Permission matrix",
+        "Approval/rejection tests",
+        "Budget and retry policy",
+        "Prompt-injection regression tests",
+        "Idempotent mock publisher",
+        "Evaluation dataset and score report"
+      ],
+      "definition_of_done": [
+        "No publish action can run without a valid approval.",
+        "Tool authorization is enforced in application code.",
+        "Duplicate side effects are prevented on retry.",
+        "Prompt-injection, failure, and rejection scenarios are tested."
+      ]
+    },
+    {
+      "week": 5,
+      "name": "Deployment, Tracing, and AgentOps",
+      "start_date": "2026-12-03",
+      "end_date": "2026-12-09",
+      "day_range": [
+        29,
+        35
+      ],
+      "goal": "Deliver the guarded workflow through a documented, observable, containerized backend service.",
+      "key_topics": [
+        "FastAPI run lifecycle",
+        "Async execution and SSE",
+        "PostgreSQL persistence and recovery",
+        "Tracing with Langfuse or Arize Phoenix",
+        "Docker and runtime secrets",
+        "Evaluation, latency, and cost measurements",
+        "Release documentation"
+      ],
+      "weekly_project_id": "P5",
+      "weekly_project_name": "Production-Oriented Agentic Research and Publishing API",
+      "project_scope": "A FastAPI service that runs the P4 workflow, persists state, streams safe progress events, exposes approval/status endpoints, records traces, and is packaged in Docker. Publishing remains mocked or explicitly controlled unless a real integration is separately authorized.",
+      "days": [
+        29,
+        30,
+        31,
+        32,
+        33,
+        34,
+        35
+      ],
+      "week_end_evidence": [
+        "API contract and run lifecycle",
+        "SSE progress stream",
+        "Durable run/checkpoint persistence",
+        "End-to-end trace",
+        "Docker image and health checks",
+        "Evaluation/latency/cost report",
+        "Architecture and operations documentation"
+      ],
+      "definition_of_done": [
+        "The service can be started from a clean setup using the README.",
+        "Runs and checkpoints survive restart.",
+        "Progress events do not expose hidden chain-of-thought or secrets.",
+        "Approval and authorization controls remain enforced.",
+        "The final demo includes measured evaluation results and clear limitations."
+      ]
+    }
+  ]
+}

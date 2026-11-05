@@ -1,0 +1,218 @@
+<div class="day-modal-backdrop" (click)="close.emit()">
+  <div class="day-modal-card" (click)="$event.stopPropagation()">
+    <!-- Top Action Bar -->
+    <div class="modal-header">
+      <div class="badge-cluster">
+        <span class="day-badge">Day {{ day.day }} of 35</span>
+        <span class="week-pill">Week {{ day.week }}</span>
+        <span class="type-pill" [class.review]="day.day_type === 'integration_review'">
+          {{ day.day_type === 'learn_build' ? '🔨 Learn & Build' : '🔍 Review & Catch-up' }}
+        </span>
+        <span class="time-pill">⏱️ {{ day.estimated_minutes }} mins</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Bookmark / Flag for Revision -->
+        <button
+          type="button"
+          class="icon-action-btn"
+          [class.active]="isFlaggedForRevision"
+          (click)="toggleRevisionFlag()"
+          [title]="isFlaggedForRevision ? 'Remove from Revision list' : 'Bookmark for Post-35 Revision'"
+        >
+          {{ isFlaggedForRevision ? '⭐ Starred for Revision' : '☆ Mark for Revision' }}
+        </button>
+
+        <!-- View / Edit Mode Toggle -->
+        <button
+          type="button"
+          class="mode-toggle-btn"
+          [class.editing]="isEditMode"
+          (click)="toggleEditMode()"
+        >
+          <span class="icon">{{ isEditMode ? '💾' : '✏️' }}</span>
+          {{ isEditMode ? 'Save & View Mode' : 'Edit Mode' }}
+        </button>
+
+        <!-- Close Button -->
+        <button type="button" class="close-btn" (click)="close.emit()">✕</button>
+      </div>
+    </div>
+
+    <!-- Main Title & Date -->
+    <div class="title-section">
+      <h2 class="day-title">{{ day.title }}</h2>
+      <div class="day-meta">
+        <span class="date">{{ day.date }} ({{ day.weekday }})</span>
+        <span class="separator">•</span>
+        <span class="phase-name">{{ day.phase }}</span>
+      </div>
+    </div>
+
+    <!-- Completion Banner -->
+    <div class="completion-banner" [class.completed]="isCompleted">
+      <div class="banner-status">
+        <span class="status-indicator-dot"></span>
+        <span>Status: <strong>{{ isCompleted ? 'Completed' : 'In Progress / Pending' }}</strong></span>
+      </div>
+      <button class="toggle-complete-btn" (click)="toggleCompletion()">
+        {{ isCompleted ? '↩️ Mark Incomplete' : '✓ Mark Day Completed' }}
+      </button>
+    </div>
+
+    <div class="modal-body">
+      <!-- Section 1: Learning Objective -->
+      <section class="content-section objective-card">
+        <h3>🎯 Learning Objective</h3>
+        <p>{{ day.learning_objective }}</p>
+      </section>
+
+      <!-- Section 2: Core Concepts -->
+      <section class="content-section">
+        <h3>💡 Key Concepts Covered</h3>
+        <div class="concepts-grid">
+          <span class="concept-tag" *ngFor="let concept of day.concepts">
+            {{ concept }}
+          </span>
+        </div>
+      </section>
+
+      <!-- Section 3: Hands-on Tasks with interactive checkboxes -->
+      <section class="content-section">
+        <div class="section-header-row">
+          <h3>🛠️ Hands-on Tasks</h3>
+          <span class="task-counter">
+            {{ dayProgress.completedTasks.length || 0 }} / {{ day.hands_on_tasks.length }} completed
+          </span>
+        </div>
+        <div class="tasks-list">
+          <div
+            class="task-item"
+            *ngFor="let task of day.hands_on_tasks; let i = index"
+            [class.checked]="isTaskChecked(i)"
+            (click)="onToggleTask(i)"
+          >
+            <input
+              type="checkbox"
+              [checked]="isTaskChecked(i)"
+              (click)="$event.stopPropagation(); onToggleTask(i)"
+            />
+            <span class="task-text">{{ task }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Deliverable & Acceptance Criteria -->
+      <section class="content-section">
+        <h3>📦 Deliverable & Acceptance Criteria</h3>
+        <div class="deliverable-box">
+          <div class="deliverable-heading">Expected Deliverable:</div>
+          <p class="deliverable-text">{{ day.deliverable }}</p>
+        </div>
+        <div class="criteria-list">
+          <div class="criterion-item" *ngFor="let crit of day.acceptance_criteria">
+            <span class="check-mark">✓</span>
+            <span>{{ crit }}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Proof of Completion Links -->
+      <section class="content-section proof-section">
+        <div class="section-header-row">
+          <h3>🔗 Proof of Completion (GitHub, Live URL, PRs)</h3>
+          <button
+            *ngIf="isEditMode"
+            type="button"
+            class="add-url-btn"
+            (click)="addProofUrl()"
+          >
+            + Add Link
+          </button>
+        </div>
+
+        <!-- VIEW MODE FOR PROOFS -->
+        <div *ngIf="!isEditMode">
+          <div *ngIf="dayProgress.proofUrls && dayProgress.proofUrls.length > 0; else noProofs" class="proof-badges-list">
+            <a
+              *ngFor="let proof of dayProgress.proofUrls"
+              [href]="proof.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="proof-badge"
+            >
+              <span class="proof-icon">{{ getLabelIcon(proof.label) }}</span>
+              <span class="proof-label">{{ proof.label }}:</span>
+              <span class="proof-url-preview">{{ proof.url }}</span>
+              <span class="external-arrow">↗</span>
+            </a>
+          </div>
+          <ng-template #noProofs>
+            <div class="empty-hint">
+              No proof links submitted yet. Switch to <strong>Edit Mode</strong> to attach your GitHub commit, PR, or live demo URL!
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- EDIT MODE FOR PROOFS -->
+        <div *ngIf="isEditMode" class="edit-proofs-container">
+          <div class="proof-input-row" *ngFor="let proof of draftProofUrls; let i = index">
+            <select [(ngModel)]="proof.label" class="proof-label-select">
+              <option *ngFor="let lbl of proofLabels" [value]="lbl">{{ lbl }}</option>
+            </select>
+            <input
+              type="url"
+              [(ngModel)]="proof.url"
+              placeholder="https://github.com/... or https://..."
+              class="proof-url-input"
+            />
+            <button type="button" class="remove-btn" (click)="removeProofUrl(i)" title="Remove URL">✕</button>
+          </div>
+          <button
+            *ngIf="draftProofUrls.length === 0"
+            type="button"
+            class="add-first-btn"
+            (click)="addProofUrl()"
+          >
+            + Add Your First Proof Link
+          </button>
+        </div>
+      </section>
+
+      <!-- Section 6: Personal Notes & Reflections -->
+      <section class="content-section notes-section">
+        <div class="section-header-row">
+          <h3>📝 Personal Notes & Revision Reflections</h3>
+        </div>
+
+        <!-- VIEW MODE FOR NOTES -->
+        <div *ngIf="!isEditMode">
+          <div *ngIf="dayProgress.notes && dayProgress.notes.trim().length > 0; else noNotes" class="notes-view-box">
+            <pre class="notes-text">{{ dayProgress.notes }}</pre>
+          </div>
+          <ng-template #noNotes>
+            <div class="empty-hint">
+              No personal notes saved yet. Click <strong>Edit Mode</strong> above to record your notes, gotchas, or revision key points!
+            </div>
+          </ng-template>
+        </div>
+
+        <!-- EDIT MODE FOR NOTES -->
+        <div *ngIf="isEditMode">
+          <textarea
+            class="notes-textarea"
+            [(ngModel)]="draftNotes"
+            rows="5"
+            placeholder="Write your study notes, commands tested, bug fixes, or architecture insights here..."
+          ></textarea>
+          <div class="edit-save-actions">
+            <button type="button" class="save-btn" (click)="saveChanges(); toggleEditMode()">
+              Save Notes & Links
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+

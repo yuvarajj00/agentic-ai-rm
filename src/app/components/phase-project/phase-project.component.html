@@ -1,0 +1,233 @@
+<div class="project-modal-backdrop" (click)="close.emit()">
+  <div class="project-modal-card" (click)="$event.stopPropagation()">
+    <!-- Top Action Bar -->
+    <div class="modal-header">
+      <div class="badge-cluster">
+        <span class="project-id-badge">{{ project.id }}</span>
+        <span class="phase-pill">Phase {{ project.phase }} • Week {{ project.week }}</span>
+        <span class="level-pill">{{ project.level }}</span>
+      </div>
+
+      <div class="header-actions">
+        <!-- Bookmark for Revision -->
+        <button
+          type="button"
+          class="icon-action-btn"
+          [class.active]="isFlaggedForRevision"
+          (click)="toggleRevisionFlag()"
+        >
+          {{ isFlaggedForRevision ? '⭐ Starred for Revision' : '☆ Bookmark Project' }}
+        </button>
+
+        <!-- View / Edit Mode Toggle -->
+        <button
+          type="button"
+          class="mode-toggle-btn"
+          [class.editing]="isEditMode"
+          (click)="toggleEditMode()"
+        >
+          <span class="icon">{{ isEditMode ? '💾' : '✏️' }}</span>
+          {{ isEditMode ? 'Save & View Mode' : 'Edit Submission' }}
+        </button>
+
+        <button type="button" class="close-btn" (click)="close.emit()">✕</button>
+      </div>
+    </div>
+
+    <!-- Title Section -->
+    <div class="title-section">
+      <h2 class="project-title">{{ project.name }}</h2>
+      <div class="dates-meta">
+        <span>Timeline: {{ project.dates.start }} to {{ project.dates.end }}</span>
+      </div>
+    </div>
+
+    <!-- Status Banner -->
+    <div class="submission-banner" [class.submitted]="isSubmitted">
+      <div class="banner-left">
+        <span class="status-dot"></span>
+        <span>Status: <strong>{{ isSubmitted ? 'Project Submitted' : 'Pending Completion' }}</strong></span>
+      </div>
+      <div class="banner-right" *ngIf="isSubmitted">
+        <span>Submitted: {{ submission.submittedAt | date:'mediumDate' }}</span>
+      </div>
+    </div>
+
+    <div class="modal-body">
+      <!-- Section 1: Objective & Problem Statement -->
+      <section class="content-section highlight-box">
+        <h3>🎯 Project Objective</h3>
+        <p class="objective-text">{{ project.objective }}</p>
+
+        <div class="problem-box">
+          <strong>Problem Statement:</strong>
+          <p>{{ project.problem_statement }}</p>
+        </div>
+      </section>
+
+      <!-- Section 2: Recommended Stack -->
+      <section class="content-section">
+        <h3>🛠️ Recommended Tech Stack</h3>
+        <div class="stack-tags">
+          <span class="stack-badge" *ngFor="let item of project.recommended_stack">
+            {{ item }}
+          </span>
+        </div>
+      </section>
+
+      <!-- Section 3: Proof of Completion Submissions (GitHub, Live URL, Loom, etc.) -->
+      <section class="content-section proofs-card">
+        <div class="section-header-row">
+          <h3>🚀 Project Deliverables & Proof of Work</h3>
+          <span *ngIf="!isEditMode && !isSubmitted" class="not-submitted-tag">No submission recorded</span>
+        </div>
+
+        <!-- VIEW MODE -->
+        <div *ngIf="!isEditMode">
+          <div class="proof-links-display">
+            <!-- GitHub Repo Link -->
+            <div class="proof-item" *ngIf="submission.githubUrl">
+              <span class="proof-type">🐙 GitHub Repository:</span>
+              <a [href]="submission.githubUrl" target="_blank" rel="noopener noreferrer" class="link-anchor">
+                {{ submission.githubUrl }} ↗
+              </a>
+            </div>
+
+            <!-- Live Demo Link -->
+            <div class="proof-item" *ngIf="submission.liveDemoUrl">
+              <span class="proof-type">🌐 Live Deployment:</span>
+              <a [href]="submission.liveDemoUrl" target="_blank" rel="noopener noreferrer" class="link-anchor">
+                {{ submission.liveDemoUrl }} ↗
+              </a>
+            </div>
+
+            <!-- Video Demo Link -->
+            <div class="proof-item" *ngIf="submission.videoDemoUrl">
+              <span class="proof-type">🎥 Walkthrough / Demo Video:</span>
+              <a [href]="submission.videoDemoUrl" target="_blank" rel="noopener noreferrer" class="link-anchor">
+                {{ submission.videoDemoUrl }} ↗
+              </a>
+            </div>
+
+            <!-- Additional URLs -->
+            <div class="proof-item" *ngFor="let extra of submission.additionalUrls">
+              <span class="proof-type">🔗 {{ extra.label }}:</span>
+              <a [href]="extra.url" target="_blank" rel="noopener noreferrer" class="link-anchor">
+                {{ extra.url }} ↗
+              </a>
+            </div>
+
+            <div *ngIf="!submission.githubUrl && !submission.liveDemoUrl && !submission.videoDemoUrl" class="empty-hint">
+              You haven't submitted your project links yet. Click <strong>Edit Submission</strong> above to add your GitHub Repo URL, live demo, or Loom recording!
+            </div>
+          </div>
+
+          <!-- Notes in View Mode -->
+          <div class="notes-display" *ngIf="submission.notes">
+            <h4>Project Notes & Architecture Reflections:</h4>
+            <pre class="notes-pre">{{ submission.notes }}</pre>
+          </div>
+        </div>
+
+        <!-- EDIT MODE -->
+        <div *ngIf="isEditMode" class="edit-submission-form">
+          <div class="form-group">
+            <label>🐙 GitHub Repository URL <span class="required">*</span></label>
+            <input
+              type="url"
+              [(ngModel)]="draftGithubUrl"
+              placeholder="https://github.com/your-username/zero-framework-agent"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>🌐 Live Demo / Deployment URL (Optional)</label>
+            <input
+              type="url"
+              [(ngModel)]="draftLiveDemoUrl"
+              placeholder="https://my-agent.onrender.com or Hugging Face space"
+              class="form-input"
+            />
+          </div>
+
+          <div class="form-group">
+            <label>🎥 Walkthrough Video URL (Loom / YouTube / Drive)</label>
+            <input
+              type="url"
+              [(ngModel)]="draftVideoDemoUrl"
+              placeholder="https://www.loom.com/share/..."
+              class="form-input"
+            />
+          </div>
+
+          <!-- Additional URLs -->
+          <div class="additional-urls-section">
+            <div class="section-header-row">
+              <label>Additional Proof Links (Docs, PRs, etc.)</label>
+              <button type="button" class="btn-sm" (click)="addExtraUrl()">+ Add URL</button>
+            </div>
+
+            <div class="extra-url-row" *ngFor="let item of draftAdditionalUrls; let i = index">
+              <select [(ngModel)]="item.label" class="form-select">
+                <option *ngFor="let opt of additionalLabels" [value]="opt">{{ opt }}</option>
+              </select>
+              <input type="url" [(ngModel)]="item.url" placeholder="https://..." class="form-input flex-1" />
+              <button type="button" class="btn-del" (click)="removeExtraUrl(i)">✕</button>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label>📝 Project Reflection & Architecture Notes</label>
+            <textarea
+              [(ngModel)]="draftNotes"
+              rows="4"
+              placeholder="Key design trade-offs, edge cases handled, what you learned..."
+              class="form-textarea"
+            ></textarea>
+          </div>
+
+          <div class="form-actions">
+            <button type="button" class="save-submission-btn" (click)="saveSubmission(); toggleEditMode()">
+              Save & Update Submission
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 4: Core Components & Responsibilities -->
+      <section class="content-section">
+        <h3>🧩 Core Architectural Components</h3>
+        <div class="components-grid">
+          <div class="component-card" *ngFor="let comp of project.core_components">
+            <div class="comp-name">{{ comp.name }}</div>
+            <div class="comp-resp">{{ comp.responsibility }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 5: Required Tools & Constraints -->
+      <section class="content-section">
+        <h3>🛡️ Required Tools & Security Constraints</h3>
+        <div class="tools-grid">
+          <div class="tool-card" *ngFor="let t of project.required_tools">
+            <div class="tool-name"><code>{{ t.tool }}</code></div>
+            <div class="tool-constraint">{{ t.constraints }}</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 6: Milestones -->
+      <section class="content-section">
+        <h3>🏁 Weekly Milestones</h3>
+        <div class="milestones-list">
+          <div class="milestone-item" *ngFor="let m of project.milestones">
+            <span class="days-badge">Days {{ m.days.join(', ') }}</span>
+            <span class="result-text">{{ m.result }}</span>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+

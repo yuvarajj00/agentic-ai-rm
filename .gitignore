@@ -42,3 +42,9 @@ __screenshots__/
 .DS_Store
 Thumbs.db
 .claude/settings.json
+
+# Environment and server
+.env
+*.env
+server/node_modules/
+server/.env

@@ -1,0 +1,53 @@
+<div class="stats-container">
+  <div class="stat-card">
+    <div class="stat-icon">📅</div>
+    <div class="stat-content">
+      <div class="stat-label">Days Finished</div>
+      <div class="stat-value"><strong>{{ completedDays }}</strong> <span class="dimmed">/ 35</span></div>
+    </div>
+  </div>
+
+  <div class="stat-card highlight">
+    <div class="stat-icon">📈</div>
+    <div class="stat-content">
+      <div class="stat-label">Curriculum Progress</div>
+      <div class="stat-value"><strong>{{ percentage }}%</strong></div>
+      <div class="progress-bar-track">
+        <div class="progress-bar-fill" [style.width.%]="percentage"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">⏱️</div>
+    <div class="stat-content">
+      <div class="stat-label">Hours Invested</div>
+      <div class="stat-value"><strong>{{ hoursInvested }}h</strong> <span class="dimmed">/ 70h</span></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">🔥</div>
+    <div class="stat-content">
+      <div class="stat-label">Study Streak</div>
+      <div class="stat-value"><strong>{{ streak }}</strong> <span class="dimmed">days</span></div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon">🚀</div>
+    <div class="stat-content">
+      <div class="stat-label">Projects Built</div>
+      <div class="stat-value"><strong>{{ projectsSubmitted }}</strong> <span class="dimmed">/ 5</span></div>
+    </div>
+  </div>
+
+  <div class="stat-card" *ngIf="revisionCount > 0">
+    <div class="stat-icon">⭐</div>
+    <div class="stat-content">
+      <div class="stat-label">Revision Bookmarks</div>
+      <div class="stat-value"><strong>{{ revisionCount }}</strong> <span class="dimmed">days</span></div>
+    </div>
+  </div>
+</div>
+

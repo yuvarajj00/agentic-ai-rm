@@ -1,0 +1,62 @@
+<header class="app-header">
+  <div class="header-left">
+    <div class="brand-badge">🤖 Agentic AI</div>
+    <div class="title-group">
+      <h1 class="main-title">Zero to Production Roadmap</h1>
+      <span class="subtitle">35-Day Curriculum • 5 Core Weeks • 5 Milestones</span>
+    </div>
+  </div>
+
+  <nav class="nav-links">
+    <button
+      class="nav-btn"
+      [class.active]="activeTab === 'roadmap'"
+      (click)="setTab('roadmap')"
+    >
+      <span class="icon">🗺️</span> Roadmap
+    </button>
+    <button
+      class="nav-btn"
+      [class.active]="activeTab === 'weeks'"
+      (click)="setTab('weeks')"
+    >
+      <span class="icon">📅</span> 5 Weeks
+    </button>
+    <button
+      class="nav-btn"
+      [class.active]="activeTab === 'projects'"
+      (click)="setTab('projects')"
+    >
+      <span class="icon">🚀</span> Projects
+    </button>
+    <button
+      class="nav-btn revision-btn"
+      [class.active]="activeTab === 'revision'"
+      (click)="setTab('revision')"
+    >
+      <span class="icon">🔄</span> Revision & Portfolio
+      <span class="badge" *ngIf="progressService.revisionDays().length > 0">
+        {{ progressService.revisionDays().length }}
+      </span>
+    </button>
+  </nav>
+
+  <div class="header-right">
+    <div
+      class="atlas-status"
+      [class.connected]="roadmapService.isConnectedToAtlas()"
+      [title]="roadmapService.isConnectedToAtlas() ? 'Connected to MongoDB Atlas Cloud Cluster' : 'Working locally (Atlas sync will retry)'"
+    >
+      <span class="pulse-dot"></span>
+      <span class="atlas-label">
+        {{ roadmapService.isConnectedToAtlas() ? 'Atlas Connected' : 'Local Fallback' }}
+      </span>
+    </div>
+
+    <div class="sync-indicator" *ngIf="progressService.isSyncing()">
+      <span class="sync-spinner"></span>
+      <span>Saving...</span>
+    </div>
+  </div>
+</header>
+

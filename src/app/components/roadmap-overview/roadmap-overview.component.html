@@ -1,0 +1,137 @@
+<div class="roadmap-container">
+  <!-- Interactive Filter Bar -->
+  <div class="filter-bar">
+    <div class="week-filter-group">
+      <button
+        class="filter-pill"
+        [class.active]="selectedWeek === 0"
+        (click)="selectedWeek = 0"
+      >
+        All 5 Weeks
+      </button>
+      <button
+        *ngFor="let w of weeks"
+        class="filter-pill"
+        [class.active]="selectedWeek === w.week"
+        (click)="selectedWeek = w.week"
+      >
+        W{{ w.week }}
+      </button>
+    </div>
+
+    <div class="controls-group">
+      <!-- Status Filter -->
+      <select [(ngModel)]="statusFilter" class="filter-select">
+        <option value="all">All Statuses</option>
+        <option value="completed">✓ Completed Only</option>
+        <option value="pending">○ Pending / In Progress</option>
+        <option value="starred">⭐ Starred for Revision</option>
+      </select>
+
+      <!-- Type Filter -->
+      <select [(ngModel)]="typeFilter" class="filter-select">
+        <option value="all">All Day Types</option>
+        <option value="learn_build">🔨 Learn & Build</option>
+        <option value="integration_review">🔍 Review & Catch-up</option>
+      </select>
+
+      <!-- Search Input -->
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="🔍 Search 35 days, tools, concepts..."
+        class="search-box"
+      />
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="roadmapService.isLoading()" class="loading-state">
+    <div class="loading-spinner"></div>
+    <p>Loading curriculum and syncing with MongoDB Atlas...</p>
+  </div>
+
+  <!-- Main Roadmap Timeline by Week -->
+  <div *ngIf="!roadmapService.isLoading()" class="weeks-timeline">
+    <div
+      *ngFor="let w of weeks"
+      class="week-section"
+      [class.hidden]="selectedWeek > 0 && selectedWeek !== w.week"
+    >
+      <!-- Week Section Header -->
+      <div class="week-section-header">
+        <div class="w-header-left">
+          <span class="w-badge">Week {{ w.week }}</span>
+          <h2 class="w-name">{{ w.name }}</h2>
+          <span class="w-dates">({{ w.start_date }} to {{ w.end_date }})</span>
+        </div>
+
+        <!-- Weekly Project Trigger Button -->
+        <button
+          *ngIf="getProjectForWeek(w.week) as proj"
+          type="button"
+          class="project-trigger-btn"
+          (click)="onProjectClick(proj)"
+        >
+          🚀 <strong>{{ proj.id }}:</strong> {{ proj.name }} ↗
+        </button>
+      </div>
+
+      <!-- 7 Days Grid for this Week -->
+      <div class="days-matrix">
+        <div
+          *ngFor="let day of getDaysForWeek(w.week)"
+          class="day-tile"
+          [class.completed]="isDayComplete(day.day)"
+          [class.starred]="isDayStarred(day.day)"
+          (click)="onDayClick(day)"
+        >
+          <div class="tile-top">
+            <span class="day-num">Day {{ day.day }}</span>
+            <span class="day-weekday">{{ day.weekday }}</span>
+
+            <div class="tile-actions">
+              <!-- Star for revision -->
+              <button
+                type="button"
+                class="star-btn"
+                [class.active]="isDayStarred(day.day)"
+                (click)="toggleDayStar(day.day, $event)"
+                [title]="isDayStarred(day.day) ? 'Remove star' : 'Flag for revision'"
+              >
+                ★
+              </button>
+
+              <!-- Checkbox -->
+              <button
+                type="button"
+                class="check-btn"
+                [class.checked]="isDayComplete(day.day)"
+                (click)="toggleDayComplete(day.day, $event)"
+                title="Mark complete / incomplete"
+              >
+                ✓
+              </button>
+            </div>
+          </div>
+
+          <h4 class="tile-title">{{ day.title }}</h4>
+
+          <p class="tile-objective">{{ day.learning_objective }}</p>
+
+          <div class="tile-bottom">
+            <div class="concept-pills-row">
+              <span class="c-pill" *ngFor="let c of day.concepts.slice(0, 2)">{{ c }}</span>
+              <span class="c-pill more" *ngIf="day.concepts.length > 2">+{{ day.concepts.length - 2 }}</span>
+            </div>
+
+            <span class="type-indicator" [class.review]="day.day_type === 'integration_review'">
+              {{ day.day_type === 'learn_build' ? '🔨' : '🔍' }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
