@@ -1,0 +1,102 @@
+<section class="milestones-section animate-fade">
+  <div class="section-header">
+    <div class="section-tag">5 PRODUCTION PHASE MILESTONES</div>
+    <h2 class="section-title">Weekly Projects & Shipyard</h2>
+    <p class="section-subtitle">
+      Every week ends with a tangible, runnable software artifact. Use Day 7 of each week as your
+      <strong>Buffer & Retrospective Day</strong> to package READMEs, run unit tests, and avoid burnout.
+    </p>
+  </div>
+
+  <div class="milestones-grid">
+    @for (m of curriculum.milestones(); track m.week) {
+      <div class="milestone-card" [class.shipped]="m.projectShipped">
+        <div class="milestone-card-top">
+          <span class="milestone-week-tag">WEEK {{ m.week }}</span>
+          <span class="milestone-dates">{{ m.startDate }} — {{ m.endDate }}</span>
+        </div>
+
+        <h3 class="milestone-project-name">{{ m.weeklyProject }}</h3>
+        <div class="milestone-topics-line">{{ m.topics }}</div>
+
+        <!-- RECOMMENDED DATASET -->
+        <div class="milestone-block">
+          <div class="m-block-title">CURATED DATASET</div>
+          <p class="m-block-text">{{ m.recommendedDataset }}</p>
+        </div>
+
+        <!-- EXPECTED OUTCOMES -->
+        <div class="milestone-block">
+          <div class="m-block-title">EXPECTED OUTCOMES</div>
+          <p class="m-block-text">{{ m.expectedOutcomes }}</p>
+        </div>
+
+        <!-- ACCEPTANCE CRITERIA CHECKLIST -->
+        <div class="milestone-block">
+          <div class="m-block-title">ACCEPTANCE CRITERIA</div>
+          <ul class="criteria-list">
+            @for (crit of m.acceptanceCriteria; track crit) {
+              <li>{{ crit }}</li>
+            }
+          </ul>
+        </div>
+
+        <!-- SHIP & REVIEW ACTIONS -->
+        <div class="milestone-footer">
+          <div class="status-toggles-row">
+            <label class="ship-check-label">
+              <input type="checkbox" [checked]="m.projectShipped" (change)="curriculum.toggleMilestoneShipped(m.week)">
+              <span class="ship-text">{{ m.projectShipped ? '🚀 PROJECT SHIPPED' : 'MARK SHIPPED' }}</span>
+            </label>
+
+            <label class="review-check-label">
+              <input type="checkbox" [checked]="m.reviewComplete" (change)="curriculum.toggleMilestoneReviewComplete(m.week)">
+              <span class="review-text">{{ m.reviewComplete ? '✅ REVIEW DONE' : 'MARK REVIEWED' }}</span>
+            </label>
+          </div>
+
+          <div class="project-url-input-row">
+            <input
+              type="url"
+              [ngModel]="m.projectUrl"
+              (blur)="curriculum.updateMilestoneProjectUrl(m.week, $any($event.target).value)"
+              placeholder="https://github.com/your-username/project-repo"
+            />
+            @if (m.projectUrl) {
+              <a [href]="m.projectUrl" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-ghost">
+                View Repo ↗
+              </a>
+            }
+          </div>
+
+          <!-- WEEKLY RETROSPECTIVE ACCORDION -->
+          <details class="milestone-retro-details">
+            <summary class="retro-summary">// DAY 7 RETROSPECTIVE & WINS</summary>
+            <div class="retro-content">
+              <div class="retro-field">
+                <label>Key Wins & Breakthroughs:</label>
+                <textarea
+                  rows="2"
+                  [ngModel]="m.weeklyReflection?.wins"
+                  (blur)="curriculum.updateMilestoneReflection(m.week, 'wins', $any($event.target).value)"
+                  placeholder="What clicked this week? What did you build successfully?"
+                ></textarea>
+              </div>
+
+              <div class="retro-field">
+                <label>Gaps to Revisit / Blockers:</label>
+                <textarea
+                  rows="2"
+                  [ngModel]="m.weeklyReflection?.gaps"
+                  (blur)="curriculum.updateMilestoneReflection(m.week, 'gaps', $any($event.target).value)"
+                  placeholder="Any tricky concepts to reinforce in upcoming buffer days?"
+                ></textarea>
+              </div>
+            </div>
+          </details>
+        </div>
+
+      </div>
+    }
+  </div>
+</section>

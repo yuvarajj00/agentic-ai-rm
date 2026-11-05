@@ -1,0 +1,43 @@
+<!-- FOOTER -->
+<footer class="app-footer">
+  <div class="footer-left">
+    <div class="footer-copy">
+      <span>&copy; 2026 Yamini Karri</span>
+      <span class="footer-muted">• Agentic AI Flight Deck • Angular 21 Standalone</span>
+    </div>
+
+    <!-- MongoDB Atlas Cloud Sync Status & History -->
+    <div
+      class="footer-atlas-badge"
+      [class.synced]="curriculum.syncStatus() === 'connected'"
+      [class.saving]="curriculum.syncStatus() === 'saving'"
+      [class.syncing]="curriculum.syncStatus() === 'syncing'"
+      [class.error]="curriculum.syncStatus() === 'error'"
+      (click)="curriculum.refreshFromAtlas()"
+      [title]="curriculum.syncStatus() === 'error' ? 'MongoDB Atlas sync error: ' + (curriculum.syncError() || 'Click to retry connection') : 'MongoDB Atlas Cloud State: ' + curriculum.lastSyncedAt() + '. Click to refresh.'"
+    >
+      <span class="atlas-indicator-dot"></span>
+      <span class="atlas-label">MongoDB Atlas:</span>
+      <span class="atlas-status">
+        @if (curriculum.syncStatus() === 'connected') {
+          SYNCED ({{ curriculum.lastSyncedAt() }})
+        } @else if (curriculum.syncStatus() === 'saving') {
+          SAVING...
+        } @else if (curriculum.syncStatus() === 'syncing') {
+          CONNECTING...
+        } @else {
+          SYNC ERROR (Click to retry)
+        }
+      </span>
+    </div>
+  </div>
+
+  <div class="footer-right">
+    <button class="footer-action-link" (click)="downloadBackupJson()">Export Progress JSON</button>
+    <label class="footer-action-link" style="cursor: pointer;">
+      Import JSON
+      <input type="file" accept=".json" (change)="triggerFileUpload($event)" style="display: none;" />
+    </label>
+    <button class="reset-link" (click)="curriculum.resetAll()">Reset to Default Plan</button>
+  </div>
+</footer>

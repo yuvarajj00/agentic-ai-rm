@@ -1,0 +1,611 @@
+<div class="gfg-article-page animate-fade">
+  <!-- TOP BREADCRUMB & UTILITY HEADER -->
+  <header class="gfg-top-nav">
+    <div class="nav-container">
+      <div class="nav-left">
+        <a routerLink="/daily" class="btn btn-sm btn-ghost back-btn">
+          ← Back to Tracker
+        </a>
+        <div class="breadcrumb-trail">
+          <span class="crumb-root">Agentic AI Flight Deck</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb-group">{{ currentTask()?.topicGroup || 'Curriculum' }}</span>
+          <span class="crumb-sep">/</span>
+          <span class="crumb-week">Week {{ currentTask()?.week || 1 }}</span>
+          <span class="crumb-sep">/</span>
+          <strong class="crumb-day">Day {{ dayNumber() }}</strong>
+        </div>
+      </div>
+
+      <div class="nav-right">
+        <!-- DAY SELECTOR DROPDOWN -->
+        <div class="day-jump-select">
+          <span class="jump-label">Jump to:</span>
+          <select [ngModel]="dayNumber()" (ngModelChange)="goToDay($event)">
+            @for (t of allTasks(); track t.id) {
+              <option [value]="t.day">
+                Day {{ t.day }} — {{ t.topic }} {{ t.status === 'completed' ? '✓' : '' }}
+              </option>
+            }
+          </select>
+        </div>
+
+        <!-- DAY STEPPER CONTROLS -->
+        <div class="stepper-controls">
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost stepper-btn"
+            [disabled]="dayNumber() <= 1"
+            (click)="goToPrevDay()"
+            title="Previous Day"
+          >
+            ← Prev
+          </button>
+          <span class="stepper-indicator">{{ dayNumber() }} / 35</span>
+          <button
+            type="button"
+            class="btn btn-sm btn-ghost stepper-btn"
+            [disabled]="dayNumber() >= 35"
+            (click)="goToNextDay()"
+            title="Next Day"
+          >
+            Next →
+          </button>
+        </div>
+
+        <!-- COMPLETION TOGGLE -->
+        @if (currentTask(); as t) {
+          <button
+            type="button"
+            class="btn btn-sm status-toggle-btn"
+            [class.btn-success]="t.status === 'completed'"
+            [class.btn-primary]="t.status !== 'completed'"
+            (click)="toggleTaskStatus()"
+          >
+            {{ t.status === 'completed' ? '✓ Completed' : 'Mark as Complete' }}
+          </button>
+        }
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN ARTICLE WORKSPACE: 2-COLUMN LAYOUT -->
+  <div class="article-layout-container">
+    <!-- LEFT SIDEBAR: STICKY TABLE OF CONTENTS -->
+    <aside class="gfg-sidebar">
+      <div class="sidebar-sticky">
+        <div class="sidebar-block">
+          <div class="sidebar-sec-title">TABLE OF CONTENTS</div>
+          <nav class="toc-nav">
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'overview'"
+              (click)="scrollToSection('overview', $event)"
+            >
+              1. Executive Overview
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'resources'"
+              (click)="scrollToSection('resources', $event)"
+            >
+              2. Study Resources
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'concepts'"
+              (click)="scrollToSection('concepts', $event)"
+            >
+              3. Concepts & Deep Dive
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'practice'"
+              (click)="scrollToSection('practice', $event)"
+            >
+              4. Practice Questions
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'starter-lab'"
+              (click)="scrollToSection('starter-lab', $event)"
+            >
+              5. Starter Code Lab
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'pitfalls'"
+              (click)="scrollToSection('pitfalls', $event)"
+            >
+              6. Common Pitfalls
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'interview'"
+              (click)="scrollToSection('interview', $event)"
+            >
+              7. ML Interview Focus
+            </button>
+          </nav>
+        </div>
+
+        @if (currentTask(); as t) {
+          <div class="sidebar-block mission-snapshot-card">
+            <div class="sidebar-sec-title">TODAY'S MISSION CARD</div>
+            <div class="mission-meta">
+              <span class="meta-badge">{{ t.topicGroup }}</span>
+              <span class="meta-date">{{ t.date }}</span>
+            </div>
+            <div class="mission-task-title">{{ t.task }}</div>
+            
+            <div class="checklist-summary">
+              <label class="check-item">
+                <input type="checkbox" [checked]="t.studyDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'studyDone')">
+                <span>Study Done</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" [checked]="t.exerciseDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'exerciseDone')">
+                <span>Exercise Done</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" [checked]="t.codeSaved" (change)="curriculum.toggleTaskCheckbox(t.id, 'codeSaved')">
+                <span>Code Saved</span>
+              </label>
+              <label class="check-item">
+                <input type="checkbox" [checked]="t.reviewDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'reviewDone')">
+                <span>Review Done</span>
+              </label>
+            </div>
+
+            @if (t.evidenceUrl) {
+              <a [href]="t.evidenceUrl" target="_blank" class="evidence-link">
+                GitHub Repo Evidence ↗
+              </a>
+            }
+          </div>
+        }
+
+        <!-- QUICK 35-DAY STRIP SELECTOR -->
+        <div class="sidebar-block mini-day-matrix">
+          <div class="sidebar-sec-title">ALL 35 DAYS</div>
+          <div class="mini-matrix-grid">
+            @for (item of allTasks(); track item.id) {
+              <button
+                type="button"
+                class="mini-day-btn"
+                [class.active]="item.day === dayNumber()"
+                [class.completed]="item.status === 'completed'"
+                (click)="goToDay(item.day)"
+                [title]="'Day ' + item.day + ': ' + item.topic"
+              >
+                {{ item.day }}
+              </button>
+            }
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- RIGHT / MAIN ARTICLE BODY (GEEKSFORGEEKS STYLE) -->
+    <main class="gfg-article-content">
+      @if (detailService.isLoading()) {
+        <div class="article-loading-state">
+          <span class="spinner spinner-lg"></span>
+          <div class="loading-label">Loading in-depth GeeksforGeeks-style guide for Day {{ dayNumber() }}...</div>
+        </div>
+      } @else if (detail(); as d) {
+        <!-- HERO TITLE BLOCK -->
+        <div class="article-hero">
+          <div class="hero-tags">
+            <span class="tag-pill tag-group">{{ d.topicGroup }}</span>
+            <span class="tag-pill tag-week">Week {{ currentTask()?.week || 1 }}</span>
+            <span class="tag-pill tag-level">Machine Learning Engineering</span>
+          </div>
+          <h1 class="article-main-title">{{ d.taskTitle }}</h1>
+          <p class="article-subtitle">// Complete practical tutorial, subtopic breakdowns, practice exercises, and starter code</p>
+
+          <!-- TIME BUDGET & METADATA STRIP -->
+          <div class="article-meta-banner">
+            <div class="meta-chip chip-total">
+              <span class="chip-icon">⏱️</span>
+              <span>Total Session: <strong>{{ d.timeBudget.totalMins }} mins</strong></span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-icon">🧠</span>
+              <span>Recall: {{ d.timeBudget.recallMins }}m</span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-icon">📚</span>
+              <span>Theory: {{ d.timeBudget.theoryMins }}m</span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-icon">💻</span>
+              <span>Coding: {{ d.timeBudget.codingMins }}m</span>
+            </div>
+            <div class="meta-chip">
+              <span class="chip-icon">🔍</span>
+              <span>Review: {{ d.timeBudget.reviewMins }}m</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- MOBILE MISSION & PROGRESS DOCK (Visible on Mobile / Tablet <= 1024px) -->
+        <div class="mobile-mission-dock">
+          @if (currentTask(); as t) {
+            <div class="mobile-checklist-card">
+              <div class="mobile-card-header">
+                <div class="mobile-card-title">
+                  <span class="live-dot"></span>
+                  <span>TODAY'S MISSION CHECKLIST</span>
+                </div>
+                <span class="mobile-task-status" [class.completed]="t.status === 'completed'">
+                  {{ t.status === 'completed' ? '✓ Complete' : 'In Progress' }}
+                </span>
+              </div>
+
+              <div class="mobile-checklist-grid">
+                <label class="mobile-check-item" [class.checked]="t.studyDone">
+                  <input type="checkbox" [checked]="t.studyDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'studyDone')">
+                  <span>📖 Study Done</span>
+                </label>
+                <label class="mobile-check-item" [class.checked]="t.exerciseDone">
+                  <input type="checkbox" [checked]="t.exerciseDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'exerciseDone')">
+                  <span>✍️ Exercise Done</span>
+                </label>
+                <label class="mobile-check-item" [class.checked]="t.codeSaved">
+                  <input type="checkbox" [checked]="t.codeSaved" (change)="curriculum.toggleTaskCheckbox(t.id, 'codeSaved')">
+                  <span>💾 Code Saved</span>
+                </label>
+                <label class="mobile-check-item" [class.checked]="t.reviewDone">
+                  <input type="checkbox" [checked]="t.reviewDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'reviewDone')">
+                  <span>🔍 Review Done</span>
+                </label>
+              </div>
+
+              @if (t.evidenceUrl) {
+                <div class="mobile-evidence-row">
+                  <a [href]="t.evidenceUrl" target="_blank" class="mobile-evidence-link">
+                    <span>GitHub Evidence:</span> <strong>{{ t.evidenceUrl }}</strong> ↗
+                  </a>
+                </div>
+              }
+            </div>
+          }
+
+          <!-- Quick Mobile Section Scroll Chips -->
+          <div class="mobile-toc-bar">
+            <span class="mobile-toc-label">Sections:</span>
+            <div class="mobile-toc-scroll">
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'overview'" (click)="scrollToSection('overview', $event)">1. Overview</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'resources'" (click)="scrollToSection('resources', $event)">2. Resources</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'concepts'" (click)="scrollToSection('concepts', $event)">3. Concepts</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'practice'" (click)="scrollToSection('practice', $event)">4. Practice</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'starter-lab'" (click)="scrollToSection('starter-lab', $event)">5. Starter Lab</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'pitfalls'" (click)="scrollToSection('pitfalls', $event)">6. Pitfalls</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'interview'" (click)="scrollToSection('interview', $event)">7. Interview</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1. EXECUTIVE OVERVIEW -->
+        <section id="overview" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">01</span>
+            <h2 class="section-title">Overview & Machine Learning Relevance</h2>
+          </div>
+          <div class="article-card overview-card">
+            <div class="overview-body-text article-markdown" [innerHTML]="d.overview | markdown"></div>
+            
+            <div class="objective-callout">
+              <div class="callout-icon">🎯</div>
+              <div>
+                <strong>Mastery Criterion for Day {{ d.day }}:</strong>
+                <div>{{ currentTask()?.outcome || 'Understand core mechanics and apply to reproducible ML code.' }}</div>
+              </div>
+            </div>
+
+            <div class="deliverable-callout">
+              <div class="callout-icon">📁</div>
+              <div>
+                <strong>Target Deliverable Output File:</strong>
+                <code>{{ d.starterCode.filename }}</code>
+              </div>
+            </div>
+
+            @if (d.thingsToDoThisDay && d.thingsToDoThisDay.length > 0) {
+              <div class="daily-tasks-box">
+                <div class="daily-tasks-head">
+                  <span class="daily-tasks-icon">📋</span>
+                  <div class="daily-tasks-title-wrap">
+                    <strong class="daily-tasks-heading">Today's Action Items & Deliverables ({{ d.thingsToDoThisDay.length }} Milestones)</strong>
+                    <span class="daily-tasks-sub">Core study topics, hands-on coding milestones, and interview checkpoints for Day {{ d.day }}</span>
+                  </div>
+                </div>
+                <div class="daily-tasks-list">
+                  @for (action of d.thingsToDoThisDay; track action.id) {
+                    <div class="daily-task-row" [class]="'task-type-' + getTaskBadge(action)">
+                      <span class="task-type-badge">{{ getTaskBadge(action) }}</span>
+                      <div class="task-text-content" [innerHTML]="action.text | markdown"></div>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- 2. CURATED STUDY RESOURCES -->
+        <section id="resources" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">02</span>
+            <h2 class="section-title">Curated Documentation & Reading Links</h2>
+          </div>
+          <div class="resources-grid">
+            @for (res of d.studyLinks; track res.url) {
+              <a [href]="res.url" target="_blank" class="resource-card">
+                <div class="res-head">
+                  <span class="res-badge">{{ res.badge }}</span>
+                  <span class="res-ext-arrow">↗</span>
+                </div>
+                <div class="res-title">{{ res.title }}</div>
+                <div class="res-url-text">{{ res.url }}</div>
+              </a>
+            }
+          </div>
+        </section>
+
+        <!-- 3. CONCEPTS, THEORY & STEP-BY-STEP EXPLANATIONS (GFG STYLE) -->
+        <section id="concepts" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">03</span>
+            <h2 class="section-title">End-to-End Concepts & Code Examples ({{ d.subtopics.length }} Topics)</h2>
+          </div>
+          <div class="subtopics-container">
+            @for (sub of d.subtopics; track sub.id; let idx = $index) {
+              <article class="subtopic-article-box" [id]="sub.id">
+                <div class="subtopic-header">
+                  <div class="subtopic-index-badge">TOPIC {{ idx + 1 }}</div>
+                  <h3 class="subtopic-title">{{ sub.title }}</h3>
+                </div>
+
+                @if (sub.summary && (!sub.detailedExplanation || sub.summary.trim() !== sub.detailedExplanation.trim())) {
+                  <div class="subtopic-summary-box article-markdown">
+                    <strong>Summary:</strong> <span [innerHTML]="sub.summary | markdown"></span>
+                  </div>
+                }
+
+                @if (sub.detailedExplanation) {
+                  <div class="subtopic-detailed-prose article-markdown" [innerHTML]="sub.detailedExplanation | markdown"></div>
+                }
+
+                @if (sub.codeExample && (!idx || sub.codeExample.trim() !== d.subtopics[idx - 1]?.codeExample?.trim())) {
+                  <div class="code-example-container">
+                    <div class="code-box-header">
+                      <span class="code-lang-label">Python 3</span>
+                      <button
+                        type="button"
+                        class="btn-copy-code"
+                        [class.copied]="copiedSnippetId() === sub.id"
+                        (click)="copyCode(sub.codeExample, sub.id)"
+                      >
+                        {{ copiedSnippetId() === sub.id ? '✓ Copied!' : '📋 Copy Code' }}
+                      </button>
+                    </div>
+                    <pre class="code-box-pre"><code [innerHTML]="highlightPython(sub.codeExample)"></code></pre>
+                  </div>
+                }
+
+                @if (sub.keyTakeaways && sub.keyTakeaways.length > 0) {
+                  <div class="takeaways-box">
+                    <div class="takeaways-header">
+                      <span>💡 KEY TAKEAWAYS FOR MACHINE LEARNING</span>
+                    </div>
+                    <ul class="takeaways-list">
+                      @for (item of sub.keyTakeaways; track item) {
+                        <li>{{ item }}</li>
+                      }
+                    </ul>
+                  </div>
+                }
+
+                
+              </article>
+            }
+          </div>
+        </section>
+
+        <!-- 4. HANDS-ON PRACTICE QUESTIONS & SOLUTIONS -->
+        <section id="practice" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">04</span>
+            <h2 class="section-title">Practice Exercises & Code Solutions ({{ d.practiceQuestions.length }} Questions)</h2>
+          </div>
+          <div class="practice-questions-grid">
+            @for (q of d.practiceQuestions; track q.id; let qIdx = $index) {
+              <div class="gfg-question-card" [id]="q.id">
+                <div class="q-card-head">
+                  <div class="q-number-title">
+                    <span class="q-number">Q{{ qIdx + 1 }}.</span>
+                    <span class="q-title-text">{{ q.title }}</span>
+                  </div>
+                  <span class="diff-badge diff-{{ q.difficulty }}">{{ q.difficulty }}</span>
+                </div>
+
+                <div class="q-prompt-box article-markdown" [innerHTML]="q.prompt | markdown"></div>
+
+                @if (q.hints && q.hints.length > 0) {
+                  <div class="q-hints-box article-markdown">
+                    <strong>Hints:</strong>
+                    <ul>
+                      @for (h of q.hints; track h) {
+                        <li [innerHTML]="h | markdown"></li>
+                      }
+                    </ul>
+                  </div>
+                }
+
+                <div class="q-actions-bar">
+                  <button
+                    type="button"
+                    class="btn-toggle-solution"
+                    (click)="toggleSolution(q.id)"
+                  >
+                    {{ isSolutionRevealed(q.id) ? '▲ Hide Answer' : (isInterviewQuestion(q) ? '👁️ View Model Interview Answer' : '👁️ View Verified Solution & Tests') }}
+                  </button>
+                </div>
+
+                @if (isSolutionRevealed(q.id)) {
+                  <div class="q-solution-reveal animate-fade">
+                    @if (isInterviewSolution(q.solutionCode)) {
+                      <!-- INTERVIEW MODEL ANSWER CARD -->
+                      <div class="interview-solution-card">
+                        <div class="code-box-header solution-box-head">
+                          <span class="code-lang-label">🎯 Model Candidate Answer</span>
+                          <button
+                            type="button"
+                            class="btn-copy-code"
+                            [class.copied]="copiedSnippetId() === q.id"
+                            (click)="copyCode(cleanInterviewAnswer(q.solutionCode), q.id)"
+                          >
+                            {{ copiedSnippetId() === q.id ? '✓ Copied!' : '📋 Copy Answer' }}
+                          </button>
+                        </div>
+                        <div class="interview-card-body article-markdown" [innerHTML]="cleanInterviewAnswer(q.solutionCode) | markdown"></div>
+                        @if (q.explanation && q.explanation.trim() !== cleanInterviewAnswer(q.solutionCode).trim()) {
+                          <div class="solution-explanation-text article-markdown" [innerHTML]="('**💡 Solution Analysis:** ' + q.explanation) | markdown"></div>
+                        }
+                      </div>
+                    } @else {
+                      <!-- PYTHON CODE SOLUTION BOX -->
+                      <div class="code-box-header solution-box-head">
+                        <span class="code-lang-label">Python Solution</span>
+                        <button
+                          type="button"
+                          class="btn-copy-code"
+                          [class.copied]="copiedSnippetId() === q.id"
+                          (click)="copyCode(q.solutionCode, q.id)"
+                        >
+                          {{ copiedSnippetId() === q.id ? '✓ Copied!' : '📋 Copy Solution' }}
+                        </button>
+                      </div>
+                      <pre class="code-box-pre solution-pre"><code [innerHTML]="highlightPython(q.solutionCode)"></code></pre>
+
+                      @if (q.explanation) {
+                        <div class="solution-explanation-text article-markdown" [innerHTML]="('**💡 Solution Analysis:** ' + q.explanation) | markdown"></div>
+                      }
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- 5. READY-TO-COPY STARTER CODE LAB -->
+        <section id="starter-lab" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">05</span>
+            <h2 class="section-title">Ready-to-Copy Starter Code Lab</h2>
+          </div>
+          <div class="starter-lab-card">
+            <div class="lab-card-head">
+              <div class="lab-file-info">
+                <span class="file-icon">📄</span>
+                <span class="file-name">{{ d.starterCode.filename }}</span>
+              </div>
+              <button
+                type="button"
+                class="btn btn-sm btn-primary btn-copy-starter"
+                [class.btn-success]="copiedSnippetId() === 'main-starter'"
+                (click)="copyCode(d.starterCode.code, 'main-starter')"
+              >
+                {{ copiedSnippetId() === 'main-starter' ? '✓ Copied to Clipboard!' : '📋 Copy Starter Code' }}
+              </button>
+            </div>
+            <div class="lab-desc article-markdown" [innerHTML]="d.starterCode.description | markdown"></div>
+            <pre class="lab-code-pre"><code [innerHTML]="highlightPython(d.starterCode.code)"></code></pre>
+          </div>
+        </section>
+
+        <!-- 6. COMMON PITFALLS & GOTCHAS -->
+        <section id="pitfalls" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">06</span>
+            <h2 class="section-title">Common Pitfalls & Friction Points</h2>
+          </div>
+          <div class="pitfalls-callout-card">
+            <div class="pitfalls-head">
+              <span class="warning-icon">⚠️</span>
+              <strong>Watch out for these common bugs and misconceptions:</strong>
+            </div>
+            <ul class="pitfalls-bullets article-markdown">
+              @for (pit of d.commonPitfalls; track pit) {
+                <li [innerHTML]="pit | markdown"></li>
+              }
+            </ul>
+          </div>
+        </section>
+
+        <!-- 7. ML TECHNICAL INTERVIEW FOCUS -->
+        <section id="interview" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">07</span>
+            <h2 class="section-title">Machine Learning Technical Interview Focus</h2>
+          </div>
+          <div class="interview-focus-card">
+            <div class="interview-q-row">
+              <span class="interview-badge">INTERVIEW QUESTION</span>
+              <div class="interview-question-text">"{{ d.interviewAngle.question }}"</div>
+            </div>
+            <div class="interview-answer-box article-markdown">
+              <strong>Model Candidate Answer:</strong>
+              <div class="mt-2" [innerHTML]="d.interviewAngle.answer | markdown"></div>
+            </div>
+            <div class="interview-why-box article-markdown">
+              <strong>Why interviewers ask this:</strong>
+              <div class="mt-1" [innerHTML]="d.interviewAngle.whyItMatters | markdown"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- BOTTOM DAY NAVIGATION CONTROLS -->
+        <nav class="bottom-nav-bar">
+          <button
+            type="button"
+            class="btn btn-ghost"
+            [disabled]="dayNumber() <= 1"
+            (click)="goToPrevDay()"
+          >
+            ← Day {{ dayNumber() > 1 ? dayNumber() - 1 : 1 }}
+          </button>
+          
+          <a routerLink="/daily" class="btn btn-secondary">
+            Back to 35-Day Tracker
+          </a>
+
+          <button
+            type="button"
+            class="btn btn-primary"
+            [disabled]="dayNumber() >= 35"
+            (click)="goToNextDay()"
+          >
+            Day {{ dayNumber() < 35 ? dayNumber() + 1 : 35 }} →
+          </button>
+        </nav>
+      } @else {
+        <div class="article-not-found">
+          <h2>Could not load Day {{ dayNumber() }} guide</h2>
+          <p>Please check your connection or return to the daily tracker.</p>
+          <a routerLink="/daily" class="btn btn-primary">Return to Tracker</a>
+        </div>
+      }
+    </main>
+  </div>
+</div>

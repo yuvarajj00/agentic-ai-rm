@@ -1,0 +1,181 @@
+<section class="skills-section animate-fade">
+  <div class="section-header">
+    <div class="section-tag">AGENTIC AI PRODUCTION TOOLS & FRAMEWORKS</div>
+    <h2 class="section-title">Agentic AI Tech Stack & Skill Matrix</h2>
+    <p class="section-subtitle">
+      Sequenced in strict chronological order from absolute scratch (Python & Dev Environment) to Senior ML Engineer (Inference APIs, CI/CD, Containerization, and Portfolio Release). Track every technology across four stages of real-world mastery.
+    </p>
+  </div>
+
+  <!-- 4 MASTERY KPI METRIC CARDS -->
+  <div class="mastery-kpi-grid">
+    <div class="kpi-card kpi-learned">
+      <div class="kpi-header">
+        <span class="kpi-label">STAGE 1: THEORY LEARNED</span>
+        <span class="kpi-icon">📖</span>
+      </div>
+      <div class="kpi-val">{{ curriculum.techStackMetrics().learned }} <span class="kpi-denom">/ {{ curriculum.techStack().length }}</span></div>
+      <div class="kpi-bar-wrap">
+        <div class="kpi-bar-fill fill-blue" [style.width.%]="curriculum.techStackMetrics().learnedPct"></div>
+      </div>
+      <div class="kpi-sub">{{ curriculum.techStackMetrics().learnedPct }}% concepts grasped</div>
+    </div>
+
+    <div class="kpi-card kpi-practiced">
+      <div class="kpi-header">
+        <span class="kpi-label">STAGE 2: HANDS-ON PRACTICED</span>
+        <span class="kpi-icon">💻</span>
+      </div>
+      <div class="kpi-val">{{ curriculum.techStackMetrics().practiced }} <span class="kpi-denom">/ {{ curriculum.techStack().length }}</span></div>
+      <div class="kpi-bar-wrap">
+        <div class="kpi-bar-fill fill-green" [style.width.%]="curriculum.techStackMetrics().practicedPct"></div>
+      </div>
+      <div class="kpi-sub">{{ curriculum.techStackMetrics().practicedPct }}% coded in exercises</div>
+    </div>
+
+    <div class="kpi-card kpi-explain">
+      <div class="kpi-header">
+        <span class="kpi-label">STAGE 3: CAN EXPLAIN</span>
+        <span class="kpi-icon">🎯</span>
+      </div>
+      <div class="kpi-val">{{ curriculum.techStackMetrics().canExplain }} <span class="kpi-denom">/ {{ curriculum.techStack().length }}</span></div>
+      <div class="kpi-bar-wrap">
+        <div class="kpi-bar-fill fill-amber" [style.width.%]="curriculum.techStackMetrics().canExplainPct"></div>
+      </div>
+      <div class="kpi-sub">{{ curriculum.techStackMetrics().canExplainPct }}% interview articulated</div>
+    </div>
+
+    <div class="kpi-card kpi-independent">
+      <div class="kpi-header">
+        <span class="kpi-label">STAGE 4: INDEPENDENT USE</span>
+        <span class="kpi-icon">🚀</span>
+      </div>
+      <div class="kpi-val">{{ curriculum.techStackMetrics().canUseIndependently }} <span class="kpi-denom">/ {{ curriculum.techStack().length }}</span></div>
+      <div class="kpi-bar-wrap">
+        <div class="kpi-bar-fill fill-purple" [style.width.%]="curriculum.techStackMetrics().independentPct"></div>
+      </div>
+      <div class="kpi-sub">{{ curriculum.techStackMetrics().independentPct }}% shipped in projects</div>
+    </div>
+  </div>
+
+  <!-- STAGE FILTER & SEARCH CONTROLS -->
+  <div class="stage-control-panel">
+    <div class="control-row">
+      <div class="filter-header-left">
+        <span class="filter-sec-title">CHRONOLOGICAL ROADMAP STAGES:</span>
+      </div>
+      <div class="filter-header-right">
+        <input
+          type="text"
+          class="tech-search-input"
+          [ngModel]="searchQuery()"
+          (ngModelChange)="searchQuery.set($event)"
+          placeholder="Search skill, concept, framework, or project..."
+        />
+      </div>
+    </div>
+
+    <div class="stage-pills-row">
+      <button
+        type="button"
+        class="stage-pill-btn"
+        [class.active]="selectedStage() === 'all'"
+        (click)="selectedStage.set('all')"
+      >
+        <span class="stage-pill-badge">ALL</span>
+        <span class="stage-pill-title">Full 31-Skill Sequence</span>
+        <span class="stage-pill-count">31</span>
+      </button>
+
+      @for (stage of stageList; track stage.id) {
+        <button
+          type="button"
+          class="stage-pill-btn"
+          [class.active]="selectedStage() === stage.id"
+          (click)="selectedStage.set(stage.id)"
+        >
+          <span class="stage-pill-badge">{{ stage.badge }}</span>
+          <span class="stage-pill-title">{{ stage.shortName }}</span>
+          <span class="stage-pill-count">{{ getSkillsForStage(stage.id).length }}</span>
+        </button>
+      }
+    </div>
+
+    <!-- STAGE SPOTLIGHT CARD -->
+    @if (selectedStage() !== 'all') {
+      @if (getStageMeta(selectedStage()); as currentStage) {
+        <div class="stage-spotlight-box animate-fade">
+          <div class="spotlight-header">
+            <span class="spotlight-badge">{{ currentStage.badge }}</span>
+            <span class="spotlight-title">{{ currentStage.name }}</span>
+            <span class="spotlight-meta">{{ currentStage.weeks }} • {{ currentStage.skillSpan }}</span>
+          </div>
+          <p class="spotlight-desc">{{ currentStage.description }}</p>
+        </div>
+      }
+    }
+  </div>
+
+  <!-- SKILLS MATRIX TABLE -->
+  <div class="table-scroll-hint">⇄ Swipe horizontally to inspect all 12 columns &amp; mastery tiers</div>
+  <div class="skills-table-wrap">
+    <table class="skills-table">
+      <thead>
+        <tr>
+          <th style="width: 55px; text-align: center;">STEP</th>
+          <th>TECHNOLOGY</th>
+          <th>ROADMAP STAGE</th>
+          <th>CATEGORY</th>
+          <th>PRIORITY</th>
+          <th>WHAT TO LEARN</th>
+          <th>PROOF EVIDENCE / PROJECT</th>
+          <th style="text-align: center;" title="Understood the theoretical principles">LEARNED</th>
+          <th style="text-align: center;" title="Implemented in hands-on code exercises">PRACTICED</th>
+          <th style="text-align: center;" title="Can explain clearly in a technical interview">CAN EXPLAIN</th>
+          <th style="text-align: center;" title="Can use independently without looking at docs/tutorials">INDEPENDENT</th>
+          <th>DOCS</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (skill of filteredSkills(); track skill.id) {
+          <tr [class.core-priority]="skill.priority === 'Core'">
+            <td style="text-align: center;">
+              <span class="step-num">#{{ (skill.order || ($index + 1)) < 10 ? '0' + (skill.order || ($index + 1)) : (skill.order || ($index + 1)) }}</span>
+            </td>
+            <td class="tech-col-name">
+              <span class="tech-title">{{ skill.technology }}</span>
+            </td>
+            <td>
+              <span class="stage-tag">{{ skill.stage || 'Curriculum Core' }}</span>
+            </td>
+            <td><span class="pill pill-category">{{ skill.category }}</span></td>
+            <td>
+              <span class="pill" [class.pill-accent]="skill.priority === 'Core'" [class.pill-accent2]="skill.priority === 'Important'">
+                {{ skill.priority }}
+              </span>
+            </td>
+            <td class="tech-col-learn">{{ skill.whatToLearn }}</td>
+            <td class="tech-col-proof">{{ skill.proofProject }}</td>
+            <td style="text-align: center;">
+              <input type="checkbox" [checked]="skill.learned" (change)="curriculum.toggleSkillCheckbox(skill.id, 'learned')" />
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" [checked]="skill.practiced" (change)="curriculum.toggleSkillCheckbox(skill.id, 'practiced')" />
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" [checked]="skill.canExplain" (change)="curriculum.toggleSkillCheckbox(skill.id, 'canExplain')" />
+            </td>
+            <td style="text-align: center;">
+              <input type="checkbox" [checked]="skill.canUseIndependently" (change)="curriculum.toggleSkillCheckbox(skill.id, 'canUseIndependently')" />
+            </td>
+            <td>
+              @if (skill.resourceUrl) {
+                <a [href]="skill.resourceUrl" target="_blank" rel="noopener noreferrer" class="docs-link">Docs ↗</a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</section>

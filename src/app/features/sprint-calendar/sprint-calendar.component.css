@@ -1,0 +1,662 @@
+/* ==========================================================================
+   SPRINT CALENDAR — ULTRA-CLEAN GLASSMORPHISM POPUP
+   Placement: Fixed Right Corner Screen & Middle of Screen (top: 50%)
+   Design: Minimal, Clean, Uncluttered Aerospace Glass (Dark & Light Theme)
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. FLOATING MINIMAL LAUNCHER TAB (Docked to Right Screen Edge)
+   -------------------------------------------------------------------------- */
+.cal-float-trigger {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1040;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.38rem 0.55rem 0.38rem 0.65rem;
+  height: 30px;
+  box-sizing: border-box;
+  background: var(--surface, rgba(13, 16, 23, 0.94));
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(110, 181, 255, 0.3);
+  border-right: none;
+  border-radius: 6px 0 0 6px;
+  color: var(--text, #e6edf3);
+  cursor: pointer;
+  box-shadow: -4px 6px 20px rgba(0, 0, 0, 0.45);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+}
+
+.cal-float-trigger:hover {
+  background: rgba(22, 27, 34, 0.98);
+  border-color: var(--accent2, #6eb5ff);
+  transform: translateY(-50%) translateX(-2px);
+  box-shadow: -6px 8px 24px rgba(0, 0, 0, 0.6), 0 0 15px rgba(110, 181, 255, 0.25);
+}
+
+.cal-float-trigger.is-hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-50%) translateX(100%);
+}
+
+.trigger-icon {
+  font-size: 0.78rem;
+  line-height: 1;
+}
+
+.trigger-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: var(--text, #ffffff);
+}
+
+.trigger-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(110, 181, 255, 0.14);
+  color: var(--accent2, #6eb5ff);
+  border: 1px solid rgba(110, 181, 255, 0.3);
+  line-height: 1;
+}
+
+.trigger-badge.badge-critical {
+  background: rgba(239, 68, 68, 0.15);
+  border-color: rgba(239, 68, 68, 0.4);
+  color: #f87171;
+}
+
+.trigger-badge.badge-behind {
+  background: rgba(245, 158, 11, 0.15);
+  border-color: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+}
+
+/* --------------------------------------------------------------------------
+   2. CLICK-OUTSIDE BACKDROP
+   -------------------------------------------------------------------------- */
+.cal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  z-index: 1045;
+  animation: fadeIn 0.15s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --------------------------------------------------------------------------
+   3. CALENDAR CARD (Fixed Right Edge, Middle Screen)
+   -------------------------------------------------------------------------- */
+.sprint-calendar-card {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 292px;
+  max-width: calc(100vw - 32px);
+  z-index: 1050;
+  background: var(--surface, #0d1017);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(110, 181, 255, 0.22);
+  border-radius: 12px;
+  box-shadow:
+    0 20px 48px rgba(0, 0, 0, 0.7),
+    0 0 20px rgba(110, 181, 255, 0.08);
+  padding: 0.75rem 0.85rem;
+  box-sizing: border-box;
+  animation: slideInRight 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  user-select: none;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(20px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0) scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. SINGLE UNIFIED HEADER
+   -------------------------------------------------------------------------- */
+.cal-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 0.45rem;
+  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  height: 28px;
+  box-sizing: border-box;
+}
+
+.cal-month-wrap {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cal-month-text {
+  margin: 0;
+  font-family: 'Syne', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: var(--text, #ffffff);
+  line-height: 1;
+}
+
+.cal-btn-today {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.12rem 0.35rem;
+  border-radius: 3px;
+  background: rgba(127, 255, 110, 0.1);
+  border: 1px solid rgba(127, 255, 110, 0.3);
+  color: var(--accent, #7fff6e);
+  cursor: pointer;
+  line-height: 1;
+  transition: all 0.15s ease;
+}
+
+.cal-btn-today:hover {
+  background: rgba(127, 255, 110, 0.22);
+  border-color: var(--accent, #7fff6e);
+}
+
+.cal-ctrls {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+.cal-ctrl-btn {
+  background: transparent;
+  border: none;
+  color: var(--muted, #8b949e);
+  width: 22px;
+  height: 22px;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: all 0.15s ease;
+  padding: 0;
+}
+
+.cal-ctrl-btn:hover {
+  color: var(--text, #ffffff);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.cal-btn-close {
+  font-size: 0.72rem;
+  margin-left: 0.2rem;
+  color: var(--muted, #8b949e);
+}
+
+.cal-btn-close:hover {
+  color: #f87171;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+/* --------------------------------------------------------------------------
+   5. WEEKDAY ROW
+   -------------------------------------------------------------------------- */
+.cal-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  padding: 0.15rem 0;
+}
+
+.cal-weekday {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  font-weight: 700;
+  color: var(--muted, #6e7681);
+  text-transform: uppercase;
+}
+
+/* --------------------------------------------------------------------------
+   6. CLEAN DATE GRID
+   -------------------------------------------------------------------------- */
+.cal-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.cal-cell {
+  position: relative;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  height: 31px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text, #c9d1d9);
+  padding: 0;
+  box-sizing: border-box;
+  transition: all 0.12s ease;
+}
+
+.cal-cell:hover {
+  background: rgba(110, 181, 255, 0.12);
+  border-color: rgba(110, 181, 255, 0.35);
+  transform: scale(1.06);
+  z-index: 2;
+}
+
+.cal-cell.other-month {
+  opacity: 0.18;
+  pointer-events: none;
+}
+
+/* Today's Target Highlight */
+.cal-cell.is-today {
+  border-color: var(--accent, #7fff6e);
+  background: rgba(127, 255, 110, 0.08);
+  box-shadow: 0 0 8px rgba(127, 255, 110, 0.2);
+}
+
+.cal-cell.is-today .cell-num {
+  color: var(--accent, #7fff6e);
+  font-weight: 800;
+}
+
+/* Sprint Day Status Accents */
+.cal-cell.status-completed {
+  color: #e6edf3;
+}
+
+.cal-cell.status-in-progress {
+  color: #e6edf3;
+}
+
+.cal-cell.status-buffer {
+  color: #e6edf3;
+}
+
+.cell-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  line-height: 1;
+}
+
+/* Minimal 3.5px Status Dot */
+.cell-dot {
+  width: 3.5px;
+  height: 3.5px;
+  border-radius: 50%;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.cell-dot.dot-completed {
+  background: #22c55e;
+  box-shadow: 0 0 4px #22c55e;
+}
+
+.cell-dot.dot-in_progress {
+  background: #06b6d4;
+  box-shadow: 0 0 4px #06b6d4;
+}
+
+.cell-dot.dot-not_started {
+  background: #eab308;
+}
+
+.cell-dot.dot-blocked {
+  background: #ef4444;
+}
+
+.cell-dot.dot-buffer {
+  background: #c084fc;
+  box-shadow: 0 0 4px #c084fc;
+}
+
+/* --------------------------------------------------------------------------
+   7. SINGLE-LINE HOVER STRIP
+   Requirement: "on hovering the date it has to show day {no of that day}-topic [status]"
+   -------------------------------------------------------------------------- */
+.cal-hover-bar {
+  margin-top: 0.25rem;
+  padding-top: 0.45rem;
+  border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  min-height: 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.hover-text {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--text, #e6edf3);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+.hover-day {
+  font-weight: 800;
+  color: var(--accent2, #6eb5ff);
+  flex-shrink: 0;
+}
+
+.hover-sep {
+  color: var(--muted, #6e7681);
+  flex-shrink: 0;
+}
+
+.hover-topic {
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--text, #ffffff);
+}
+
+.hover-status {
+  font-weight: 700;
+  margin-left: auto;
+  flex-shrink: 0;
+  font-size: 0.62rem;
+}
+
+.hover-status.status-completed { color: #4ade80; }
+.hover-status.status-in_progress { color: #38bdf8; }
+.hover-status.status-not_started { color: #fbbf24; }
+.hover-status.status-blocked { color: #f87171; }
+.hover-status.status-buffer { color: #c084fc; }
+
+.hover-text.muted {
+  color: var(--muted, #8b949e);
+}
+
+.hover-placeholder {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  color: var(--muted, #6e7681);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* --------------------------------------------------------------------------
+   8. MOBILE RESPONSIVENESS
+   -------------------------------------------------------------------------- */
+@media (max-width: 640px) {
+  .sprint-calendar-card {
+    right: 12px;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: auto;
+    max-width: 310px;
+    margin: 0 auto;
+  }
+}
+
+/* ==========================================================================
+   9. LIGHT THEME OVERRIDES (Clean, High Contrast, Accessible)
+   ========================================================================== */
+:host-context([data-theme="light"]) .cal-float-trigger,
+:root[data-theme="light"] .cal-float-trigger {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-right: none;
+  color: #0f172a;
+  box-shadow: -4px 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+:host-context([data-theme="light"]) .cal-float-trigger:hover,
+:root[data-theme="light"] .cal-float-trigger:hover {
+  background: #f8fafc;
+  border-color: #0284c7;
+  box-shadow: -6px 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+:host-context([data-theme="light"]) .trigger-label,
+:root[data-theme="light"] .trigger-label {
+  color: #0f172a;
+}
+
+:host-context([data-theme="light"]) .trigger-badge,
+:root[data-theme="light"] .trigger-badge {
+  background: #eff6ff;
+  color: #0284c7;
+  border-color: #bae6fd;
+}
+
+:host-context([data-theme="light"]) .trigger-badge.badge-critical,
+:root[data-theme="light"] .trigger-badge.badge-critical {
+  background: #fef2f2;
+  border-color: #fecaca;
+  color: #dc2626;
+}
+
+:host-context([data-theme="light"]) .trigger-badge.badge-behind,
+:root[data-theme="light"] .trigger-badge.badge-behind {
+  background: #fffbeb;
+  border-color: #fde68a;
+  color: #b45309;
+}
+
+:host-context([data-theme="light"]) .cal-backdrop,
+:root[data-theme="light"] .cal-backdrop {
+  background: rgba(15, 23, 42, 0.25);
+}
+
+:host-context([data-theme="light"]) .sprint-calendar-card,
+:root[data-theme="light"] .sprint-calendar-card {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.12), 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+:host-context([data-theme="light"]) .cal-card-header,
+:root[data-theme="light"] .cal-card-header {
+  border-bottom: 1px solid #e2e8f0;
+}
+
+:host-context([data-theme="light"]) .cal-month-text,
+:root[data-theme="light"] .cal-month-text {
+  color: #0f172a;
+}
+
+:host-context([data-theme="light"]) .cal-btn-today,
+:root[data-theme="light"] .cal-btn-today {
+  background: #ecfdf5;
+  border-color: #a7f3d0;
+  color: #047857;
+}
+
+:host-context([data-theme="light"]) .cal-btn-today:hover,
+:root[data-theme="light"] .cal-btn-today:hover {
+  background: #d1fae5;
+  border-color: #34d399;
+}
+
+:host-context([data-theme="light"]) .cal-ctrl-btn,
+:root[data-theme="light"] .cal-ctrl-btn {
+  color: #64748b;
+}
+
+:host-context([data-theme="light"]) .cal-ctrl-btn:hover,
+:root[data-theme="light"] .cal-ctrl-btn:hover {
+  color: #0f172a;
+  background: #f1f5f9;
+}
+
+:host-context([data-theme="light"]) .cal-btn-close:hover,
+:root[data-theme="light"] .cal-btn-close:hover {
+  color: #dc2626;
+  background: #fee2e2;
+}
+
+:host-context([data-theme="light"]) .cal-weekday,
+:root[data-theme="light"] .cal-weekday {
+  color: #64748b;
+}
+
+:host-context([data-theme="light"]) .cal-cell,
+:root[data-theme="light"] .cal-cell {
+  color: #1e293b;
+}
+
+:host-context([data-theme="light"]) .cal-cell:hover,
+:root[data-theme="light"] .cal-cell:hover {
+  background: #f1f5f9;
+  border-color: #cbd5e1;
+}
+
+:host-context([data-theme="light"]) .cal-cell.other-month,
+:root[data-theme="light"] .cal-cell.other-month {
+  color: #94a3b8;
+  opacity: 0.35;
+}
+
+:host-context([data-theme="light"]) .cal-cell.is-today,
+:root[data-theme="light"] .cal-cell.is-today {
+  border-color: #059669;
+  background: #ecfdf5;
+  box-shadow: 0 0 0 1px #059669;
+}
+
+:host-context([data-theme="light"]) .cal-cell.is-today .cell-num,
+:root[data-theme="light"] .cal-cell.is-today .cell-num {
+  color: #047857;
+  font-weight: 800;
+}
+
+:host-context([data-theme="light"]) .cell-dot.dot-completed,
+:root[data-theme="light"] .cell-dot.dot-completed {
+  background: #16a34a;
+  box-shadow: none;
+}
+
+:host-context([data-theme="light"]) .cell-dot.dot-in_progress,
+:root[data-theme="light"] .cell-dot.dot-in_progress {
+  background: #0284c7;
+  box-shadow: none;
+}
+
+:host-context([data-theme="light"]) .cell-dot.dot-not_started,
+:root[data-theme="light"] .cell-dot.dot-not_started {
+  background: #d97706;
+  box-shadow: none;
+}
+
+:host-context([data-theme="light"]) .cell-dot.dot-blocked,
+:root[data-theme="light"] .cell-dot.dot-blocked {
+  background: #dc2626;
+  box-shadow: none;
+}
+
+:host-context([data-theme="light"]) .cell-dot.dot-buffer,
+:root[data-theme="light"] .cell-dot.dot-buffer {
+  background: #9333ea;
+  box-shadow: none;
+}
+
+:host-context([data-theme="light"]) .cal-hover-bar,
+:root[data-theme="light"] .cal-hover-bar {
+  border-top: 1px solid #e2e8f0;
+  background: #f8fafc;
+  border-radius: 6px;
+  padding: 0.35rem 0.5rem;
+}
+
+:host-context([data-theme="light"]) .hover-text,
+:root[data-theme="light"] .hover-text {
+  color: #0f172a;
+}
+
+:host-context([data-theme="light"]) .hover-day,
+:root[data-theme="light"] .hover-day {
+  color: #0369a1;
+  font-weight: 800;
+}
+
+:host-context([data-theme="light"]) .hover-sep,
+:root[data-theme="light"] .hover-sep {
+  color: #94a3b8;
+}
+
+:host-context([data-theme="light"]) .hover-topic,
+:root[data-theme="light"] .hover-topic {
+  color: #0f172a;
+  font-weight: 600;
+}
+
+:host-context([data-theme="light"]) .hover-status.status-completed,
+:root[data-theme="light"] .hover-status.status-completed {
+  color: #15803d;
+}
+
+:host-context([data-theme="light"]) .hover-status.status-in_progress,
+:root[data-theme="light"] .hover-status.status-in_progress {
+  color: #0369a1;
+}
+
+:host-context([data-theme="light"]) .hover-status.status-not_started,
+:root[data-theme="light"] .hover-status.status-not_started {
+  color: #b45309;
+}
+
+:host-context([data-theme="light"]) .hover-status.status-blocked,
+:root[data-theme="light"] .hover-status.status-blocked {
+  color: #b91c1c;
+}
+
+:host-context([data-theme="light"]) .hover-status.status-buffer,
+:root[data-theme="light"] .hover-status.status-buffer {
+  color: #7e22ce;
+}
+
+:host-context([data-theme="light"]) .hover-placeholder,
+:root[data-theme="light"] .hover-placeholder {
+  color: #64748b;
+}
+
+:host-context([data-theme="light"]) .hover-text.muted,
+:root[data-theme="light"] .hover-text.muted {
+  color: #64748b;
+}

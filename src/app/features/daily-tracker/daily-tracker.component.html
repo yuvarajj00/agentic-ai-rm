@@ -1,0 +1,470 @@
+<section class="daily-section animate-fade">
+  <!-- 35-DAY MISSION MATRIX OVERVIEW -->
+  <div class="matrix-overview-card">
+    <div class="matrix-card-header">
+      <div class="matrix-header-title">
+        <span class="matrix-icon">🗺️</span>
+        <div>
+          <div class="matrix-title-text">35-DAY ROADMAP MATRIX // ALL 35 DAYS AT A GLANCE</div>
+          <div class="matrix-sub-text">Click any day block (01 to 35) to immediately load its hands-on exercise and briefing</div>
+        </div>
+      </div>
+      <div class="matrix-header-actions">
+        <button
+          type="button"
+          class="btn btn-sm btn-primary jump-today-btn"
+          (click)="jumpToToday()"
+          [title]="'Jump directly to Today: Day ' + (curriculum.calendarPacing().expectedDayNumber || 1)"
+        >
+          🎯 Jump to Today (Day {{ curriculum.calendarPacing().expectedDayNumber }})
+        </button>
+        <span class="matrix-stat-pill">
+          <strong>{{ curriculum.completedDaysCount() }}</strong> / 35 Completed
+        </span>
+        <button
+          type="button"
+          class="btn btn-sm btn-ghost toggle-matrix-btn"
+          (click)="showMatrixView.set(!showMatrixView())"
+        >
+          {{ showMatrixView() ? '▲ Collapse Matrix' : '▼ Expand 35-Day Matrix' }}
+        </button>
+      </div>
+    </div>
+
+    @if (showMatrixView()) {
+      <div class="matrix-grid-scroll animate-fade">
+        <div class="matrix-weeks-container">
+          @for (item of daysByWeek(); track item.week) {
+            <div class="matrix-week-col">
+              <button
+                type="button"
+                class="matrix-week-header"
+                [class.active]="curriculum.filterWeek() === item.week"
+                (click)="onWeekFilterChange(curriculum.filterWeek() === item.week ? 'all' : item.week)"
+                title="Filter to Week {{ item.week }}"
+              >
+                W{{ item.week }}
+              </button>
+              <div class="matrix-day-cells">
+                @for (task of item.tasks; track task.id) {
+                  <button
+                    type="button"
+                    class="matrix-day-cell"
+                    [class.selected]="curriculum.selectedDay()?.id === task.id"
+                    [class.completed]="task.status === 'completed'"
+                    [class.today]="curriculum.isTaskToday(task)"
+                    [class.overdue]="curriculum.isTaskOverdue(task)"
+                    [class.buffer]="task.isBufferDay"
+                    (click)="selectDay(task)"
+                    [title]="'Day ' + task.day + ': ' + task.task + ' (' + task.date + ')'"
+                  >
+                    {{ task.day }}
+                  </button>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    }
+  </div>
+
+  <!-- CONTROLS & FILTER BAR -->
+  <div class="filter-bar">
+    <div class="filter-inputs">
+      <div class="filter-item">
+        <label>FILTER BY WEEK</label>
+        <select [ngModel]="curriculum.filterWeek()" (ngModelChange)="onWeekFilterChange($event)">
+          <option [ngValue]="'all'">All Weeks (1 to 5)</option>
+          @for (w of weeksList; track w) {
+            <option [ngValue]="w">Week {{ w }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label>TOPIC GROUP</label>
+        <select [ngModel]="curriculum.filterGroup()" (ngModelChange)="curriculum.filterGroup.set($event)">
+          <option value="all">All Domains</option>
+          @for (g of topicGroups; track g) {
+            <option [value]="g">{{ g }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="filter-item">
+        <label>STATUS</label>
+        <select [ngModel]="curriculum.filterStatus()" (ngModelChange)="curriculum.filterStatus.set($event)">
+          <option value="all">All Statuses</option>
+          <option value="overdue">⚠️ Overdue Untracked ({{ curriculum.overdueCount() }})</option>
+          <option value="not_started">Not Started</option>
+          <option value="in_progress">In Progress</option>
+          <option value="completed">Completed</option>
+          <option value="blocked">Blocked</option>
+        </select>
+      </div>
+
+      <div class="filter-item search-item">
+        <label>KEYWORD SEARCH</label>
+        <input type="text" [ngModel]="curriculum.searchQuery()" (ngModelChange)="curriculum.searchQuery.set($event)" placeholder="Search tasks, exercises, topics..." />
+      </div>
+    </div>
+
+    <div class="filter-summary">
+      @if (curriculum.overdueCount() > 0) {
+        <button
+          class="btn btn-sm btn-danger overdue-toggle-btn"
+          [class.active]="curriculum.filterStatus() === 'overdue'"
+          (click)="toggleOverdueFilter()"
+          title="Filter and show only overdue untracked tasks"
+        >
+          ⚠️ {{ curriculum.filterStatus() === 'overdue' ? 'Clear Overdue Filter' : 'Show ' + curriculum.overdueCount() + ' Overdue Days' }}
+        </button>
+      }
+      <span>Showing <strong>{{ curriculum.filteredTasks().length }}</strong> of 35 days</span>
+      @if (curriculum.filteredTasks().length < 35) {
+        <button type="button" class="btn btn-xs btn-ghost link-reset" (click)="resetAllFilters()" title="Reset filters to show all 35 days">
+          ✨ Show all 35
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- QUICK ACCESS WEEK PILLS -->
+  <div class="quick-week-bar">
+    <div class="week-pills-scroll">
+      <button
+        type="button"
+        class="week-nav-pill"
+        [class.active]="curriculum.filterWeek() === 'all'"
+        (click)="onWeekFilterChange('all')"
+      >
+        ALL 35 DAYS
+      </button>
+      @for (w of weeksList; track w) {
+        <button
+          type="button"
+          class="week-nav-pill"
+          [class.active]="curriculum.filterWeek() === w"
+          (click)="onWeekFilterChange(w)"
+        >
+          W{{ w }}
+        </button>
+      }
+    </div>
+    @if (isFilterActive()) {
+      <button
+        type="button"
+        class="btn btn-sm btn-ghost reset-filter-btn"
+        (click)="resetAllFilters()"
+        title="Clear all filters and show all 35 days"
+      >
+        ✕ Reset All Filters
+      </button>
+    }
+  </div>
+
+  <!-- SPLIT LAYOUT: LIST + INSPECTOR -->
+  <div class="daily-split-layout">
+
+    <!-- TASK LIST -->
+    <div class="task-list-panel">
+      @for (task of curriculum.filteredTasks(); track task.id) {
+        <div
+          class="task-row-card"
+          [id]="'day-task-card-' + task.day"
+          [class.active]="curriculum.selectedDay()?.id === task.id"
+          [class.completed]="task.status === 'completed'"
+          [class.buffer-day]="task.isBufferDay"
+          [class.is-overdue]="curriculum.isTaskOverdue(task)"
+          [class.is-today]="curriculum.isTaskToday(task)"
+          (click)="selectDay(task)"
+        >
+          <div class="task-row-left">
+            <span class="day-badge">DAY {{ task.day }}</span>
+            <div class="task-row-titles">
+              <div class="task-row-name">{{ task.task }}</div>
+              <div class="task-row-meta">
+                {{ task.date }} · Week {{ task.week }} · {{ task.topicGroup }}
+                @if (task.proofUrls && task.proofUrls.length > 0) {
+                  <span class="pill-mini-proofs" [title]="task.proofUrls.length + ' proof link(s) added'">
+                    🔗 {{ task.proofUrls.length }} Link{{ task.proofUrls.length > 1 ? 's' : '' }}
+                  </span>
+                }
+              </div>
+            </div>
+          </div>
+
+          <div class="task-row-right">
+            @if (curriculum.isTaskToday(task)) {
+              <span class="badge-today">🎯 TODAY</span>
+            }
+            @if (curriculum.isTaskOverdue(task)) {
+              <span class="badge-overdue">⚠️ OVERDUE</span>
+            }
+            @if (task.isBufferDay) {
+              <span class="buffer-indicator">BUFFER</span>
+            }
+            <span class="status-badge" [class]="task.status">
+              {{ task.status | uppercase }}
+            </span>
+          </div>
+        </div>
+      } @empty {
+        <div class="no-tasks-found-box animate-fade">
+          <div class="no-tasks-icon">🔍</div>
+          <h3 class="no-tasks-title">No Daily Missions Match Filter</h3>
+          <p class="no-tasks-desc">
+            Your current filter or search query is hiding tasks.
+          </p>
+          <button type="button" class="btn btn-primary" (click)="resetAllFilters()">
+            ✨ Reset Filters & Show All 35 Days
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>
+
+<!-- POPUP MODAL FOR DAY DETAIL INSPECTOR -->
+@if (isInspectorModalOpen() && curriculum.selectedDay(); as sel) {
+  <div class="modal-backdrop inspector-modal-backdrop" (click)="closeDayModal()">
+    <div
+      class="modal-dialog inspector-modal-dialog"
+      (click)="$event.stopPropagation()"
+    >
+      <div class="terminal-bar inspector-modal-header">
+        <div class="terminal-dots">
+          <div class="dot dot-r" (click)="closeDayModal()" title="Close"></div>
+          <div class="dot dot-y"></div>
+          <div class="dot dot-g"></div>
+          <span class="terminal-title">DAY {{ sel.day }} INSPECTOR // {{ sel.date }}</span>
+        </div>
+        <div class="inspector-badges">
+          @if (curriculum.isTaskToday(sel)) {
+            <span class="badge-today">TODAY'S TARGET</span>
+          }
+          @if (curriculum.isTaskOverdue(sel)) {
+            <span class="badge-overdue">OVERDUE</span>
+          }
+          <span class="pill pill-accent">{{ sel.topicGroup }}</span>
+          <a
+            [routerLink]="['/detailedview', 'day' + sel.day]"
+            (click)="closeDayModal()"
+            class="btn btn-xs btn-ghost"
+            style="color: var(--accent2); font-family: var(--mono); font-size: 0.72rem; padding: 3px 8px;"
+            title="Open complete Day Guide"
+          >
+            📖 Full Guide ↗
+          </a>
+          <button type="button" class="inspector-close-btn" (click)="closeDayModal()" title="Close (Esc)">✕</button>
+        </div>
+      </div>
+
+      <div class="inspector-content inspector-modal-body">
+        <!-- DAY PREV / NEXT NAVIGATION BAR -->
+        <div class="inspector-nav-row">
+          <button
+            type="button"
+            class="btn btn-xs btn-ghost day-nav-btn"
+            [disabled]="sel.day <= 1"
+            (click)="goToPrevDay()"
+          >
+            ← Day {{ sel.day > 1 ? sel.day - 1 : 1 }}
+          </button>
+          <span class="day-nav-indicator">Day {{ sel.day }} of 35</span>
+          <button
+            type="button"
+            class="btn btn-xs btn-ghost day-nav-btn"
+            [disabled]="sel.day >= 35"
+            (click)="goToNextDay()"
+          >
+            Day {{ sel.day < 35 ? sel.day + 1 : 35 }} →
+          </button>
+        </div>
+
+        <!-- OVERDUE INTIMATION CALLOUT IN DRAWER -->
+        @if (curriculum.isTaskOverdue(sel)) {
+          <div class="overdue-inspector-callout animate-fade">
+            <span class="callout-icon">⚠️</span>
+            <div class="callout-body">
+              <strong>UNTRACKED OVERDUE MISSION</strong>: This task was scheduled for <strong>{{ sel.date }}</strong>.
+              Complete the hands-on exercise and mark it complete to bring your timetable back on track!
+            </div>
+          </div>
+        } @else if (curriculum.isTaskToday(sel)) {
+          <div class="today-inspector-callout animate-fade">
+            <span class="callout-icon">🎯</span>
+            <div class="callout-body">
+              <strong>TODAY'S SCHEDULED TARGET</strong>: Day {{ sel.day }} ({{ sel.date }}).
+              Focus on today's hands-on exercise and verify all 4 daily completion checkboxes.
+            </div>
+          </div>
+        }
+        <div class="inspector-header">
+          <h2 class="inspector-title">{{ sel.task }}</h2>
+          <div class="inspector-topic">// {{ sel.topic }} · Week {{ sel.week }}</div>
+        </div>
+
+        <!-- STATUS BUTTONS -->
+        <div class="status-selector-row">
+          <button class="status-choice-btn" [class.selected]="sel.status === 'not_started'" (click)="curriculum.updateTaskStatus(sel.id, 'not_started')">Not Started</button>
+          <button class="status-choice-btn" [class.selected]="sel.status === 'in_progress'" (click)="curriculum.updateTaskStatus(sel.id, 'in_progress')">In Progress</button>
+          <button class="status-choice-btn completed-choice" [class.selected]="sel.status === 'completed'" (click)="curriculum.updateTaskStatus(sel.id, 'completed')">Completed</button>
+          <button class="status-choice-btn blocked-choice" [class.selected]="sel.status === 'blocked'" (click)="curriculum.updateTaskStatus(sel.id, 'blocked')">Blocked</button>
+        </div>
+
+        <!-- GO TO DETAILED VIEW BANNER (OPENS FULL-PAGE LEARNING ARTICLE) -->
+        <div class="detailed-view-banner animate-fade">
+          <div class="banner-info">
+            <span class="banner-icon">📖</span>
+            <div>
+              <div class="banner-title">Need full explanations, subtopics & code solutions?</div>
+            </div>
+          </div>
+          <a
+            [routerLink]="['/detailedview', 'day' + sel.day]"
+            (click)="closeDayModal()"
+            class="btn btn-sm btn-primary banner-cta-btn"
+          >
+            Open Detailed Guide ↗
+          </a>
+        </div>
+
+        <!-- VERIFICATION CHECKLIST -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">DAILY COMPLETION VERIFICATION</div>
+          <div class="verification-grid">
+            <label class="verify-check">
+              <input type="checkbox" [checked]="sel.studyDone" (change)="curriculum.toggleTaskCheckbox(sel.id, 'studyDone')">
+              <span>Study Done</span>
+            </label>
+            <label class="verify-check">
+              <input type="checkbox" [checked]="sel.exerciseDone" (change)="curriculum.toggleTaskCheckbox(sel.id, 'exerciseDone')">
+              <span>Exercise Done</span>
+            </label>
+            <label class="verify-check">
+              <input type="checkbox" [checked]="sel.codeSaved" (change)="curriculum.toggleTaskCheckbox(sel.id, 'codeSaved')">
+              <span>Code Saved</span>
+            </label>
+            <label class="verify-check">
+              <input type="checkbox" [checked]="sel.reviewDone" (change)="curriculum.toggleTaskCheckbox(sel.id, 'reviewDone')">
+              <span>Review Done</span>
+            </label>
+          </div>
+        </div>
+
+        <!-- INPUTS & PREREQUISITES -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">PREREQUISITES & INPUTS</div>
+          <p class="inspector-text">{{ sel.inputs }}</p>
+        </div>
+
+        <!-- HANDS-ON EXERCISE -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">HANDS-ON EXERCISE</div>
+          <div class="exercise-card-box">{{ sel.handsOnExercise }}</div>
+        </div>
+
+        <!-- DELIVERABLE FILE -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">DELIVERABLE OUTPUT FILE</div>
+          <code class="deliverable-badge">{{ sel.deliverableOutput }}</code>
+        </div>
+
+        <!-- EXPECTED OUTCOME -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">OUTCOME / MASTERY CRITERIA</div>
+          <p class="inspector-text">{{ sel.outcome }}</p>
+        </div>
+
+        <!-- ACTIVE RECALL -->
+        <div class="inspector-section">
+          <div class="inspector-sec-label">ACTIVE RECALL CHALLENGE</div>
+          <div class="recall-callout">{{ sel.activeRecall }}</div>
+        </div>
+
+        <!-- PROOF OF COMPLETION / MULTIPLE EVIDENCE LINKS -->
+        <div class="inspector-section proof-section">
+          <div class="inspector-sec-label">// PROOF OF COMPLETION & EVIDENCE LINKS ({{ (sel.proofUrls || []).length }})</div>
+
+          <!-- Existing Added Links List -->
+          @if (sel.proofUrls && sel.proofUrls.length > 0) {
+            <div class="proof-links-grid">
+              @for (proof of sel.proofUrls; track proof.id || proof.url; let idx = $index) {
+                <div class="proof-link-card">
+                  <div class="proof-link-meta">
+                    <span class="proof-badge" [attr.data-label]="proof.label">
+                      {{ getProofIcon(proof.label) }} {{ proof.label }}
+                    </span>
+                    <a [href]="proof.url" target="_blank" rel="noopener noreferrer" class="proof-anchor" [title]="proof.url">
+                      {{ proof.url }} ↗
+                    </a>
+                  </div>
+                  <button
+                    type="button"
+                    class="btn-delete-proof"
+                    (click)="removeProof(sel.id, proof.id || proof.url)"
+                    title="Remove link"
+                  >
+                    ✕
+                  </button>
+                </div>
+              }
+            </div>
+          } @else {
+            <div class="no-proof-empty-box">
+              <span>🔗 No proof links added yet. Attach your GitHub repo, Live Demo, PR, or Video demo below!</span>
+            </div>
+          }
+
+          <!-- ADD LINK FORM WITH DROPDOWN -->
+          <div class="add-proof-card">
+            <div class="add-proof-prompt">Select link type and paste URL:</div>
+            <div class="add-proof-inputs">
+              <select class="proof-type-dropdown" [(ngModel)]="selectedProofLabel">
+                @for (lbl of proofLabels; track lbl) {
+                  <option [value]="lbl">{{ getProofIcon(lbl) }} {{ lbl }}</option>
+                }
+              </select>
+              <input
+                type="url"
+                class="proof-url-input"
+                [(ngModel)]="newProofUrl"
+                placeholder="https://github.com/... or https://..."
+                (keydown.enter)="addProof(sel.id)"
+              />
+              <button
+                type="button"
+                class="btn btn-sm btn-primary add-link-btn"
+                [disabled]="!newProofUrl.trim()"
+                (click)="addProof(sel.id)"
+              >
+                + Add Link
+              </button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- MODAL FOOTER -->
+      <div class="modal-footer inspector-modal-footer">
+        <div class="footer-left">
+          <a
+            [routerLink]="['/detailedview', 'day' + sel.day]"
+            (click)="closeDayModal()"
+            class="btn btn-sm btn-secondary"
+          >
+            📖 Open Day {{ sel.day }} Full Guide ↗
+          </a>
+        </div>
+        <div class="footer-right">
+          <button type="button" class="btn btn-primary" (click)="closeDayModal()">
+            Done / Close
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+}

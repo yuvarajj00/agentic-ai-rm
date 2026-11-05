@@ -1,0 +1,198 @@
+<!-- TOP NAVIGATION -->
+<nav class="app-nav">
+  <!-- BRAND IDENTITY (Left Section) -->
+  <a class="nav-brand" routerLink="/dashboard" (click)="navigateTo('/dashboard', $event)" title="ML Engineer Flight Deck Command Center">
+    <div class="brand-icon-box">
+      <span class="brand-beacon"></span>
+      <span class="nav-logo">YK_</span>
+    </div>
+    <div class="brand-meta">
+      <span class="brand-name">AGENTIC AI FLIGHT DECK</span>
+      <span class="brand-sub">35-DAY SPRINT</span>
+    </div>
+  </a>
+
+  <!-- NAVIGATION LINKS (Dead-Center Section) -->
+  <div class="nav-links">
+    <a
+      class="nav-btn"
+      routerLink="/dashboard"
+      (click)="navigateTo('/dashboard', $event)"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      title="Command Center Dashboard"
+    >
+      <span class="btn-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </span>
+      <span class="btn-label">Command</span>
+    </a>
+
+    <a
+      class="nav-btn"
+      routerLink="/daily"
+      (click)="navigateTo('/daily', $event)"
+      routerLinkActive="active"
+      title="35-Day Daily Tracker & Missions"
+    >
+      <span class="btn-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2z"></path>
+        </svg>
+      </span>
+      <span class="btn-label">Daily Tracker</span>
+    </a>
+
+    <a
+      class="nav-btn nav-btn-guide"
+      [routerLink]="['/detailedview', 'day' + (curriculum.calendarPacing().expectedDayNumber || 1)]"
+      (click)="navigateTo('/detailedview/day' + (curriculum.calendarPacing().expectedDayNumber || 5), $event)"
+      routerLinkActive="active"
+      title="Detailed Learning Guide"
+    >
+      <span class="btn-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path>
+        </svg>
+      </span>
+      <span class="btn-label">Day Guide</span>
+      <span class="nav-badge badge-accent">D{{ curriculum.calendarPacing().expectedDayNumber || 5 }}</span>
+    </a>
+
+    <a
+      class="nav-btn"
+      routerLink="/milestones"
+      (click)="navigateTo('/milestones', $event)"
+      routerLinkActive="active"
+      title="5-Week Milestones Roadmap"
+    >
+      <span class="btn-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+        </svg>
+      </span>
+      <span class="btn-label">Milestones</span>
+    </a>
+
+    <a
+      class="nav-btn"
+      routerLink="/skills"
+      (click)="navigateTo('/skills', $event)"
+      routerLinkActive="active"
+      title="Tech Stack & Skill Matrix"
+    >
+      <span class="btn-icon">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect>
+          <line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line>
+          <line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line>
+          <line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line>
+          <line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line>
+        </svg>
+      </span>
+      <span class="btn-label">Tech Stack</span>
+    </a>
+
+    </div>
+
+  <!-- RIGHT TELEMETRY & CONTROLS (Right-Aligned Section) -->
+  <div class="nav-status">
+    <!-- CALENDAR PACING STATUS PILL -->
+    <div
+      class="status-pill pace-pill"
+      [class.pill-pace-presprint]="curriculum.calendarPacing().paceStatus === 'pre_sprint'"
+      [class.pill-pace-ontrack]="curriculum.calendarPacing().paceStatus === 'on_track'"
+      [class.pill-pace-ahead]="curriculum.calendarPacing().paceStatus === 'ahead'"
+      [class.pill-pace-behind]="curriculum.calendarPacing().paceStatus === 'behind'"
+      [class.pill-pace-critical]="curriculum.calendarPacing().paceStatus === 'critical'"
+      (click)="toggleCalendar()"
+      [title]="paceTooltip()"
+      style="cursor: pointer;"
+    >
+      @if (curriculum.calendarPacing().paceStatus === 'pre_sprint') {
+        <span>⏱️ IN {{ curriculum.calendarPacing().daysUntilSprint }}D</span>
+      } @else if (curriculum.calendarPacing().paceStatus === 'ahead') {
+        <span>🚀 +{{ curriculum.calendarPacing().paceDelta }}D</span>
+      } @else if (curriculum.calendarPacing().paceStatus === 'on_track') {
+        <span>🎯 DAY {{ curriculum.calendarPacing().expectedDayNumber }}</span>
+      } @else if (curriculum.calendarPacing().paceStatus === 'behind') {
+        <span>⚠️ {{ curriculum.calendarPacing().paceDelta }}D</span>
+      } @else if (curriculum.calendarPacing().paceStatus === 'critical') {
+        <span>🚨 {{ curriculum.calendarPacing().paceDelta }}D</span>
+      } @else {
+        <span>🏆 100%</span>
+      }
+    </div>
+
+    <!-- OVERDUE INTIMATION BADGE (Visible when tasks are overdue) -->
+    @if (curriculum.overdueCount() > 0) {
+      <button
+        class="badge-overdue overdue-nav-btn"
+        (click)="goToOverdue()"
+        [title]="overdueTooltip()"
+      >
+        <span>⚠️</span>
+        <span>{{ curriculum.overdueCount() }} DUE</span>
+      </button>
+    }
+
+    <!-- SIMULATION BADGE (Visible when simulation date is active) -->
+    @if (curriculum.calendarPacing().isSimulationActive) {
+      <div
+        class="pill-simulation status-pill"
+        (click)="curriculum.clearSimulation()"
+        title="Date simulation active. Click to reset to real-time calendar."
+      >
+        <span>🧪 SIM ACTIVE ✕</span>
+      </div>
+    }
+
+    <!-- PROGRESS MINI GAUGE -->
+    <div
+      class="status-pill pill-progress"
+      (click)="navigateTo('/daily', $event)"
+      title="Total Sprint Progress: {{ curriculum.completedDaysCount() }} of 35 Days ({{ curriculum.percentComplete() }}%)"
+    >
+      <div class="progress-mini-bar">
+        <div class="progress-mini-fill" [style.width.%]="curriculum.percentComplete()"></div>
+      </div>
+      <span class="prog-pct">{{ curriculum.percentComplete() }}%</span>
+    </div>
+
+    <!-- MINN.AI MENTOR QUICK TOGGLE -->
+    
+
+    <!-- THEME TOGGLE BUTTON -->
+    <button
+      class="theme-toggle-btn"
+      (click)="theme.toggleTheme()"
+      [title]="'Switch to ' + (theme.theme() === 'dark' ? 'Light' : 'Dark') + ' Mode'"
+      aria-label="Toggle dark/light theme"
+    >
+      @if (theme.theme() === 'dark') {
+        <span class="theme-toggle-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+          </svg>
+        </span>
+      } @else {
+        <span class="theme-toggle-icon">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="5"></circle>
+            <line x1="12" y1="1" x2="12" y2="3"></line>
+            <line x1="12" y1="21" x2="12" y2="23"></line>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+            <line x1="1" y1="12" x2="3" y2="12"></line>
+            <line x1="21" y1="12" x2="23" y2="12"></line>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+          </svg>
+        </span>
+      }
+    </button>
+  </div>
+</nav>

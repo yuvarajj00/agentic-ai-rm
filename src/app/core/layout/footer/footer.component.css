@@ -1,0 +1,179 @@
+/* FOOTER */
+:host {
+  display: block;
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.app-footer {
+  padding: 1.25rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.72rem;
+  color: var(--muted);
+  flex-wrap: wrap;
+  gap: 1rem;
+  max-width: 1680px;
+  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.footer-copy {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.footer-action-link {
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--accent2);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.footer-action-link:hover {
+  border-color: var(--accent2);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.reset-link {
+  background: none;
+  border: none;
+  color: var(--accent3);
+  font-family: 'DM Mono', monospace;
+  font-size: 0.7rem;
+  cursor: pointer;
+  text-decoration: underline;
+  white-space: nowrap;
+}
+
+/* MongoDB Atlas Sync Badge in Footer */
+.footer-atlas-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  padding: 0.28rem 0.65rem;
+  border-radius: 4px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+  line-height: 1;
+}
+
+.footer-atlas-badge:hover {
+  border-color: var(--accent2);
+  color: var(--text);
+  transform: translateY(-1px);
+}
+
+.atlas-indicator-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--muted);
+  flex-shrink: 0;
+}
+
+.footer-atlas-badge.synced {
+  border-color: rgba(127, 255, 110, 0.3);
+  background: rgba(127, 255, 110, 0.05);
+}
+
+.footer-atlas-badge.synced .atlas-indicator-dot {
+  background: var(--accent);
+  box-shadow: 0 0 6px var(--accent);
+}
+
+.footer-atlas-badge.synced .atlas-status {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.footer-atlas-badge.saving {
+  border-color: rgba(110, 181, 255, 0.35);
+  background: rgba(110, 181, 255, 0.05);
+}
+
+.footer-atlas-badge.saving .atlas-indicator-dot {
+  background: var(--accent2);
+  animation: pulse-dot 0.8s infinite alternate;
+}
+
+.footer-atlas-badge.saving .atlas-status {
+  color: var(--accent2);
+}
+
+.footer-atlas-badge.syncing {
+  border-color: var(--warning-border);
+}
+
+.footer-atlas-badge.syncing .atlas-indicator-dot {
+  background: var(--warning);
+  animation: pulse-dot 0.8s infinite alternate;
+}
+
+.footer-atlas-badge.error {
+  border-color: var(--danger-border);
+  background: var(--danger-bg);
+}
+
+.footer-atlas-badge.error .atlas-indicator-dot {
+  background: var(--danger);
+  box-shadow: 0 0 6px var(--danger);
+}
+
+.footer-atlas-badge.error .atlas-status {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+@keyframes pulse-dot {
+  from { opacity: 0.3; transform: scale(0.85); }
+  to { opacity: 1; transform: scale(1.15); }
+}
+
+@media (max-width: 900px) {
+  .app-footer {
+    padding: 1.2rem 1rem;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  .footer-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+  .footer-right {
+    flex-wrap: wrap;
+    gap: 0.65rem;
+    width: 100%;
+  }
+}

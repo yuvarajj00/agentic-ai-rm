@@ -1,0 +1,579 @@
+<section class="dashboard-section animate-fade">
+  <!-- HERO TERMINAL BANNER -->
+  <div class="hero-grid">
+    <div class="hero-content">
+      <div class="hero-tag">NOV 5, 2026 — DEC 9, 2026 • 35-DAY AGENTIC AI SPRINT</div>
+      <h1
+        class="hero-name quote-headline"
+        [class.swap-anim]="isAnimatingQuote()"
+        (click)="handleManualQuoteClick()"
+        (mouseenter)="stopQuoteRotation()"
+        (mouseleave)="startQuoteRotation()"
+        [title]="'Auto-rotates every 3s • Click to cycle now (' + (currentQuoteIndex() + 1) + '/' + quotes.length + ')'"
+      >
+        <span class="quote-word-first">{{ currentQuote().first }}</span>
+        <span class="quote-word-second">{{ currentQuote().second }}</span>
+        <span class="quote-refresh-icon" aria-hidden="true">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="23 4 23 10 17 10"></polyline>
+            <polyline points="1 20 1 14 7 14"></polyline>
+            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+          </svg>
+        </span>
+      </h1>
+      <p class="hero-role">// Agentic AI Flight Deck • Zero to Production Autonomous Systems</p>
+      <p class="hero-desc">
+        35-day intensive engineering roadmap bridging bounded <strong>LLM function calling</strong>, <strong>Agentic RAG & memory</strong>, <strong>LangGraph workflows</strong>, and <strong>production guardrails</strong>.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-primary" (click)="openTodayTask()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+          Execute Today's Mission
+        </button>
+        
+        <button class="btn btn-secondary" (click)="goToMilestones()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+          5 Phase Milestones
+        </button>
+      </div>
+    </div>
+
+    <div class="hero-terminal">
+      <div class="terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <div class="dot dot-r"></div>
+            <div class="dot dot-y"></div>
+            <div class="dot dot-g"></div>
+          </div>
+          <span class="terminal-title">sprint_status.json</span>
+          <span class="pill pill-accent2">ONLINE</span>
+        </div>
+        <div class="terminal-body">
+          <div><span class="t-prompt">$ </span><span class="t-cmd">cat sprint_status.json</span></div>
+          <div>&#123;</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"calendar_date"</span>: <span class="t-str">"{{ curriculum.calendarPacing().currentDateFormatted }}"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"timetable_target"</span>: <span class="t-num">"Day {{ curriculum.calendarPacing().expectedDayNumber }}"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"days_completed"</span>: <span class="t-num">{{ curriculum.completedDaysCount() }} / 35</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"schedule_pace"</span>: <span class="t-str">"{{ curriculum.calendarPacing().paceMessage }}"</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"untracked_overdue"</span>: <span class="t-num">{{ curriculum.overdueCount() }}</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"projects_shipped"</span>: <span class="t-num">{{ curriculum.shippedProjectsCount() }} / 5</span>,</div>
+          <div>&nbsp;&nbsp;<span class="t-key">"pipeline_rule"</span>: <span class="t-str">"Deterministic Guardrails / Sandboxed Execution"</span></div>
+          <div>&#125;</div>
+          <div style="margin-top: 0.5rem;"><span class="t-prompt">$ </span><span class="t-cursor"></span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- REAL-TIME TIMETABLE & UNTRACKED DAY INTIMATION BANNER -->
+  @if (curriculum.calendarPacing().paceStatus === 'critical') {
+    <div class="intimation-alert alert-critical animate-fade">
+      <div class="intimation-content">
+        <span class="intimation-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--danger)" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path>
+            <line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>
+          </svg>
+        </span>
+        <div>
+          <div class="intimation-title" style="color: var(--danger);">
+            CRITICAL SCHEDULE ALERT • YOU ARE {{ -curriculum.calendarPacing().paceDelta }} DAYS BEHIND TIMETABLE
+          </div>
+          <div class="intimation-desc">
+            The curriculum timetable target for <strong>{{ curriculum.calendarPacing().currentDateFormatted }}</strong> is
+            <strong>Day {{ curriculum.calendarPacing().expectedDayNumber }}</strong> ({{ curriculum.calendarPacing().expectedDateFormatted }}),
+            but you have completed <strong>{{ curriculum.completedDaysCount() }} / 35</strong> days.
+            You currently have <strong>{{ curriculum.overdueCount() }} untracked overdue mission(s)</strong> that need immediate catch-up.
+          </div>
+        </div>
+      </div>
+      <div class="intimation-actions">
+        <button class="btn btn-sm btn-danger" (click)="goToOldestOverdue()">
+          🎯 Catch Up Oldest Overdue Day
+        </button>
+        <button class="btn btn-sm btn-ghost" (click)="goToOverdueList()">
+          View {{ curriculum.overdueCount() }} Overdue Tasks
+        </button>
+      </div>
+    </div>
+  } @else if (curriculum.calendarPacing().paceStatus === 'behind') {
+    <div class="intimation-alert alert-warning animate-fade">
+      <div class="intimation-content">
+        <span class="intimation-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>
+          </svg>
+        </span>
+        <div>
+          <div class="intimation-title" style="color: var(--warning);">
+            SCHEDULE NOTICE • {{ -curriculum.calendarPacing().paceDelta }} DAY(S) UNTRACKED BEHIND TIMETABLE
+          </div>
+          <div class="intimation-desc">
+            Expected target today: <strong>Day {{ curriculum.calendarPacing().expectedDayNumber }}</strong> ({{ curriculum.calendarPacing().expectedDateFormatted }}).
+            Completed: <strong>{{ curriculum.completedDaysCount() }} / 35</strong> days.
+            Catch up on your untracked days to keep your graduation date on track for February 5, 2027.
+          </div>
+        </div>
+      </div>
+      <div class="intimation-actions">
+        <button class="btn btn-sm btn-secondary" (click)="goToOverdueList()">
+          Review {{ curriculum.overdueCount() }} Overdue Day(s)
+        </button>
+        <button class="btn btn-sm btn-primary" (click)="goToExpectedTarget()">
+          Execute Day {{ curriculum.calendarPacing().expectedDayNumber }} Target
+        </button>
+      </div>
+    </div>
+  } @else if (curriculum.calendarPacing().paceStatus === 'pre_sprint') {
+    <div class="intimation-alert alert-presprint animate-fade">
+      <div class="intimation-content">
+        <span class="intimation-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent2)" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline>
+          </svg>
+        </span>
+        <div>
+          <div class="intimation-title" style="color: var(--accent2);">
+            SPRINT KICKOFF COUNTDOWN • {{ curriculum.calendarPacing().daysUntilSprint }} DAYS UNTIL OCTOBER 22, 2026
+          </div>
+          <div class="intimation-desc">
+            The 35-day sprint officially begins on <strong>November 5, 2026</strong>. Prepare your local Python environment and API keys,
+            Docker, Git repository, and study routine. Day 1 target: <em>Set up Python workspace & virtual environments</em>.
+          </div>
+        </div>
+      </div>
+      <div class="intimation-actions">
+        <button class="btn btn-sm btn-primary" (click)="goToExpectedTarget()">
+          Preview Day 1 Mission
+        </button>
+      </div>
+    </div>
+  } @else if (curriculum.calendarPacing().paceStatus === 'ahead') {
+    <div class="intimation-alert alert-ahead animate-fade">
+      <div class="intimation-content">
+        <span class="intimation-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+          </svg>
+        </span>
+        <div>
+          <div class="intimation-title" style="color: var(--accent);">
+            PACING EXCELLENCE • +{{ curriculum.calendarPacing().paceDelta }} DAYS AHEAD OF SCHEDULE
+          </div>
+          <div class="intimation-desc">
+            Outstanding velocity! Real-time timetable expected Day {{ curriculum.calendarPacing().expectedDayNumber }},
+            and you have already completed <strong>{{ curriculum.completedDaysCount() }} / 35</strong> days. Keep building momentum!
+          </div>
+        </div>
+      </div>
+      <div class="intimation-actions">
+        <button class="btn btn-sm btn-primary" (click)="openTodayTask()">
+          Execute Next Mission
+        </button>
+      </div>
+    </div>
+  }
+
+  <!-- METRIC STATS ROW -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-label">COMPLETED DAYS</div>
+      <div class="stat-val accent">{{ curriculum.completedDaysCount() }} <span class="stat-sub">/ 35</span></div>
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" [style.width.%]="curriculum.percentComplete()"></div>
+      </div>
+    </div>
+
+    <!-- SCHEDULE PACING METRIC CARD -->
+    <div class="stat-card">
+      <div class="stat-label">SCHEDULE PACING</div>
+      @if (curriculum.calendarPacing().paceStatus === 'pre_sprint') {
+        <div class="stat-val accent2">{{ curriculum.calendarPacing().daysUntilSprint }}d <span class="stat-sub">to kickoff</span></div>
+        <div class="stat-sub-text">Starts Oct 22, 2026</div>
+      } @else if (curriculum.calendarPacing().paceStatus === 'ahead') {
+        <div class="stat-val accent">+{{ curriculum.calendarPacing().paceDelta }}d <span class="stat-sub">ahead</span></div>
+        <div class="stat-sub-text">Target: Day {{ curriculum.calendarPacing().expectedDayNumber }}</div>
+      } @else if (curriculum.calendarPacing().paceStatus === 'on_track') {
+        <div class="stat-val accent">On Track</div>
+        <div class="stat-sub-text">Target: Day {{ curriculum.calendarPacing().expectedDayNumber }}</div>
+      } @else if (curriculum.calendarPacing().paceStatus === 'behind') {
+        <div class="stat-val warning">{{ curriculum.calendarPacing().paceDelta }}d <span class="stat-sub">behind</span></div>
+        <div class="stat-sub-text">{{ curriculum.overdueCount() }} untracked day(s)</div>
+      } @else if (curriculum.calendarPacing().paceStatus === 'critical') {
+        <div class="stat-val danger">{{ curriculum.calendarPacing().paceDelta }}d <span class="stat-sub">behind</span></div>
+        <div class="stat-sub-text">{{ curriculum.overdueCount() }} overdue missions</div>
+      } @else {
+        <div class="stat-val accent">100%</div>
+        <div class="stat-sub-text">Curriculum Completed</div>
+      }
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">DAYS REMAINING</div>
+      <div class="stat-val accent2">{{ curriculum.daysRemaining() }} <span class="stat-sub">Days</span></div>
+      <div class="stat-sub-text">Sprint ends Feb 5, 2027</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">SHIPPED PROJECTS</div>
+      <div class="stat-val accent3">{{ curriculum.shippedProjectsCount() }} <span class="stat-sub">/ 14</span></div>
+      <div class="stat-sub-text">Production GitHub Repos</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">DAILY STUDY TARGET</div>
+      <div class="stat-val accent">3.0 <span class="stat-sub">Hours</span></div>
+      <div class="stat-sub-text">Recall • Theory • Code • Project</div>
+    </div>
+  </div>
+
+  <!-- TODAY'S MISSION CARD -->
+  @if (curriculum.currentActiveDay(); as today) {
+    <div class="mission-wrapper">
+      <div class="terminal mission-terminal">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <div class="dot dot-g"></div>
+            <span class="mission-bar-title">TODAY'S MISSION // DAY {{ today.day }} ({{ today.date }})</span>
+          </div>
+          <div class="mission-badges">
+            <span class="pill pill-accent">{{ today.topicGroup }}</span>
+            <span class="pill" [class.pill-accent3]="today.isBufferDay">
+              {{ today.isBufferDay ? 'BUFFER & RETRO DAY' : 'STUDY SPRINT' }}
+            </span>
+            <span class="pill status-pill-tag" [class.completed]="today.status === 'completed'">
+              {{ today.status | uppercase }}
+            </span>
+          </div>
+        </div>
+
+        <div class="mission-grid">
+          <div class="mission-main">
+            <h2 class="mission-task-title">{{ today.task }}</h2>
+            <div class="mission-topic-sub">// Topic: {{ today.topic }} • Week {{ today.week }}</div>
+
+            <div class="mission-block">
+              <div class="block-title">PREREQUISITES & INPUTS</div>
+              <p class="block-desc">{{ today.inputs }}</p>
+            </div>
+
+            <div class="mission-block">
+              <div class="block-title">HANDS-ON EXERCISE (CODE FROM SCRATCH)</div>
+              <p class="block-desc exercise-highlight">{{ today.handsOnExercise }}</p>
+            </div>
+
+            <div class="mission-block">
+              <div class="block-title">DELIVERABLE FILE & EXPECTED OUTPUT</div>
+              <code class="deliverable-code">{{ today.deliverableOutput }}</code>
+            </div>
+
+            <div class="mission-block">
+              <div class="block-title">OUTCOME & MASTERY CRITERIA</div>
+              <p class="block-desc">{{ today.outcome }}</p>
+            </div>
+
+            <div class="recall-box">
+              <div class="recall-title">🎯 ACTIVE RECALL CHALLENGE (TEST YOURSELF)</div>
+              <p class="recall-q">{{ today.activeRecall }}</p>
+            </div>
+
+            <!-- PROOF OF COMPLETION / MULTIPLE EVIDENCE LINKS -->
+            <div class="mission-block proof-section">
+              <div class="block-title">// PROOF OF COMPLETION & EVIDENCE LINKS ({{ (today.proofUrls || []).length }})</div>
+
+              <!-- Existing Added Links List -->
+              @if (today.proofUrls && today.proofUrls.length > 0) {
+                <div class="proof-links-grid">
+                  @for (proof of today.proofUrls; track proof.id || proof.url; let idx = $index) {
+                    <div class="proof-link-card">
+                      <div class="proof-link-meta">
+                        <span class="proof-badge" [attr.data-label]="proof.label">
+                          {{ getProofIcon(proof.label) }} {{ proof.label }}
+                        </span>
+                        <a [href]="proof.url" target="_blank" rel="noopener noreferrer" class="proof-anchor" [title]="proof.url">
+                          {{ proof.url }} ↗
+                        </a>
+                      </div>
+                      <button
+                        type="button"
+                        class="btn-delete-proof"
+                        (click)="removeProof(today.id, proof.id || proof.url)"
+                        title="Remove link"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  }
+                </div>
+              } @else {
+                <div class="no-proof-empty-box">
+                  <span>🔗 No proof links added yet. Attach your GitHub repo, Live Demo, PR, or Video demo below!</span>
+                </div>
+              }
+
+              <!-- ADD LINK FORM WITH DROPDOWN -->
+              <div class="add-proof-card">
+                <div class="add-proof-prompt">Select link type and paste URL:</div>
+                <div class="add-proof-inputs">
+                  <select class="proof-type-dropdown" [(ngModel)]="selectedProofLabel">
+                    @for (lbl of proofLabels; track lbl) {
+                      <option [value]="lbl">{{ getProofIcon(lbl) }} {{ lbl }}</option>
+                    }
+                  </select>
+                  <input
+                    type="url"
+                    class="proof-url-input"
+                    [(ngModel)]="newProofUrl"
+                    placeholder="https://github.com/... or https://..."
+                    (keydown.enter)="addProof(today.id)"
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-primary add-link-btn"
+                    [disabled]="!newProofUrl.trim()"
+                    (click)="addProof(today.id)"
+                  >
+                    + Add Link
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mission-sidebar">
+            <div class="checklist-card">
+              <div class="checklist-head">DAILY VERIFICATION CHECKLIST</div>
+
+              <label class="check-item">
+                <input type="checkbox" [checked]="today.studyDone" (change)="curriculum.toggleTaskCheckbox(today.id, 'studyDone')">
+                <span>1. Theory & Docs Read (45m)</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" [checked]="today.exerciseDone" (change)="curriculum.toggleTaskCheckbox(today.id, 'exerciseDone')">
+                <span>2. Exercise Implemented (75m)</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" [checked]="today.codeSaved" (change)="curriculum.toggleTaskCheckbox(today.id, 'codeSaved')">
+                <span>3. Committed to Git (15m)</span>
+              </label>
+
+              <label class="check-item">
+                <input type="checkbox" [checked]="today.reviewDone" (change)="curriculum.toggleTaskCheckbox(today.id, 'reviewDone')">
+                <span>4. Proof of Completion & Links Verified (15m)</span>
+              </label>
+
+              <div class="evidence-input-group">
+                <label class="input-lbl">PROOF LINKS ATTACHED</label>
+                <div style="font-family: var(--mono); font-size: 0.8rem; color: var(--accent); padding: 4px 0;">
+                  {{ (today.proofUrls || []).length }} link(s) on file
+                </div>
+              </div>
+
+              <div class="status-action-btns">
+                <button class="btn btn-sm btn-primary" (click)="curriculum.updateTaskStatus(today.id, 'completed')">
+                  Mark Day Complete
+                </button>
+                
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- 35-DAY CURRICULUM FLIGHT MAP -->
+  <div class="roadmap-flight-map animate-fade">
+    <div class="roadmap-flight-header">
+      <div class="flight-header-left">
+        <span class="flight-header-icon">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect>
+            <rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>
+          </svg>
+        </span>
+        <div>
+          <h3 class="flight-title">35-DAY CURRICULUM FLIGHT MAP</h3>
+          <p class="flight-subtitle">
+            14 Weeks &bull; 96 Production Missions &bull; Oct 22, 2026 — Feb 5, 2027 &bull; Click any day block to inspect &amp; execute
+          </p>
+        </div>
+      </div>
+      <div class="flight-header-right">
+        <span class="flight-count-pill">
+          <strong>{{ curriculum.completedDaysCount() }}</strong> / 35 Done ({{ curriculum.percentComplete() }}%)
+        </span>
+        <button class="btn btn-sm btn-primary" (click)="openTodayTask()">
+          Open 35-Day Daily Tracker ↗
+        </button>
+      </div>
+    </div>
+
+    <div class="flight-matrix-scroll">
+      <div class="flight-weeks-grid">
+        @for (item of daysByWeek(); track item.week) {
+          <div class="flight-week-column">
+            <div class="flight-week-lbl">W{{ item.week }}</div>
+            <div class="flight-day-cells">
+              @for (task of item.tasks; track task.id) {
+                <button
+                  type="button"
+                  class="flight-day-cell"
+                  [class.completed]="task.status === 'completed'"
+                  [class.today]="curriculum.isTaskToday(task)"
+                  [class.overdue]="curriculum.isTaskOverdue(task)"
+                  [class.buffer]="task.isBufferDay"
+                  (click)="jumpToDay(task)"
+                  [title]="'Day ' + task.day + ': ' + task.task + ' (' + task.date + ')'"
+                >
+                  {{ task.day }}
+                </button>
+              }
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <!-- CATEGORY MASTERY & DAILY ROUTINE INFO -->
+  <div class="info-grid">
+    <div class="info-card">
+      <h3 class="info-card-title">DOMAIN COMPETENCY BREAKDOWN</h3>
+      <div class="category-bars">
+        @for (cat of curriculum.categoryProgress(); track cat.category) {
+          <div class="cat-bar-item">
+            <div class="cat-bar-labels">
+              <span class="cat-name">{{ cat.category }}</span>
+              <span class="cat-stat">{{ cat.learned }}/{{ cat.total }} ({{ cat.percent }}%)</span>
+            </div>
+            <div class="cat-bar-bg">
+              <div class="cat-bar-fill" [style.width.%]="cat.percent"></div>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+
+    <div class="info-card">
+      <h3 class="info-card-title">THE 5-BLOCK DAILY ROUTINE (2.5 - 3.5 HOURS)</h3>
+      <div class="routine-steps">
+        <div class="routine-step">
+          <span class="step-num">01</span>
+          <div>
+            <strong>Recall (15m):</strong> Reconstruct yesterday's algorithm or formula from memory with zero notes.
+          </div>
+        </div>
+        <div class="routine-step">
+          <span class="step-num">02</span>
+          <div>
+            <strong>Theory (45m):</strong> Read official Scikit-Learn, PyTorch, or Python documentation.
+          </div>
+        </div>
+        <div class="routine-step">
+          <span class="step-num">03</span>
+          <div>
+            <strong>Code (75m):</strong> Build today's exercise from scratch. Observe the 20-minute struggle rule before asking AI.
+          </div>
+        </div>
+        <div class="routine-step">
+          <span class="step-num">04</span>
+          <div>
+            <strong>Project (30m):</strong> Refactor logic into modular functions in this week's milestone repository.
+          </div>
+        </div>
+        <div class="routine-step">
+          <span class="step-num">05</span>
+          <div>
+            <strong>Review (15m):</strong> Run tests, commit to GitHub, and record one concrete resolved bug.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CALENDAR PACING & DATE SIMULATION TESTING TOOLBAR (COLLAPSIBLE DEVELOPER TOOLS) -->
+  <div class="simulation-section">
+    <div class="sim-toggle-row">
+      <button class="sim-toggle-btn" (click)="toggleSimTools()" type="button">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path>
+        </svg>
+        <span>{{ showSimTools() ? 'Hide Pacing Simulation Testing' : 'Developer Pacing Simulation Tools' }}</span>
+        @if (curriculum.calendarPacing().isSimulationActive) {
+          <span class="sim-active-badge">SIM ACTIVE: {{ curriculum.calendarPacing().currentDateFormatted }}</span>
+        }
+      </button>
+    </div>
+
+    @if (showSimTools()) {
+      <div class="simulation-toolbar animate-fade">
+        <div class="sim-info">
+          <span class="sim-tag">🧪 CALENDAR PACING SIMULATION</span>
+          <span class="sim-desc">
+            Current Mode:
+            <strong>
+              {{ curriculum.calendarPacing().isSimulationActive ? 'Simulated (' + curriculum.calendarPacing().currentDateFormatted + ')' : 'Live System Time (' + curriculum.calendarPacing().currentDateFormatted + ')' }}
+            </strong>
+            • Target: <strong>Day {{ curriculum.calendarPacing().expectedDayNumber }}</strong>
+          </span>
+        </div>
+        <div class="sim-presets">
+          <button
+            class="sim-btn"
+            [class.active]="curriculum.simulationDate() === '2026-10-15'"
+            (click)="setSimDate('2026-10-15')"
+            title="Test Pre-Sprint Countdown (Oct 15, 2026)"
+          >
+            ⏱️ Pre-Sprint (Oct 15)
+          </button>
+          <button
+            class="sim-btn"
+            [class.active]="curriculum.simulationDate() === '2026-10-22'"
+            (click)="setSimDate('2026-10-22')"
+            title="Test Kickoff Day 1 (Oct 22, 2026)"
+          >
+            🚀 Kickoff (Oct 22)
+          </button>
+          <button
+            class="sim-btn"
+            [class.active]="curriculum.simulationDate() === '2026-11-05'"
+            (click)="setSimDate('2026-11-05')"
+            title="Test Behind Timetable Intimation (Nov 5, 2026)"
+          >
+            ⚠️ Day 15 Behind Test (Nov 05)
+          </button>
+          <button
+            class="sim-btn"
+            [class.active]="curriculum.simulationDate() === '2026-12-10'"
+            (click)="setSimDate('2026-12-10')"
+            title="Test Mid-Sprint (Dec 10, 2026)"
+          >
+            📊 Mid-Sprint (Dec 10)
+          </button>
+          <button
+            class="sim-btn"
+            [class.active]="curriculum.simulationDate() === '2027-02-05'"
+            (click)="setSimDate('2027-02-05')"
+            title="Test Sprint Finale (Feb 5, 2027)"
+          >
+            🏆 Day 35 Finale (Dec 9)
+          </button>
+          <button
+            class="sim-btn sim-btn-reset"
+            [class.active]="!curriculum.calendarPacing().isSimulationActive"
+            (click)="resetSimDate()"
+            title="Reset to Real-Time System Clock"
+          >
+            🔄 Live System Clock
+          </button>
+        </div>
+      </div>
+    }
+  </div>
+</section>

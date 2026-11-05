@@ -1,0 +1,129 @@
+<!-- Floating Minimal Dock Launcher (Right Edge, Middle Screen) -->
+<button
+  type="button"
+  class="cal-float-trigger"
+  [class.is-hidden]="calendarService.isOpen()"
+  (click)="calendarService.toggle()"
+  aria-label="Toggle Sprint Calendar"
+  title="Open Sprint Calendar (Target: Day {{ curriculum.calendarPacing().expectedDayNumber || 7 }})"
+>
+  <span class="trigger-icon">📅</span>
+  <span class="trigger-label">Calendar</span>
+  <span class="trigger-badge" [class]="'badge-' + curriculum.calendarPacing().paceStatus">
+    D{{ curriculum.calendarPacing().expectedDayNumber || 7 }}
+  </span>
+</button>
+
+<!-- Minimal Glassmorphism Calendar Popup (Right Screen, Middle of Screen) -->
+@if (calendarService.isOpen()) {
+  <!-- Subtle Click-Outside Backdrop -->
+  <div class="cal-backdrop" (click)="calendarService.close()" aria-hidden="true"></div>
+
+  <div
+    class="sprint-calendar-card"
+    role="dialog"
+    aria-labelledby="cal-month-title"
+    tabindex="-1"
+  >
+    <!-- Single Unified Header (Clean & Compact) -->
+    <header class="cal-card-header">
+      <div class="cal-month-wrap">
+        <h3 id="cal-month-title" class="cal-month-text">{{ monthTitle() }}</h3>
+        <button
+          type="button"
+          class="cal-btn-today"
+          (click)="calendarService.goToToday()"
+          title="Jump to Today's Date"
+        >
+          Today
+        </button>
+      </div>
+
+      <div class="cal-ctrls">
+        <button
+          type="button"
+          class="cal-ctrl-btn"
+          (click)="calendarService.prevMonth()"
+          aria-label="Previous month"
+          title="Previous Month"
+        >
+          ‹
+        </button>
+        <button
+          type="button"
+          class="cal-ctrl-btn"
+          (click)="calendarService.nextMonth()"
+          aria-label="Next month"
+          title="Next Month"
+        >
+          ›
+        </button>
+        <button
+          type="button"
+          class="cal-ctrl-btn cal-btn-close"
+          (click)="calendarService.close()"
+          aria-label="Close calendar"
+          title="Close (Esc)"
+        >
+          ✕
+        </button>
+      </div>
+    </header>
+
+    <!-- Weekday Row -->
+    <div class="cal-weekdays">
+      @for (w of weekdays; track w) {
+        <span class="cal-weekday">{{ w }}</span>
+      }
+    </div>
+
+    <!-- Days Grid (Pure & Clean: Just Day Number + Status Dot) -->
+    <div class="cal-grid">
+      @for (d of calendarDays(); track d.isoDate) {
+        <button
+          type="button"
+          class="cal-cell"
+          [class.other-month]="!d.isCurrentMonth"
+          [class.is-today]="d.isToday"
+          [class.is-sprint]="d.isSprintDay"
+          [class.status-completed]="d.status === 'completed'"
+          [class.status-in-progress]="d.status === 'in_progress'"
+          [class.status-not-started]="d.status === 'not_started'"
+          [class.status-buffer]="d.status === 'buffer'"
+          (mouseenter)="onHoverDay(d)"
+          (mouseleave)="onLeaveDay()"
+          (click)="onSelectDay(d)"
+          [title]="d.tooltipText"
+        >
+          <span class="cell-num">{{ d.dayOfMonth }}</span>
+          @if (d.isSprintDay && d.isCurrentMonth) {
+            <span class="cell-dot" [class]="'dot-' + d.status"></span>
+          }
+        </button>
+      }
+    </div>
+
+    <!-- Clean 1-Line Hover Strip: Day {no of that day} - {topic} [{status}] -->
+    <div class="cal-hover-bar" [class.has-hover]="activeHover()">
+      @if (activeHover(); as h) {
+        @if (h.isSprintDay) {
+          <div class="hover-text" [title]="h.tooltipText">
+            <span class="hover-day">Day {{ h.dayNumber }}</span>
+            <span class="hover-sep">–</span>
+            <span class="hover-topic">{{ h.topic }}</span>
+            <span class="hover-status status-{{ h.status }}">[{{ h.statusDisplay }}]</span>
+          </div>
+        } @else {
+          <div class="hover-text muted">
+            <span>{{ h.tooltipText }}</span>
+            <span class="hover-status">[Off-Sprint]</span>
+          </div>
+        }
+      } @else {
+        <div class="hover-placeholder">
+          <span>Hover a date to preview Day Topic [Status]</span>
+        </div>
+      }
+    </div>
+  </div>
+}
