@@ -5,12 +5,12 @@
   [class.is-hidden]="calendarService.isOpen()"
   (click)="calendarService.toggle()"
   aria-label="Toggle Sprint Calendar"
-  title="Open Sprint Calendar (Target: Day {{ curriculum.calendarPacing().expectedDayNumber || 7 }})"
+  [title]="'Open Sprint Calendar (' + (curriculum.calendarPacing().isPreSprint ? 'Kickoff Nov 5' : 'Target: Day ' + curriculum.calendarPacing().expectedDayNumber) + ')'"
 >
   <span class="trigger-icon">📅</span>
   <span class="trigger-label">Calendar</span>
   <span class="trigger-badge" [class]="'badge-' + curriculum.calendarPacing().paceStatus">
-    D{{ curriculum.calendarPacing().expectedDayNumber || 7 }}
+    {{ curriculum.calendarPacing().isPreSprint ? 'Kickoff' : 'D' + curriculum.calendarPacing().expectedDayNumber }}
   </span>
 </button>
 
@@ -89,6 +89,7 @@
           [class.status-completed]="d.status === 'completed'"
           [class.status-in-progress]="d.status === 'in_progress'"
           [class.status-not-started]="d.status === 'not_started'"
+          [class.status-blocked]="d.status === 'blocked'"
           [class.status-buffer]="d.status === 'buffer'"
           (mouseenter)="onHoverDay(d)"
           (mouseleave)="onLeaveDay()"
@@ -96,32 +97,63 @@
           [title]="d.tooltipText"
         >
           <span class="cell-num">{{ d.dayOfMonth }}</span>
-          @if (d.isSprintDay && d.isCurrentMonth) {
+          @if (d.isSprintDay) {
             <span class="cell-dot" [class]="'dot-' + d.status"></span>
           }
         </button>
       }
     </div>
 
-    <!-- Clean 1-Line Hover Strip: Day {no of that day} - {topic} [{status}] -->
+    <!-- Rich Telemetry Hover Panel -->
     <div class="cal-hover-bar" [class.has-hover]="activeHover()">
       @if (activeHover(); as h) {
-        @if (h.isSprintDay) {
-          <div class="hover-text" [title]="h.tooltipText">
-            <span class="hover-day">Day {{ h.dayNumber }}</span>
-            <span class="hover-sep">–</span>
-            <span class="hover-topic">{{ h.topic }}</span>
-            <span class="hover-status status-{{ h.status }}">[{{ h.statusDisplay }}]</span>
+        @if (h.isSprintDay && h.task) {
+          <div class="hover-telemetry-card">
+            <!-- Row 1: Day Badge + Date + Status + Today/Overdue -->
+            <div class="hover-head-row">
+              <span class="hover-day-badge">DAY {{ h.dayNumber }}</span>
+              <span class="hover-date-lbl">{{ h.task.date }}</span>
+              @if (h.isTodayTask) {
+                <span class="hover-badge-today">🎯 TODAY</span>
+              }
+              @if (h.isOverdue) {
+                <span class="hover-badge-overdue">⚠️ OVERDUE</span>
+              }
+              <span class="hover-status-pill status-{{ h.status }}">
+                {{ h.statusDisplay }}
+              </span>
+            </div>
+
+            <!-- Row 2: Full Topic Title -->
+            <div class="hover-topic-title" [title]="h.topic || ''">
+              {{ h.topic }}
+            </div>
+
+            <!-- Row 3: Meta tags: Topic Group, Checkpoints verified, Proof links -->
+            <div class="hover-meta-tags">
+              @if (h.topicGroup) {
+                <span class="hover-tag-group">📂 {{ h.topicGroup }}</span>
+              }
+              <span class="hover-tag-checks">
+                ✓ {{ h.verifiedChecksCount }}/4 Checks
+              </span>
+              @if ((h.proofsCount || 0) > 0) {
+                <span class="hover-tag-proofs">
+                  🔗 {{ h.proofsCount }} Link{{ (h.proofsCount || 0) > 1 ? 's' : '' }}
+                </span>
+              }
+              <span class="hover-open-hint">Click to inspect ↗</span>
+            </div>
           </div>
         } @else {
-          <div class="hover-text muted">
-            <span>{{ h.tooltipText }}</span>
-            <span class="hover-status">[Off-Sprint]</span>
+          <div class="hover-off-sprint">
+            <span class="hover-off-date">{{ h.tooltipText }}</span>
+            <span class="hover-off-status">[{{ h.statusDisplay }}]</span>
           </div>
         }
       } @else {
         <div class="hover-placeholder">
-          <span>Hover a date to preview Day Topic [Status]</span>
+          <span>Hover any calendar date to inspect day details, checklist, and status</span>
         </div>
       }
     </div>

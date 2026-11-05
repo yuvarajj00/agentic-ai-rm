@@ -108,7 +108,7 @@
   right: 24px;
   top: 50%;
   transform: translateY(-50%);
-  width: 292px;
+  width: 330px;
   max-width: calc(100vw - 32px);
   z-index: 1050;
   background: var(--surface, #0d1017);
@@ -279,8 +279,12 @@
 }
 
 .cal-cell.other-month {
-  opacity: 0.18;
-  pointer-events: none;
+  opacity: 0.35;
+  cursor: pointer;
+}
+
+.cal-cell.other-month:not(.is-sprint) {
+  cursor: default;
 }
 
 /* Today's Target Highlight */
@@ -347,76 +351,188 @@
 }
 
 /* --------------------------------------------------------------------------
-   7. SINGLE-LINE HOVER STRIP
-   Requirement: "on hovering the date it has to show day {no of that day}-topic [status]"
+   7. RICH TELEMETRY HOVER PANEL
+   Shows Day #, Date, Status, Today/Overdue flags, Topic, and Checkpoint stats
    -------------------------------------------------------------------------- */
 .cal-hover-bar {
-  margin-top: 0.25rem;
-  padding-top: 0.45rem;
+  margin-top: 0.35rem;
+  padding-top: 0.5rem;
   border-top: 1px solid var(--border, rgba(255, 255, 255, 0.08));
-  min-height: 24px;
+  min-height: 72px;
   box-sizing: border-box;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  justify-content: center;
 }
 
-.hover-text {
-  display: inline-flex;
-  align-items: center;
+.hover-telemetry-card {
+  display: flex;
+  flex-direction: column;
   gap: 0.3rem;
+  width: 100%;
+  animation: fadeIn 0.15s ease;
+}
+
+.hover-head-row {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.hover-day-badge {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 0.68rem;
+  letter-spacing: 0.04em;
+  color: var(--accent);
+  background: rgba(127, 255, 110, 0.12);
+  border: 1px solid rgba(127, 255, 110, 0.3);
+  padding: 0.1rem 0.38rem;
+  border-radius: 3px;
+  line-height: 1;
+}
+
+.hover-date-lbl {
   font-family: 'DM Mono', monospace;
   font-size: 0.66rem;
-  color: var(--text, #e6edf3);
-  line-height: 1.2;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  width: 100%;
+  color: var(--muted, #8b949e);
 }
 
-.hover-day {
-  font-weight: 800;
-  color: var(--accent2, #6eb5ff);
-  flex-shrink: 0;
+.hover-badge-today {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(127, 255, 110, 0.18);
+  border: 1px solid var(--accent);
+  padding: 0.08rem 0.3rem;
+  border-radius: 2px;
 }
 
-.hover-sep {
-  color: var(--muted, #6e7681);
-  flex-shrink: 0;
+.hover-badge-overdue {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.58rem;
+  font-weight: 700;
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.18);
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  padding: 0.08rem 0.3rem;
+  border-radius: 2px;
 }
 
-.hover-topic {
-  font-weight: 500;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  color: var(--text, #ffffff);
-}
-
-.hover-status {
+.hover-status-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
   font-weight: 700;
   margin-left: auto;
-  flex-shrink: 0;
-  font-size: 0.62rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 3px;
+  line-height: 1;
 }
 
-.hover-status.status-completed { color: #4ade80; }
-.hover-status.status-in_progress { color: #38bdf8; }
-.hover-status.status-not_started { color: #fbbf24; }
-.hover-status.status-blocked { color: #f87171; }
-.hover-status.status-buffer { color: #c084fc; }
+.hover-status-pill.status-completed {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.12);
+  border: 1px solid rgba(34, 197, 94, 0.3);
+}
 
-.hover-text.muted {
+.hover-status-pill.status-in_progress {
+  color: #06b6d4;
+  background: rgba(6, 182, 212, 0.12);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+}
+
+.hover-status-pill.status-blocked {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.12);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.hover-status-pill.status-not_started {
+  color: #eab308;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+}
+
+.hover-status-pill.status-buffer {
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.12);
+  border: 1px solid rgba(192, 132, 252, 0.3);
+}
+
+.hover-topic-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.76rem;
+  font-weight: 700;
+  color: var(--text, #ffffff);
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hover-meta-tags {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.6rem;
+  margin-top: 0.1rem;
+}
+
+.hover-tag-group {
+  color: var(--accent2, #6eb5ff);
+  background: rgba(110, 181, 255, 0.08);
+  padding: 0.08rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid rgba(110, 181, 255, 0.2);
+}
+
+.hover-tag-checks {
   color: var(--muted, #8b949e);
+}
+
+.hover-tag-proofs {
+  color: #c084fc;
+  background: rgba(192, 132, 252, 0.1);
+  padding: 0.08rem 0.35rem;
+  border-radius: 3px;
+  border: 1px solid rgba(192, 132, 252, 0.25);
+}
+
+.hover-open-hint {
+  color: var(--accent2, #6eb5ff);
+  margin-left: auto;
+  font-size: 0.58rem;
+  opacity: 0.8;
+}
+
+.hover-off-sprint {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  font-family: 'DM Mono', monospace;
+  font-size: 0.66rem;
+  color: var(--muted, #8b949e);
+}
+
+.hover-off-status {
+  font-weight: 700;
+  color: var(--accent3, #ff79c6);
 }
 
 .hover-placeholder {
   font-family: 'DM Mono', monospace;
-  font-size: 0.6rem;
+  font-size: 0.62rem;
   color: var(--muted, #6e7681);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  text-align: center;
+  line-height: 1.4;
+  padding: 0.4rem 0.2rem;
 }
 
 /* --------------------------------------------------------------------------

@@ -12,6 +12,12 @@ export interface SprintCalendarDay {
   isBufferDay: boolean;
   dayNumber: number | null;
   topic: string | null;
+  topicGroup?: string;
+  deliverableOutput?: string;
+  verifiedChecksCount?: number;
+  proofsCount?: number;
+  isTodayTask?: boolean;
+  isOverdue?: boolean;
   status: 'completed' | 'in_progress' | 'not_started' | 'blocked' | 'buffer' | 'none';
   statusDisplay: string;
   tooltipText: string;
@@ -30,7 +36,8 @@ export class SprintCalendarService {
 
   private getInitialDate(): Date {
     const pacing = this.curriculum.calendarPacing();
-    return new Date(pacing.currentCalendarDate || new Date(2026, 10, 4));
+    const target = pacing.currentCalendarDate || new Date(2026, 10, 5);
+    return new Date(target.getFullYear(), target.getMonth(), 1);
   }
 
   open(): void {
@@ -65,7 +72,7 @@ export class SprintCalendarService {
 
   goToToday(): void {
     const pacing = this.curriculum.calendarPacing();
-    const today = new Date(pacing.currentCalendarDate || new Date(2026, 10, 4));
+    const today = new Date(pacing.currentCalendarDate || new Date(2026, 10, 5));
     this.currentMonth.set(new Date(today.getFullYear(), today.getMonth(), 1));
   }
 

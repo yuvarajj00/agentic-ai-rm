@@ -96,16 +96,16 @@ export class SprintCalendarComponent {
     const isToday = isoDate === todayIsoStr;
     const task = taskMap.get(isoDate) || null;
 
-    // Transition buffer check: October 29, 2026 to November 8, 2026
-    const utcTime = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
-    const oct29Utc = Date.UTC(2026, 9, 29);
-    const nov8Utc = Date.UTC(2026, 10, 8);
-    const isTransitionBuffer = utcTime >= oct29Utc && utcTime <= nov8Utc;
-
     let isSprintDay = false;
     let isBufferDay = false;
     let dayNumber: number | null = null;
     let topic: string | null = null;
+    let topicGroup: string | undefined = undefined;
+    let deliverableOutput: string | undefined = undefined;
+    let verifiedChecksCount = 0;
+    let proofsCount = 0;
+    let isTodayTask = false;
+    let isOverdue = false;
     let status: SprintCalendarDay['status'] = 'none';
     let statusDisplay = '';
     let tooltipText = '';
@@ -115,20 +115,34 @@ export class SprintCalendarComponent {
       isBufferDay = !!task.isBufferDay;
       dayNumber = task.day;
       topic = task.topic;
+      topicGroup = task.topicGroup;
+      deliverableOutput = task.deliverableOutput;
+      verifiedChecksCount =
+        (task.studyDone ? 1 : 0) +
+        (task.exerciseDone ? 1 : 0) +
+        (task.codeSaved ? 1 : 0) +
+        (task.reviewDone ? 1 : 0);
+      proofsCount = task.proofUrls?.length || (task.evidenceUrl ? 1 : 0);
+      isTodayTask = this.curriculum.isTaskToday(task);
+      isOverdue = this.curriculum.isTaskOverdue(task);
       status = task.status;
       statusDisplay = this.formatStatus(task.status);
       tooltipText = `Day ${task.day} - ${task.topic} [${statusDisplay}]`;
-    } else if (isTransitionBuffer) {
-      isSprintDay = true;
-      isBufferDay = true;
-      dayNumber = 7;
-      topic = 'Transition Buffer (Target: Day 7)';
-      status = 'buffer';
-      statusDisplay = 'Buffer';
-      tooltipText = `Day 7 - Transition Buffer [Buffer]`;
     } else {
-      statusDisplay = isCurrentMonth ? 'Off-Sprint' : '';
-      tooltipText = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+      const utcTime = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate());
+      const sprintStartUtc = CurriculumService.SPRINT_START_UTC;
+      const sprintEndUtc = CurriculumService.SPRINT_END_UTC;
+
+      if (utcTime < sprintStartUtc) {
+        statusDisplay = 'Pre-Sprint';
+        tooltipText = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · Pre-Sprint (Kickoff Nov 5)`;
+      } else if (utcTime > sprintEndUtc) {
+        statusDisplay = 'Post-Sprint';
+        tooltipText = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })} · Post-Sprint (Complete)`;
+      } else {
+        statusDisplay = 'Off-Sprint';
+        tooltipText = `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+      }
     }
 
     return {
@@ -141,6 +155,12 @@ export class SprintCalendarComponent {
       isBufferDay,
       dayNumber,
       topic,
+      topicGroup,
+      deliverableOutput,
+      verifiedChecksCount,
+      proofsCount,
+      isTodayTask,
+      isOverdue,
       status,
       statusDisplay,
       tooltipText,
@@ -166,9 +186,7 @@ export class SprintCalendarComponent {
   }
 
   onHoverDay(day: SprintCalendarDay): void {
-    if (day.isCurrentMonth) {
-      this.calendarService.setHoveredDay(day);
-    }
+    this.calendarService.setHoveredDay(day);
   }
 
   onLeaveDay(): void {
