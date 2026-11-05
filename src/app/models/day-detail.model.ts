@@ -30,12 +30,38 @@ export interface DayTaskItem {
   type?: 'learn' | 'practice' | 'build' | 'review' | string;
 }
 
+export interface LearningChecklistCategory {
+  category: string;
+  items: string[];
+}
+
+export interface DayDeliverables {
+  requiredFiles: string[];
+  description: string;
+}
+
 export interface DayDetail {
   day: number;
   taskTitle: string;
   topic: string;
   topicGroup: string;
   overview: string;
+  week?: number;
+  date?: string;
+  isoDate?: string;
+
+  // The 9 Granular Checklist Sections
+  goal?: string;
+  prerequisites?: string[];
+  learningChecklist?: LearningChecklistCategory[];
+  implementationChecklist?: string[];
+  failureCases?: string[];
+  deliverables?: DayDeliverables;
+  completionCriteria?: string[];
+  activeRecallQuestions?: string[];
+  advancedTopics?: string[];
+
+  // Supporting & Backward-compatible Fields
   timeBudget: {
     recallMins: number;
     theoryMins: number;
@@ -59,4 +85,3 @@ export interface DayDetail {
   };
   thingsToDoThisDay?: DayTaskItem[];
 }
-

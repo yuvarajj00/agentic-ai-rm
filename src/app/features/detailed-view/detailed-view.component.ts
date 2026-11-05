@@ -31,7 +31,7 @@ export class DetailedViewComponent implements OnInit, OnDestroy {
   readonly dayNumber = signal<number>(1);
 
   // Active section for sticky Table of Contents highlighting
-  readonly activeSection = signal<string>('overview');
+  readonly activeSection = signal<string>('goal');
 
   // Associated daily task from main tracker
   readonly currentTask = computed<DailyTask | undefined>(() => {
@@ -151,7 +151,17 @@ export class DetailedViewComponent implements OnInit, OnDestroy {
   @HostListener('window:scroll')
   onWindowScroll() {
     if (typeof window === 'undefined') return;
-    const sections = ['overview', 'resources', 'concepts', 'practice', 'starter-lab', 'pitfalls', 'interview'];
+    const sections = [
+      'goal',
+      'learning-checklist',
+      'implementation-checklist',
+      'failure-cases',
+      'deliverables',
+      'completion-criteria',
+      'active-recall',
+      'advanced-topics',
+      'starter-lab'
+    ];
     const scrollPosition = window.scrollY + 200;
 
     for (const id of sections) {

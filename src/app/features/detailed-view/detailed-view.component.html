@@ -80,34 +80,66 @@
             <button
               type="button"
               class="toc-link"
-              [class.active]="activeSection() === 'overview'"
-              (click)="scrollToSection('overview', $event)"
+              [class.active]="activeSection() === 'goal'"
+              (click)="scrollToSection('goal', $event)"
             >
-              1. Executive Overview
+              1. Goal & Prerequisites
             </button>
             <button
               type="button"
               class="toc-link"
-              [class.active]="activeSection() === 'resources'"
-              (click)="scrollToSection('resources', $event)"
+              [class.active]="activeSection() === 'learning-checklist'"
+              (click)="scrollToSection('learning-checklist', $event)"
             >
-              2. Study Resources
+              2. Learning Checklist
             </button>
             <button
               type="button"
               class="toc-link"
-              [class.active]="activeSection() === 'concepts'"
-              (click)="scrollToSection('concepts', $event)"
+              [class.active]="activeSection() === 'implementation-checklist'"
+              (click)="scrollToSection('implementation-checklist', $event)"
             >
-              3. Concepts & Deep Dive
+              3. Implementation Steps
             </button>
             <button
               type="button"
               class="toc-link"
-              [class.active]="activeSection() === 'practice'"
-              (click)="scrollToSection('practice', $event)"
+              [class.active]="activeSection() === 'failure-cases'"
+              (click)="scrollToSection('failure-cases', $event)"
             >
-              4. Practice Questions
+              4. Failure Cases to Test
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'deliverables'"
+              (click)="scrollToSection('deliverables', $event)"
+            >
+              5. Daily Deliverables
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'completion-criteria'"
+              (click)="scrollToSection('completion-criteria', $event)"
+            >
+              6. Completion Criteria
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'active-recall'"
+              (click)="scrollToSection('active-recall', $event)"
+            >
+              7. Recall & Interview
+            </button>
+            <button
+              type="button"
+              class="toc-link"
+              [class.active]="activeSection() === 'advanced-topics'"
+              (click)="scrollToSection('advanced-topics', $event)"
+            >
+              8. Advanced Topics
             </button>
             <button
               type="button"
@@ -115,58 +147,66 @@
               [class.active]="activeSection() === 'starter-lab'"
               (click)="scrollToSection('starter-lab', $event)"
             >
-              5. Starter Code Lab
-            </button>
-            <button
-              type="button"
-              class="toc-link"
-              [class.active]="activeSection() === 'pitfalls'"
-              (click)="scrollToSection('pitfalls', $event)"
-            >
-              6. Common Pitfalls
-            </button>
-            <button
-              type="button"
-              class="toc-link"
-              [class.active]="activeSection() === 'interview'"
-              (click)="scrollToSection('interview', $event)"
-            >
-              7. ML Interview Focus
+              9. Starter Code Lab
             </button>
           </nav>
         </div>
 
         @if (currentTask(); as t) {
           <div class="sidebar-block mission-snapshot-card">
-            <div class="sidebar-sec-title">TODAY'S MISSION CARD</div>
-            <div class="mission-meta">
-              <span class="meta-badge">{{ t.topicGroup }}</span>
-              <span class="meta-date">{{ t.date }}</span>
+            <div class="mission-card-top-bar">
+              <div class="mission-card-header-title">
+                <span class="mission-title-icon">🎯</span>
+                <span class="mission-title-text">
+                  @if (curriculum.isTaskToday(t)) {
+                    TODAY'S MISSION
+                  } @else {
+                    DAY {{ t.day }} MISSION
+                  }
+                </span>
+              </div>
+              <span class="mission-status-pill" [class]="t.status">
+                {{ t.status === 'completed' ? '✓ DONE' : (t.status === 'in_progress' ? 'ACTIVE' : (t.status === 'blocked' ? 'BLOCKED' : 'READY')) }}
+              </span>
             </div>
-            <div class="mission-task-title">{{ t.task }}</div>
+
+            <div class="mission-meta-info">
+              <div class="mission-group-row">
+                <span class="meta-badge">{{ t.topicGroup }}</span>
+              </div>
+              <div class="mission-date-row">
+                <span class="date-icon">📅</span>
+                <span class="meta-date">{{ t.date }}</span>
+              </div>
+            </div>
+
+            <h3 class="mission-task-title">{{ t.task }}</h3>
             
             <div class="checklist-summary">
-              <label class="check-item">
-                <input type="checkbox" [checked]="t.studyDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'studyDone')">
-                <span>Study Done</span>
-              </label>
-              <label class="check-item">
-                <input type="checkbox" [checked]="t.exerciseDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'exerciseDone')">
-                <span>Exercise Done</span>
-              </label>
-              <label class="check-item">
-                <input type="checkbox" [checked]="t.codeSaved" (change)="curriculum.toggleTaskCheckbox(t.id, 'codeSaved')">
-                <span>Code Saved</span>
-              </label>
-              <label class="check-item">
-                <input type="checkbox" [checked]="t.reviewDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'reviewDone')">
-                <span>Review Done</span>
-              </label>
+              <div class="checklist-summary-label">// DAILY PROGRESS CHECKLIST</div>
+              <div class="checklist-grid-2x2">
+                <label class="check-item" [class.checked]="t.studyDone">
+                  <input type="checkbox" [checked]="t.studyDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'studyDone')">
+                  <span>Study</span>
+                </label>
+                <label class="check-item" [class.checked]="t.exerciseDone">
+                  <input type="checkbox" [checked]="t.exerciseDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'exerciseDone')">
+                  <span>Exercise</span>
+                </label>
+                <label class="check-item" [class.checked]="t.codeSaved">
+                  <input type="checkbox" [checked]="t.codeSaved" (change)="curriculum.toggleTaskCheckbox(t.id, 'codeSaved')">
+                  <span>Code</span>
+                </label>
+                <label class="check-item" [class.checked]="t.reviewDone">
+                  <input type="checkbox" [checked]="t.reviewDone" (change)="curriculum.toggleTaskCheckbox(t.id, 'reviewDone')">
+                  <span>Review</span>
+                </label>
+              </div>
             </div>
 
             @if (t.evidenceUrl) {
               <a [href]="t.evidenceUrl" target="_blank" class="evidence-link">
-                GitHub Repo Evidence ↗
+                🔗 Proof of Work ↗
               </a>
             }
           </div>
@@ -198,7 +238,7 @@
       @if (detailService.isLoading()) {
         <div class="article-loading-state">
           <span class="spinner spinner-lg"></span>
-          <div class="loading-label">Loading in-depth GeeksforGeeks-style guide for Day {{ dayNumber() }}...</div>
+          <div class="loading-label">Loading comprehensive curriculum guide for Day {{ dayNumber() }}...</div>
         </div>
       } @else if (detail(); as d) {
         <!-- HERO TITLE BLOCK -->
@@ -206,10 +246,10 @@
           <div class="hero-tags">
             <span class="tag-pill tag-group">{{ d.topicGroup }}</span>
             <span class="tag-pill tag-week">Week {{ currentTask()?.week || 1 }}</span>
-            <span class="tag-pill tag-level">Machine Learning Engineering</span>
+            <span class="tag-pill tag-level">Agentic AI Engineering</span>
           </div>
           <h1 class="article-main-title">{{ d.taskTitle }}</h1>
-          <p class="article-subtitle">// Complete practical tutorial, subtopic breakdowns, practice exercises, and starter code</p>
+          <p class="article-subtitle">// Complete, unambiguous 9-section checklist: concepts, step-by-step code, failure cases, deliverables, and interview review</p>
 
           <!-- TIME BUDGET & METADATA STRIP -->
           <div class="article-meta-banner">
@@ -236,7 +276,7 @@
           </div>
         </div>
 
-        <!-- MOBILE MISSION & PROGRESS DOCK (Visible on Mobile / Tablet <= 1024px) -->
+        <!-- MOBILE MISSION & PROGRESS DOCK -->
         <div class="mobile-mission-dock">
           @if (currentTask(); as t) {
             <div class="mobile-checklist-card">
@@ -268,14 +308,6 @@
                   <span>🔍 Review Done</span>
                 </label>
               </div>
-
-              @if (t.evidenceUrl) {
-                <div class="mobile-evidence-row">
-                  <a [href]="t.evidenceUrl" target="_blank" class="mobile-evidence-link">
-                    <span>GitHub Evidence:</span> <strong>{{ t.evidenceUrl }}</strong> ↗
-                  </a>
-                </div>
-              }
             </div>
           }
 
@@ -283,235 +315,247 @@
           <div class="mobile-toc-bar">
             <span class="mobile-toc-label">Sections:</span>
             <div class="mobile-toc-scroll">
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'overview'" (click)="scrollToSection('overview', $event)">1. Overview</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'resources'" (click)="scrollToSection('resources', $event)">2. Resources</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'concepts'" (click)="scrollToSection('concepts', $event)">3. Concepts</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'practice'" (click)="scrollToSection('practice', $event)">4. Practice</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'starter-lab'" (click)="scrollToSection('starter-lab', $event)">5. Starter Lab</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'pitfalls'" (click)="scrollToSection('pitfalls', $event)">6. Pitfalls</button>
-              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'interview'" (click)="scrollToSection('interview', $event)">7. Interview</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'goal'" (click)="scrollToSection('goal', $event)">1. Goal</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'learning-checklist'" (click)="scrollToSection('learning-checklist', $event)">2. Concepts</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'implementation-checklist'" (click)="scrollToSection('implementation-checklist', $event)">3. Steps</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'failure-cases'" (click)="scrollToSection('failure-cases', $event)">4. Failures</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'deliverables'" (click)="scrollToSection('deliverables', $event)">5. Deliverables</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'completion-criteria'" (click)="scrollToSection('completion-criteria', $event)">6. Criteria</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'active-recall'" (click)="scrollToSection('active-recall', $event)">7. Recall</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'advanced-topics'" (click)="scrollToSection('advanced-topics', $event)">8. Advanced</button>
+              <button type="button" class="mobile-toc-chip" [class.active]="activeSection() === 'starter-lab'" (click)="scrollToSection('starter-lab', $event)">9. Lab</button>
             </div>
           </div>
         </div>
 
-        <!-- 1. EXECUTIVE OVERVIEW -->
-        <section id="overview" class="article-section">
+        <!-- 1. DAILY GOAL & PREREQUISITES -->
+        <section id="goal" class="article-section">
           <div class="section-badge-header">
             <span class="sec-number">01</span>
-            <h2 class="section-title">Overview & Machine Learning Relevance</h2>
+            <h2 class="section-title">Daily Goal & Prerequisites</h2>
           </div>
           <div class="article-card overview-card">
-            <div class="overview-body-text article-markdown" [innerHTML]="d.overview | markdown"></div>
-            
-            <div class="objective-callout">
-              <div class="callout-icon">🎯</div>
-              <div>
-                <strong>Mastery Criterion for Day {{ d.day }}:</strong>
-                <div>{{ currentTask()?.outcome || 'Understand core mechanics and apply to reproducible ML code.' }}</div>
-              </div>
+            <div class="goal-highlight-box">
+              <div class="goal-badge">🎯 DAILY GOAL</div>
+              <p class="goal-statement">{{ d.goal || d.overview }}</p>
             </div>
 
-            <div class="deliverable-callout">
-              <div class="callout-icon">📁</div>
-              <div>
-                <strong>Target Deliverable Output File:</strong>
-                <code>{{ d.starterCode.filename }}</code>
-              </div>
-            </div>
-
-            @if (d.thingsToDoThisDay && d.thingsToDoThisDay.length > 0) {
-              <div class="daily-tasks-box">
-                <div class="daily-tasks-head">
-                  <span class="daily-tasks-icon">📋</span>
-                  <div class="daily-tasks-title-wrap">
-                    <strong class="daily-tasks-heading">Today's Action Items & Deliverables ({{ d.thingsToDoThisDay.length }} Milestones)</strong>
-                    <span class="daily-tasks-sub">Core study topics, hands-on coding milestones, and interview checkpoints for Day {{ d.day }}</span>
-                  </div>
+            @if (d.prerequisites && d.prerequisites.length > 0) {
+              <div class="prereq-container">
+                <div class="prereq-head">
+                  <span class="prereq-icon">⚡</span>
+                  <strong>Concepts you should understand before starting today:</strong>
                 </div>
-                <div class="daily-tasks-list">
-                  @for (action of d.thingsToDoThisDay; track action.id) {
-                    <div class="daily-task-row" [class]="'task-type-' + getTaskBadge(action)">
-                      <span class="task-type-badge">{{ getTaskBadge(action) }}</span>
-                      <div class="task-text-content" [innerHTML]="action.text | markdown"></div>
+                <ul class="prereq-list">
+                  @for (pre of d.prerequisites; track pre) {
+                    <li class="prereq-item">
+                      <span class="check-bullet">✓</span>
+                      <span>{{ pre }}</span>
+                    </li>
+                  }
+                </ul>
+              </div>
+            }
+
+            @if (d.studyLinks && d.studyLinks.length > 0) {
+              <div class="study-links-subgrid">
+                @for (res of d.studyLinks; track res.url) {
+                  <a [href]="res.url" target="_blank" class="resource-pill">
+                    <span class="res-badge">{{ res.badge }}</span>
+                    <span class="res-title">{{ res.title }}</span>
+                    <span class="res-arrow">↗</span>
+                  </a>
+                }
+              </div>
+            }
+          </div>
+        </section>
+
+        <!-- 2. COMPLETE LEARNING CHECKLIST -->
+        <section id="learning-checklist" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">02</span>
+            <h2 class="section-title">Complete Learning Checklist</h2>
+          </div>
+          @if (d.learningChecklist && d.learningChecklist.length > 0) {
+            <div class="learning-checklist-grid">
+              @for (cat of d.learningChecklist; track cat.category) {
+                <div class="category-checklist-card">
+                  <div class="category-card-head">
+                    <span class="category-icon">📌</span>
+                    <h3 class="category-title">{{ cat.category }}</h3>
+                    <span class="category-count">{{ cat.items.length }} topics</span>
+                  </div>
+                  <ul class="concept-items-list">
+                    @for (item of cat.items; track item) {
+                      <li class="concept-item">
+                        <span class="bullet-dot">•</span>
+                        <span class="concept-text">{{ item }}</span>
+                      </li>
+                    }
+                  </ul>
+                </div>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- 3. IMPLEMENTATION CHECKLIST -->
+        <section id="implementation-checklist" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">03</span>
+            <h2 class="section-title">Implementation Checklist (Exact Coding Steps)</h2>
+          </div>
+          @if (d.implementationChecklist && d.implementationChecklist.length > 0) {
+            <div class="article-card implementation-card">
+              <div class="impl-steps-list">
+                @for (step of d.implementationChecklist; track step; let idx = $index) {
+                  <div class="impl-step-row">
+                    <div class="step-number-circle">{{ idx + 1 }}</div>
+                    <div class="step-content">
+                      <span class="step-text">{{ step }}</span>
+                    </div>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </section>
+
+        <!-- 4. FAILURE CASES TO TEST -->
+        <section id="failure-cases" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">04</span>
+            <h2 class="section-title">Failure Cases to Test (Negative Testing & Traps)</h2>
+          </div>
+          @if (d.failureCases && d.failureCases.length > 0) {
+            <div class="failure-cases-grid">
+              @for (failure of d.failureCases; track failure; let fIdx = $index) {
+                <div class="failure-case-card">
+                  <div class="failure-card-head">
+                    <span class="failure-warn-icon">⚠️</span>
+                    <span class="failure-tag">NEGATIVE TEST {{ fIdx + 1 }}</span>
+                  </div>
+                  <div class="failure-text">{{ failure }}</div>
+                </div>
+              }
+            </div>
+          }
+        </section>
+
+        <!-- 5. DAILY DELIVERABLES & REQUIRED FILES -->
+        <section id="deliverables" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">05</span>
+            <h2 class="section-title">Daily Deliverables & Required Files</h2>
+          </div>
+          @if (d.deliverables) {
+            <div class="article-card deliverables-card">
+              <div class="deliverable-desc-box">
+                <strong>Expected Outcome Artifact:</strong>
+                <p>{{ d.deliverables.description }}</p>
+              </div>
+
+              <div class="required-files-block">
+                <div class="files-head">
+                  <span class="files-icon">📂</span>
+                  <span>Required Repository File Structure (<code>day-{{ d.day < 10 ? '0' + d.day : d.day }}/</code>):</span>
+                </div>
+                <div class="files-tree-list">
+                  @for (file of d.deliverables.requiredFiles; track file) {
+                    <div class="file-item-badge">
+                      <span class="file-glyph">📄</span>
+                      <code class="file-path-code">{{ file }}</code>
                     </div>
                   }
                 </div>
               </div>
-            }
-          </div>
+            </div>
+          }
         </section>
 
-        <!-- 2. CURATED STUDY RESOURCES -->
-        <section id="resources" class="article-section">
+        <!-- 6. COMPLETION CRITERIA -->
+        <section id="completion-criteria" class="article-section">
           <div class="section-badge-header">
-            <span class="sec-number">02</span>
-            <h2 class="section-title">Curated Documentation & Reading Links</h2>
+            <span class="sec-number">06</span>
+            <h2 class="section-title">Completion Criteria ("How do I know this day is finished?")</h2>
           </div>
-          <div class="resources-grid">
-            @for (res of d.studyLinks; track res.url) {
-              <a [href]="res.url" target="_blank" class="resource-card">
-                <div class="res-head">
-                  <span class="res-badge">{{ res.badge }}</span>
-                  <span class="res-ext-arrow">↗</span>
-                </div>
-                <div class="res-title">{{ res.title }}</div>
-                <div class="res-url-text">{{ res.url }}</div>
-              </a>
-            }
-          </div>
-        </section>
-
-        <!-- 3. CONCEPTS, THEORY & STEP-BY-STEP EXPLANATIONS (GFG STYLE) -->
-        <section id="concepts" class="article-section">
-          <div class="section-badge-header">
-            <span class="sec-number">03</span>
-            <h2 class="section-title">End-to-End Concepts & Code Examples ({{ d.subtopics.length }} Topics)</h2>
-          </div>
-          <div class="subtopics-container">
-            @for (sub of d.subtopics; track sub.id; let idx = $index) {
-              <article class="subtopic-article-box" [id]="sub.id">
-                <div class="subtopic-header">
-                  <div class="subtopic-index-badge">TOPIC {{ idx + 1 }}</div>
-                  <h3 class="subtopic-title">{{ sub.title }}</h3>
-                </div>
-
-                @if (sub.summary && (!sub.detailedExplanation || sub.summary.trim() !== sub.detailedExplanation.trim())) {
-                  <div class="subtopic-summary-box article-markdown">
-                    <strong>Summary:</strong> <span [innerHTML]="sub.summary | markdown"></span>
-                  </div>
-                }
-
-                @if (sub.detailedExplanation) {
-                  <div class="subtopic-detailed-prose article-markdown" [innerHTML]="sub.detailedExplanation | markdown"></div>
-                }
-
-                @if (sub.codeExample && (!idx || sub.codeExample.trim() !== d.subtopics[idx - 1]?.codeExample?.trim())) {
-                  <div class="code-example-container">
-                    <div class="code-box-header">
-                      <span class="code-lang-label">Python 3</span>
-                      <button
-                        type="button"
-                        class="btn-copy-code"
-                        [class.copied]="copiedSnippetId() === sub.id"
-                        (click)="copyCode(sub.codeExample, sub.id)"
-                      >
-                        {{ copiedSnippetId() === sub.id ? '✓ Copied!' : '📋 Copy Code' }}
-                      </button>
-                    </div>
-                    <pre class="code-box-pre"><code [innerHTML]="highlightPython(sub.codeExample)"></code></pre>
-                  </div>
-                }
-
-                @if (sub.keyTakeaways && sub.keyTakeaways.length > 0) {
-                  <div class="takeaways-box">
-                    <div class="takeaways-header">
-                      <span>💡 KEY TAKEAWAYS FOR MACHINE LEARNING</span>
-                    </div>
-                    <ul class="takeaways-list">
-                      @for (item of sub.keyTakeaways; track item) {
-                        <li>{{ item }}</li>
-                      }
-                    </ul>
-                  </div>
-                }
-
-                
-              </article>
-            }
-          </div>
-        </section>
-
-        <!-- 4. HANDS-ON PRACTICE QUESTIONS & SOLUTIONS -->
-        <section id="practice" class="article-section">
-          <div class="section-badge-header">
-            <span class="sec-number">04</span>
-            <h2 class="section-title">Practice Exercises & Code Solutions ({{ d.practiceQuestions.length }} Questions)</h2>
-          </div>
-          <div class="practice-questions-grid">
-            @for (q of d.practiceQuestions; track q.id; let qIdx = $index) {
-              <div class="gfg-question-card" [id]="q.id">
-                <div class="q-card-head">
-                  <div class="q-number-title">
-                    <span class="q-number">Q{{ qIdx + 1 }}.</span>
-                    <span class="q-title-text">{{ q.title }}</span>
-                  </div>
-                  <span class="diff-badge diff-{{ q.difficulty }}">{{ q.difficulty }}</span>
-                </div>
-
-                <div class="q-prompt-box article-markdown" [innerHTML]="q.prompt | markdown"></div>
-
-                @if (q.hints && q.hints.length > 0) {
-                  <div class="q-hints-box article-markdown">
-                    <strong>Hints:</strong>
-                    <ul>
-                      @for (h of q.hints; track h) {
-                        <li [innerHTML]="h | markdown"></li>
-                      }
-                    </ul>
-                  </div>
-                }
-
-                <div class="q-actions-bar">
-                  <button
-                    type="button"
-                    class="btn-toggle-solution"
-                    (click)="toggleSolution(q.id)"
-                  >
-                    {{ isSolutionRevealed(q.id) ? '▲ Hide Answer' : (isInterviewQuestion(q) ? '👁️ View Model Interview Answer' : '👁️ View Verified Solution & Tests') }}
-                  </button>
-                </div>
-
-                @if (isSolutionRevealed(q.id)) {
-                  <div class="q-solution-reveal animate-fade">
-                    @if (isInterviewSolution(q.solutionCode)) {
-                      <!-- INTERVIEW MODEL ANSWER CARD -->
-                      <div class="interview-solution-card">
-                        <div class="code-box-header solution-box-head">
-                          <span class="code-lang-label">🎯 Model Candidate Answer</span>
-                          <button
-                            type="button"
-                            class="btn-copy-code"
-                            [class.copied]="copiedSnippetId() === q.id"
-                            (click)="copyCode(cleanInterviewAnswer(q.solutionCode), q.id)"
-                          >
-                            {{ copiedSnippetId() === q.id ? '✓ Copied!' : '📋 Copy Answer' }}
-                          </button>
-                        </div>
-                        <div class="interview-card-body article-markdown" [innerHTML]="cleanInterviewAnswer(q.solutionCode) | markdown"></div>
-                        @if (q.explanation && q.explanation.trim() !== cleanInterviewAnswer(q.solutionCode).trim()) {
-                          <div class="solution-explanation-text article-markdown" [innerHTML]="('**💡 Solution Analysis:** ' + q.explanation) | markdown"></div>
-                        }
-                      </div>
-                    } @else {
-                      <!-- PYTHON CODE SOLUTION BOX -->
-                      <div class="code-box-header solution-box-head">
-                        <span class="code-lang-label">Python Solution</span>
-                        <button
-                          type="button"
-                          class="btn-copy-code"
-                          [class.copied]="copiedSnippetId() === q.id"
-                          (click)="copyCode(q.solutionCode, q.id)"
-                        >
-                          {{ copiedSnippetId() === q.id ? '✓ Copied!' : '📋 Copy Solution' }}
-                        </button>
-                      </div>
-                      <pre class="code-box-pre solution-pre"><code [innerHTML]="highlightPython(q.solutionCode)"></code></pre>
-
-                      @if (q.explanation) {
-                        <div class="solution-explanation-text article-markdown" [innerHTML]="('**💡 Solution Analysis:** ' + q.explanation) | markdown"></div>
-                      }
-                    }
+          @if (d.completionCriteria && d.completionCriteria.length > 0) {
+            <div class="article-card criteria-card">
+              <div class="criteria-list">
+                @for (crit of d.completionCriteria; track crit) {
+                  <div class="criteria-row">
+                    <span class="criteria-check">✅</span>
+                    <span class="criteria-text">{{ crit }}</span>
                   </div>
                 }
               </div>
-            }
-          </div>
+            </div>
+          }
         </section>
 
-        <!-- 5. READY-TO-COPY STARTER CODE LAB -->
+        <!-- 7. INTERVIEW AND ACTIVE-RECALL QUESTIONS -->
+        <section id="active-recall" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">07</span>
+            <h2 class="section-title">Interview & Active-Recall Technical Questions</h2>
+          </div>
+          @if (d.activeRecallQuestions && d.activeRecallQuestions.length > 0) {
+            <div class="active-recall-grid">
+              @for (q of d.activeRecallQuestions; track q; let qIdx = $index) {
+                <div class="active-recall-card">
+                  <div class="recall-card-head">
+                    <span class="recall-badge">QUESTION {{ qIdx + 1 }}</span>
+                  </div>
+                  <div class="recall-prompt">{{ q }}</div>
+                </div>
+              }
+            </div>
+          }
+
+          @if (d.interviewAngle) {
+            <div class="interview-focus-card mt-4">
+              <div class="interview-q-row">
+                <span class="interview-badge">MODEL INTERVIEW RUBRIC</span>
+                <div class="interview-question-text">"{{ d.interviewAngle.question }}"</div>
+              </div>
+              <div class="interview-answer-box article-markdown">
+                <strong>Model Candidate Answer:</strong>
+                <div class="mt-2" [innerHTML]="d.interviewAngle.answer | markdown"></div>
+              </div>
+              <div class="interview-why-box article-markdown">
+                <strong>Why interviewers ask this:</strong>
+                <div class="mt-1" [innerHTML]="d.interviewAngle.whyItMatters | markdown"></div>
+              </div>
+            </div>
+          }
+        </section>
+
+        <!-- 8. OPTIONAL ADVANCED TOPICS -->
+        <section id="advanced-topics" class="article-section">
+          <div class="section-badge-header">
+            <span class="sec-number">08</span>
+            <h2 class="section-title">Optional Advanced Topics & Production Extensions</h2>
+          </div>
+          @if (d.advancedTopics && d.advancedTopics.length > 0) {
+            <div class="article-card advanced-card">
+              <div class="advanced-intro">Explore these enterprise-scale topics after completing today's core implementation:</div>
+              <div class="advanced-tags-grid">
+                @for (adv of d.advancedTopics; track adv) {
+                  <div class="advanced-topic-pill">
+                    <span class="adv-star">🚀</span>
+                    <span class="adv-text">{{ adv }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+          }
+        </section>
+
+        <!-- 9. READY-TO-COPY STARTER CODE LAB -->
         <section id="starter-lab" class="article-section">
           <div class="section-badge-header">
-            <span class="sec-number">05</span>
+            <span class="sec-number">09</span>
             <h2 class="section-title">Ready-to-Copy Starter Code Lab</h2>
           </div>
           <div class="starter-lab-card">
@@ -531,47 +575,6 @@
             </div>
             <div class="lab-desc article-markdown" [innerHTML]="d.starterCode.description | markdown"></div>
             <pre class="lab-code-pre"><code [innerHTML]="highlightPython(d.starterCode.code)"></code></pre>
-          </div>
-        </section>
-
-        <!-- 6. COMMON PITFALLS & GOTCHAS -->
-        <section id="pitfalls" class="article-section">
-          <div class="section-badge-header">
-            <span class="sec-number">06</span>
-            <h2 class="section-title">Common Pitfalls & Friction Points</h2>
-          </div>
-          <div class="pitfalls-callout-card">
-            <div class="pitfalls-head">
-              <span class="warning-icon">⚠️</span>
-              <strong>Watch out for these common bugs and misconceptions:</strong>
-            </div>
-            <ul class="pitfalls-bullets article-markdown">
-              @for (pit of d.commonPitfalls; track pit) {
-                <li [innerHTML]="pit | markdown"></li>
-              }
-            </ul>
-          </div>
-        </section>
-
-        <!-- 7. ML TECHNICAL INTERVIEW FOCUS -->
-        <section id="interview" class="article-section">
-          <div class="section-badge-header">
-            <span class="sec-number">07</span>
-            <h2 class="section-title">Machine Learning Technical Interview Focus</h2>
-          </div>
-          <div class="interview-focus-card">
-            <div class="interview-q-row">
-              <span class="interview-badge">INTERVIEW QUESTION</span>
-              <div class="interview-question-text">"{{ d.interviewAngle.question }}"</div>
-            </div>
-            <div class="interview-answer-box article-markdown">
-              <strong>Model Candidate Answer:</strong>
-              <div class="mt-2" [innerHTML]="d.interviewAngle.answer | markdown"></div>
-            </div>
-            <div class="interview-why-box article-markdown">
-              <strong>Why interviewers ask this:</strong>
-              <div class="mt-1" [innerHTML]="d.interviewAngle.whyItMatters | markdown"></div>
-            </div>
           </div>
         </section>
 
