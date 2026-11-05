@@ -3,22 +3,20 @@ const cors = require('cors');
 const path = require('path');
 const dns = require('dns');
 const { MongoClient } = require('mongodb');
+
+// Load environment variables (.env in server/ or root)
 require('dotenv').config({ path: path.join(__dirname, '.env') });
+require('dotenv').config({ path: path.join(__dirname, 'server', '.env') });
 
 // Ensure reliable SRV DNS resolution on Windows / all platforms
 try {
   dns.setServers(['8.8.8.8', '1.1.1.1']);
 } catch (e) {
-  console.warn('DNS override skipped:', e.message);
+  // Fallback if environment restricts custom DNS
 }
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const MONGODB_URI = process.env.MONGODB_URI;
-if (!MONGODB_URI) {
-  console.error('ERROR: MONGODB_URI environment variable is required. Please set it in your .env or environment.');
-  process.exit(1);
-}
 const DB_NAME = process.env.MONGODB_DB || 'agentic_ai_roadmap';
 const COLLECTION_NAME = process.env.MONGODB_COLLECTION || 'roadmap_state';
 const STATE_DOC_ID = 'current_roadmap_state';
@@ -42,9 +40,16 @@ async function getDb() {
     return cachedDb;
   }
 
+  const uri = process.env.MONGODB_URI;
+  if (!uri) {
+    throw new Error(
+      'MONGODB_URI environment variable is required. Please configure it in your Vercel Project Settings > Environment Variables or local .env file.'
+    );
+  }
+
   try {
-    const client = new MongoClient(MONGODB_URI, {
-      serverSelectionTimeoutMS: 5000,
+    const client = new MongoClient(uri, {
+      serverSelectionTimeoutMS: 8000,
       connectTimeoutMS: 10000,
       socketTimeoutMS: 45000,
       maxIdleTimeMS: 30000
@@ -71,8 +76,11 @@ async function getDb() {
   }
 }
 
+// Dedicated API Router
+const apiRouter = express.Router();
+
 // Health check endpoint
-app.get('/api/health', async (req, res) => {
+apiRouter.get('/health', async (req, res) => {
   try {
     const db = await getDb();
     await db.command({ ping: 1 });
@@ -90,7 +98,7 @@ app.get('/api/health', async (req, res) => {
 });
 
 // GET /api/progress - Fetch roadmap state from MongoDB Atlas
-app.get('/api/progress', async (req, res) => {
+apiRouter.get('/progress', async (req, res) => {
   try {
     const db = await getDb();
     const doc = await db.collection(COLLECTION_NAME).findOne({ _id: STATE_DOC_ID });
@@ -115,7 +123,7 @@ app.get('/api/progress', async (req, res) => {
 });
 
 // POST /api/progress - Save roadmap state into MongoDB Atlas
-app.post('/api/progress', async (req, res) => {
+apiRouter.post('/progress', async (req, res) => {
   try {
     const { dailyTasks, milestones, techStack } = req.body;
     if (!dailyTasks || !Array.isArray(dailyTasks)) {
@@ -147,7 +155,7 @@ app.post('/api/progress', async (req, res) => {
 });
 
 // POST /api/progress/reset - Reset progress state in MongoDB Atlas
-app.post('/api/progress/reset', async (req, res) => {
+apiRouter.post('/progress/reset', async (req, res) => {
   try {
     const db = await getDb();
     await db.collection(COLLECTION_NAME).deleteOne({ _id: STATE_DOC_ID });
@@ -158,10 +166,9 @@ app.post('/api/progress/reset', async (req, res) => {
   }
 });
 
-// Catch unhandled API routes with a 404 JSON error instead of sending index.html
-app.use('/api', (req, res) => {
-  res.status(404).json({ success: false, error: `API endpoint not found: ${req.method} ${req.originalUrl}` });
-});
+// Mount API router under both /api and root / for Vercel Serverless Function compatibility
+app.use('/api', apiRouter);
+app.use('/', apiRouter);
 
 // Serve public static assets (curriculum datasets, icons, manifest)
 app.use(express.static(path.join(__dirname, 'public')));
@@ -170,8 +177,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const distPath = path.join(__dirname, 'dist', 'agentic-ai', 'browser');
 app.use(express.static(distPath));
 
-// Fallback for Angular SPA client-side routing
-app.use((req, res) => {
+// Fallback for Angular SPA client-side routing (local server mode)
+app.use((req, res, next) => {
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({ success: false, error: `API endpoint not found: ${req.method} ${req.originalUrl}` });
+  }
   const indexFile = path.join(distPath, 'index.html');
   res.sendFile(indexFile, (err) => {
     if (err) {
@@ -180,7 +190,13 @@ app.use((req, res) => {
   });
 });
 
-app.listen(PORT, () => {
-  console.log(`Agentic AI Flight Deck server listening on http://localhost:${PORT}`);
-  console.log(`MongoDB Atlas Target: ${DB_NAME} / ${COLLECTION_NAME}`);
-});
+// Start local server if run directly (node server.js)
+if (require.main === module) {
+  app.listen(PORT, () => {
+    console.log(`Agentic AI Flight Deck server listening on http://localhost:${PORT}`);
+    console.log(`MongoDB Atlas Target: ${DB_NAME} / ${COLLECTION_NAME}`);
+  });
+}
+
+// Export for Vercel Serverless Functions
+module.exports = app;
