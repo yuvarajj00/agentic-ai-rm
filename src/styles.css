@@ -54,6 +54,261 @@
   --text-muted: var(--muted);
 }
 
+/* ==========================================================================
+   CUSTOM COLOR PALETTES (Themes 1 - 4)
+   ========================================================================== */
+
+/* Theme 1: Royal Amethyst */
+/* Palette: #4C2365 • #7F5D99 • #9E7EB5 • #C4A4DA */
+:root[data-theme="theme-1"] {
+  --bg: #180924;
+  --surface: #2b143c;
+  --border: #4C2365;
+  --accent: #C4A4DA;
+  --accent2: #9E7EB5;
+  --accent3: #E8D3F5;
+  --text: #F3EAFD;
+  --muted: #9E7EB5;
+  --card: #240e34;
+  --btn-primary-text: #180924;
+  --nav-bg: rgba(24, 9, 36, 0.94);
+  --card-hover: #321648;
+  --card-active: #3e1b58;
+  --table-hover: #29123b;
+  --terminal-shadow: 0 20px 50px rgba(76, 35, 101, 0.45);
+  --noise-opacity: 0.25;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
+  --danger: #f87171;
+  --danger-bg: rgba(248, 113, 113, 0.15);
+  --danger-border: rgba(248, 113, 113, 0.35);
+  --mono: 'DM Mono', monospace;
+  --font-body: system-ui, sans-serif;
+  --text-muted: var(--muted);
+}
+
+/* Theme 2: Navy Sunset */
+/* Palette: #253C6D • #30497D • #455B8A • #F2842F */
+:root[data-theme="theme-2"] {
+  --bg: #121d36;
+  --surface: #1e3058;
+  --border: #30497D;
+  --accent: #F2842F;
+  --accent2: #6d8ac9;
+  --accent3: #ffaa5e;
+  --text: #f0f4fc;
+  --muted: #8da4d0;
+  --card: #192a4e;
+  --btn-primary-text: #0d1629;
+  --nav-bg: rgba(18, 29, 54, 0.94);
+  --card-hover: #223764;
+  --card-active: #2b457c;
+  --table-hover: #1f325c;
+  --terminal-shadow: 0 20px 50px rgba(18, 29, 54, 0.6);
+  --noise-opacity: 0.25;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.35);
+  --mono: 'DM Mono', monospace;
+  --font-body: system-ui, sans-serif;
+  --text-muted: var(--muted);
+}
+
+/* Theme 3: Midnight Obsidian & Gold */
+/* Palette: #010736 • #0D1C42 • #22396F • #FCF1D0 */
+:root[data-theme="theme-3"] {
+  --bg: #010736;
+  --surface: #0D1C42;
+  --border: #22396F;
+  --accent: #FCF1D0;
+  --accent2: #6c8fd8;
+  --accent3: #ffe599;
+  --text: #fdfbf7;
+  --muted: #879bce;
+  --card: #091533;
+  --btn-primary-text: #010736;
+  --nav-bg: rgba(1, 7, 54, 0.94);
+  --card-hover: #11224d;
+  --card-active: #172c63;
+  --table-hover: #0e1e45;
+  --terminal-shadow: 0 20px 50px rgba(1, 7, 54, 0.8);
+  --noise-opacity: 0.25;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.35);
+  --mono: 'DM Mono', monospace;
+  --font-body: system-ui, sans-serif;
+  --text-muted: var(--muted);
+}
+
+/* Theme 4: Nordic Slate & Frost */
+/* Palette: #27374D • #526D82 • #9DB2BF • #DDE6ED */
+:root[data-theme="theme-4"] {
+  --bg: #192433;
+  --surface: #27374D;
+  --border: #3b506b;
+  --accent: #DDE6ED;
+  --accent2: #9DB2BF;
+  --accent3: #7593ab;
+  --text: #f8fafc;
+  --muted: #9DB2BF;
+  --card: #202d3f;
+  --btn-primary-text: #192433;
+  --nav-bg: rgba(25, 36, 51, 0.94);
+  --card-hover: #2b3d54;
+  --card-active: #344a66;
+  --table-hover: #243447;
+  --terminal-shadow: 0 20px 50px rgba(25, 36, 51, 0.6);
+  --noise-opacity: 0.25;
+  --warning: #f59e0b;
+  --warning-bg: rgba(245, 158, 11, 0.15);
+  --warning-border: rgba(245, 158, 11, 0.35);
+  --danger: #ef4444;
+  --danger-bg: rgba(239, 68, 68, 0.15);
+  --danger-border: rgba(239, 68, 68, 0.35);
+  --mono: 'DM Mono', monospace;
+  --font-body: system-ui, sans-serif;
+  --text-muted: var(--muted);
+}
+
+/* ==========================================================================
+   DYNAMIC FONT FAMILIES
+   ========================================================================== */
+:root {
+  --app-font-family: 'DM Mono', monospace;
+}
+
+:root[data-font="short-stack"] {
+  --app-font-family: "Short Stack", cursive;
+}
+:root[data-font="basic"] {
+  --app-font-family: "Basic", sans-serif;
+}
+:root[data-font="pt-sans"] {
+  --app-font-family: "PT Sans", sans-serif;
+}
+:root[data-font="love-ya"] {
+  --app-font-family: "Love Ya Like A Sister", cursive;
+}
+:root[data-font="finger-paint"] {
+  --app-font-family: "Finger Paint", sans-serif;
+}
+:root[data-font="crafty-girls"] {
+  --app-font-family: "Crafty Girls", cursive;
+}
+:root[data-font="life-savers"] {
+  --app-font-family: "Life Savers", serif;
+}
+:root[data-font="schoolbell"] {
+  --app-font-family: "Schoolbell", cursive;
+}
+:root[data-font="edu-vic"] {
+  --app-font-family: "Edu VIC WA NT Hand", cursive;
+}
+
+/* User-requested exact class names */
+.short-stack-regular {
+  font-family: "Short Stack", cursive !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.basic-regular {
+  font-family: "Basic", sans-serif !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.pt-sans-regular {
+  font-family: "PT Sans", sans-serif !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.pt-sans-bold {
+  font-family: "PT Sans", sans-serif !important;
+  font-weight: 700;
+  font-style: normal;
+}
+.pt-sans-regular-italic {
+  font-family: "PT Sans", sans-serif !important;
+  font-weight: 400;
+  font-style: italic;
+}
+.pt-sans-bold-italic {
+  font-family: "PT Sans", sans-serif !important;
+  font-weight: 700;
+  font-style: italic;
+}
+.love-ya-like-a-sister-regular {
+  font-family: "Love Ya Like A Sister", cursive !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.finger-paint-regular {
+  font-family: "Finger Paint", sans-serif !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.crafty-girls-regular {
+  font-family: "Crafty Girls", cursive !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.life-savers-regular {
+  font-family: "Life Savers", serif !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.life-savers-bold {
+  font-family: "Life Savers", serif !important;
+  font-weight: 700;
+  font-style: normal;
+}
+.life-savers-extrabold {
+  font-family: "Life Savers", serif !important;
+  font-weight: 800;
+  font-style: normal;
+}
+.schoolbell-regular {
+  font-family: "Schoolbell", cursive !important;
+  font-weight: 400;
+  font-style: normal;
+}
+.edu-vic-wa-nt-hand-regular {
+  font-family: "Edu VIC WA NT Hand", cursive !important;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
+/* Global Application Typography override when custom font is active */
+:root:not([data-font="default"]) body,
+:root:not([data-font="default"]) h1,
+:root:not([data-font="default"]) h2,
+:root:not([data-font="default"]) h3,
+:root:not([data-font="default"]) h4,
+:root:not([data-font="default"]) p,
+:root:not([data-font="default"]) span:not(.chip-icon):not(.callout-icon):not(.file-icon):not(.btn-icon):not(.date-icon):not(.bullet-dot):not(.res-arrow):not(.check-bullet):not(.criteria-check):not(.adv-star):not(.warning-icon):not(.files-icon):not(.failure-warn-icon):not(.category-icon):not(.brand-beacon),
+:root:not([data-font="default"]) button,
+:root:not([data-font="default"]) input,
+:root:not([data-font="default"]) select,
+:root:not([data-font="default"]) textarea,
+:root:not([data-font="default"]) a,
+:root:not([data-font="default"]) label,
+:root:not([data-font="default"]) .btn,
+:root:not([data-font="default"]) .nav-btn,
+:root:not([data-font="default"]) .status-pill,
+:root:not([data-font="default"]) .mission-task-title,
+:root:not([data-font="default"]) .brand-name,
+:root:not([data-font="default"]) .brand-sub {
+  font-family: var(--app-font-family);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;

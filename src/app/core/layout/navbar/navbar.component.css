@@ -541,6 +541,58 @@
   font-size: 0.68rem;
 }
 
+/* Settings & Theme Action Buttons */
+.settings-nav-btn {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--text);
+  height: 30px;
+  padding: 0 0.55rem;
+  gap: 0.35rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+.settings-nav-btn:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(16, 185, 129, 0.08);
+  transform: translateY(-1px);
+}
+
+.settings-nav-icon {
+  font-size: 0.82rem;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.settings-nav-label {
+  display: inline;
+}
+
+@media (max-width: 900px) {
+  .settings-nav-label {
+    display: none;
+  }
+  .settings-nav-btn {
+    width: 30px;
+    padding: 0;
+  }
+}
+
 /* Theme Toggle Button */
 .theme-toggle-btn {
   background: var(--surface);
@@ -951,6 +1003,7 @@
 }
 
 :root[data-theme="light"] .status-pill,
+:root[data-theme="light"] .settings-nav-btn,
 :root[data-theme="light"] .theme-toggle-btn {
   background: var(--surface);
   border-color: var(--border);

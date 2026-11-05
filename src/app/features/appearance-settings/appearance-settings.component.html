@@ -1,0 +1,167 @@
+@if (isOpen) {
+  <div class="settings-modal-backdrop animate-fade" (click)="close()">
+    <div
+      class="settings-modal-dialog animate-scale"
+      (click)="$event.stopPropagation()"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="settings-dialog-title"
+    >
+      <!-- CLEAN HEADER -->
+      <div class="settings-header">
+        <div class="settings-title-group">
+          <span class="settings-icon">⚙️</span>
+          <span id="settings-dialog-title" class="settings-title">Appearance Settings</span>
+        </div>
+        <button
+          type="button"
+          class="settings-close-btn"
+          (click)="close()"
+          title="Close Settings (Esc)"
+          aria-label="Close"
+        >
+          ✕
+        </button>
+      </div>
+
+      <!-- COMPACT CLEAN FORM (CUSTOM DROPDOWNS WITH RICH LIVE PREVIEWS) -->
+      <div class="settings-body" (click)="closeDropdowns()">
+        
+        <!-- 1. FONT SELECTION WITH LIVE PREVIEW IN DROPDOWN VALUES -->
+        <div class="setting-row">
+          <div class="setting-label-row">
+            <label class="setting-label">Typography Font</label>
+            <span class="setting-badge">{{ activeFontOption?.category || 'Font' }}</span>
+          </div>
+
+          <div class="custom-select-wrapper" (click)="$event.stopPropagation()">
+            <!-- Trigger button with font preview -->
+            <button
+              type="button"
+              id="fontDropdown"
+              class="custom-select-trigger"
+              [class.open]="isFontDropdownOpen()"
+              (click)="toggleFontDropdown($event)"
+              aria-haspopup="listbox"
+              [attr.aria-expanded]="isFontDropdownOpen()"
+            >
+              <div class="trigger-font-display">
+                <span class="trigger-font-name" [style.font-family]="activeFontOption?.cssFamily">
+                  {{ activeFontOption?.name }}
+                </span>
+                <span class="trigger-font-sample" [style.font-family]="activeFontOption?.cssFamily">
+                  Sample: The quick brown fox jumps 123
+                </span>
+              </div>
+              <span class="select-caret" [class.rotated]="isFontDropdownOpen()">▾</span>
+            </button>
+
+            <!-- Menu list showing preview for each font -->
+            @if (isFontDropdownOpen()) {
+              <div class="custom-dropdown-menu font-menu animate-fade-in" role="listbox">
+                @for (f of themeService.availableFonts; track f.id) {
+                  <div
+                    class="dropdown-option font-option"
+                    [class.selected]="f.id === currentFont"
+                    (click)="selectFont(f.id)"
+                    role="option"
+                    [attr.aria-selected]="f.id === currentFont"
+                  >
+                    <div class="font-option-details">
+                      <div class="font-option-name" [style.font-family]="f.cssFamily">
+                        {{ f.name }}
+                      </div>
+                      <div class="font-option-preview" [style.font-family]="f.cssFamily">
+                        The quick brown fox jumps over the lazy dog 123
+                      </div>
+                    </div>
+                    <div class="font-option-meta">
+                      <span class="category-tag">{{ f.category }}</span>
+                      @if (f.id === currentFont) {
+                        <span class="check-icon">✓</span>
+                      }
+                    </div>
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+        <!-- 2. COLOR THEME SELECTION WITH LIVE COLOR PALETTE PREVIEW IN DROPDOWN VALUES -->
+        <div class="setting-row">
+          <div class="setting-label-row">
+            <label class="setting-label">Color Theme</label>
+            <span class="setting-theme-sub">{{ activeThemeOption?.subtitle }}</span>
+          </div>
+
+          <div class="custom-select-wrapper" (click)="$event.stopPropagation()">
+            <!-- Trigger button with theme palette preview -->
+            <button
+              type="button"
+              id="themeDropdown"
+              class="custom-select-trigger"
+              [class.open]="isThemeDropdownOpen()"
+              (click)="toggleThemeDropdown($event)"
+              aria-haspopup="listbox"
+              [attr.aria-expanded]="isThemeDropdownOpen()"
+            >
+              <div class="trigger-theme-display">
+                <div class="palette-dots">
+                  @for (c of activeThemeOption?.colors; track c) {
+                    <span class="palette-dot" [style.background]="c" [title]="c"></span>
+                  }
+                </div>
+                <div class="trigger-theme-text">
+                  <span class="trigger-theme-name">{{ activeThemeOption?.name }}</span>
+                  <span class="trigger-theme-sub">({{ activeThemeOption?.subtitle }})</span>
+                </div>
+              </div>
+              <span class="select-caret" [class.rotated]="isThemeDropdownOpen()">▾</span>
+            </button>
+
+            <!-- Menu list showing preview swatches for each theme -->
+            @if (isThemeDropdownOpen()) {
+              <div class="custom-dropdown-menu theme-menu animate-fade-in" role="listbox">
+                @for (th of themeService.availableThemes; track th.id) {
+                  <div
+                    class="dropdown-option theme-option"
+                    [class.selected]="th.id === currentTheme"
+                    (click)="selectTheme(th.id)"
+                    role="option"
+                    [attr.aria-selected]="th.id === currentTheme"
+                  >
+                    <!-- Visual 4-swatch bar for this theme -->
+                    <div class="theme-option-palette">
+                      @for (c of th.colors; track c) {
+                        <span class="palette-swatch" [style.background]="c" [title]="c"></span>
+                      }
+                    </div>
+                    <div class="theme-option-info">
+                      <span class="theme-option-title">{{ th.name }}</span>
+                      <span class="theme-option-sub">{{ th.subtitle }}</span>
+                    </div>
+                    @if (th.id === currentTheme) {
+                      <span class="check-icon">✓</span>
+                    }
+                  </div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CLEAN FOOTER -->
+      <div class="settings-footer">
+        <button type="button" class="btn-clean btn-clean-ghost" (click)="reset()">
+          Reset Defaults
+        </button>
+        <button type="button" class="btn-clean btn-clean-primary" (click)="close()">
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+}
