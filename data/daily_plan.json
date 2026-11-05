@@ -1,0 +1,1065 @@
+{
+  "plan_id": "agentic-ai-zero-to-production-5-weeks-2026",
+  "title": "Agentic AI: 35-Day Daily Learning Plan",
+  "timezone": "Asia/Kolkata",
+  "start_date": "2026-11-05",
+  "end_date": "2026-12-09",
+  "duration_days": 35,
+  "daily_time_budget_minutes": 120,
+  "total_planned_hours": 70,
+  "planning_note": "Five consecutive 7-day blocks. Days 1–6 of each week focus on learning/building; day 7 is used for integration, review, tests, and catch-up. Daily time is a target, not a guarantee of mastery.",
+  "provider_strategy": "Choose one LLM provider SDK for the first two weeks (for example, Google GenAI or OpenAI). Keep provider-specific calls behind a small adapter. Do not learn multiple SDKs simultaneously.",
+  "days": [
+    {
+      "day": 1,
+      "date": "2026-11-05",
+      "weekday": "Thursday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "learn_build",
+      "title": "LLM foundations and first API call",
+      "learning_objective": "Understand the request/response lifecycle between a Python application and a hosted language model.",
+      "concepts": [
+        "LLM input and output tokens",
+        "Context window and message roles",
+        "System/developer/user messages",
+        "API keys and environment variables",
+        "Basic request/response handling"
+      ],
+      "hands_on_tasks": [
+        "Create the project repository and virtual environment.",
+        "Store the model API key in an environment variable and load it without hard-coding secrets.",
+        "Call one model through one provider SDK and print the response.",
+        "Record model name, request latency, and basic usage metadata when the provider returns it."
+      ],
+      "deliverable": "A working Python LLM client with a .env.example file and a README setup section.",
+      "acceptance_criteria": [
+        "The API key is not committed to source control.",
+        "A valid request returns a response.",
+        "Missing credentials produce a clear, safe error."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 2,
+      "date": "2026-11-06",
+      "weekday": "Friday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "learn_build",
+      "title": "Structured outputs and Pydantic",
+      "learning_objective": "Make model responses machine-readable and validate them before application code uses them.",
+      "concepts": [
+        "JSON vs. JSON Schema",
+        "Pydantic BaseModel and field constraints",
+        "Structured-output API modes",
+        "Parsing and validation errors",
+        "Schema versioning basics"
+      ],
+      "hands_on_tasks": [
+        "Define Pydantic models for an agent decision and a final answer.",
+        "Request structured output using the provider-supported schema feature, or request JSON and validate it locally if strict structured output is unavailable.",
+        "Test valid output, missing fields, wrong types, and extra fields.",
+        "Return validation errors to the application without treating model text as trusted data."
+      ],
+      "deliverable": "A validated decision schema and a small test suite covering valid and invalid model output.",
+      "acceptance_criteria": [
+        "Application logic consumes validated Pydantic objects, not unvalidated JSON strings.",
+        "Invalid output is rejected and logged safely."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 3,
+      "date": "2026-11-07",
+      "weekday": "Saturday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "learn_build",
+      "title": "Tool definitions and function calling",
+      "learning_objective": "Understand how a model requests a tool call and how application code makes the tool available.",
+      "concepts": [
+        "Tool/function schemas",
+        "Tool names, descriptions and JSON arguments",
+        "Model tool-call responses",
+        "Tool-call IDs and result messages",
+        "Separation of model decision and Python execution"
+      ],
+      "hands_on_tasks": [
+        "Write two safe Python tools, such as calculator and read_project_notes.",
+        "Describe each tool with an explicit argument schema.",
+        "Send tool definitions to the model using the chosen provider SDK.",
+        "Inspect the returned tool-call request; do not execute arbitrary model-generated code."
+      ],
+      "deliverable": "A small tool registry containing two typed, documented tools.",
+      "acceptance_criteria": [
+        "Tool arguments are validated before execution.",
+        "The model can request a tool, but only the Python application executes it.",
+        "Unknown tool names are rejected."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 4,
+      "date": "2026-11-08",
+      "weekday": "Sunday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "learn_build",
+      "title": "Tool dispatcher and observation cycle",
+      "learning_objective": "Implement the application-side mechanics for dispatching tool calls and returning results to the model.",
+      "concepts": [
+        "Tool registry and dispatcher",
+        "Argument parsing and validation",
+        "Tool result serialization",
+        "Tool errors as structured observations",
+        "Conversation history updates"
+      ],
+      "hands_on_tasks": [
+        "Implement a dispatcher mapping approved tool names to Python functions.",
+        "Execute a requested tool and capture success or failure as a structured result.",
+        "Append the tool result to the provider conversation format.",
+        "Test unknown tools, invalid arguments, tool exceptions, and large outputs."
+      ],
+      "deliverable": "A reusable dispatcher that executes approved functions and returns structured observations.",
+      "acceptance_criteria": [
+        "Only registered tools can run.",
+        "Tool exceptions do not crash the whole process.",
+        "Tool output is bounded and serializable."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 5,
+      "date": "2026-11-09",
+      "weekday": "Monday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "learn_build",
+      "title": "ReAct-style agent loop and stopping rules",
+      "learning_objective": "Build a bounded reasoning-and-action control loop without exposing private chain-of-thought.",
+      "concepts": [
+        "Observe-decide-act cycle",
+        "Tool-call continuation",
+        "Final-answer detection",
+        "Maximum iterations and time budgets",
+        "Why visible progress summaries differ from hidden reasoning"
+      ],
+      "hands_on_tasks": [
+        "Implement a loop that sends the current conversation to the model.",
+        "When the model requests a tool, validate and execute it, then continue with the observation.",
+        "Stop when the model returns a final response or a budget is reached.",
+        "Emit user-safe progress events such as tool_started and tool_completed, not hidden internal reasoning."
+      ],
+      "deliverable": "A bounded single-agent loop that can call multiple tools and terminate safely.",
+      "acceptance_criteria": [
+        "The loop has a maximum-iteration limit and timeout.",
+        "It terminates on a final response.",
+        "It stops safely when the budget is exceeded."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 6,
+      "date": "2026-11-10",
+      "weekday": "Tuesday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "project_build",
+      "title": "Build the zero-framework CLI coding assistant",
+      "learning_objective": "Combine the raw LLM, schemas, tools, dispatcher, and loop into a useful command-line agent.",
+      "concepts": [
+        "CLI input handling",
+        "Workspace-scoped file tools",
+        "Allowlisted test command",
+        "Error observation and bounded repair cycle",
+        "Basic audit logging"
+      ],
+      "hands_on_tasks": [
+        "Create read_file and write_file tools restricted to a dedicated workspace directory.",
+        "Create run_tests that runs only a fixed, allowlisted test command in that workspace.",
+        "Ask the agent to inspect a small sample project, make a fix, and rerun tests.",
+        "Require confirmation before overwriting important files; never expose unrestricted shell access."
+      ],
+      "deliverable": "Project 1: a CLI coding assistant that can inspect files, make bounded edits, and run an allowlisted test command.",
+      "acceptance_criteria": [
+        "Path traversal outside the workspace is blocked.",
+        "Only allowlisted commands can run.",
+        "The agent stops after a configured attempt limit.",
+        "All file changes are reviewable."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 7,
+      "date": "2026-11-11",
+      "weekday": "Wednesday",
+      "week": 1,
+      "phase": "Raw LLM and Function Calling",
+      "day_type": "review",
+      "title": "Week 1 review and integration tests",
+      "learning_objective": "Consolidate the raw agent mechanics and document what the application—not the model—controls.",
+      "concepts": [
+        "End-to-end tests",
+        "Failure cases",
+        "Tool permissions",
+        "Loop tracing",
+        "Technical documentation"
+      ],
+      "hands_on_tasks": [
+        "Run the CLI assistant against at least three tasks, including one that should fail.",
+        "Test invalid arguments, unknown tools, tool exceptions, and iteration exhaustion.",
+        "Review logs and remove secrets or sensitive file contents.",
+        "Write an architecture note explaining the control loop."
+      ],
+      "deliverable": "A tested Week 1 project with setup instructions, architecture notes, and known limitations.",
+      "acceptance_criteria": [
+        "The happy path and failure paths are tested.",
+        "The agent cannot escape its workspace or run arbitrary commands.",
+        "The README explains how to configure and run the project."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 8,
+      "date": "2026-11-12",
+      "weekday": "Thursday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Agent state and short-term memory",
+      "learning_objective": "Distinguish conversation history, execution state, and persistent memory.",
+      "concepts": [
+        "Conversation messages",
+        "Intermediate tool results",
+        "Execution state vs. user memory",
+        "Context-window budgets",
+        "History truncation and summarization"
+      ],
+      "hands_on_tasks": [
+        "Define a typed AgentState model containing messages, task metadata, and tool observations.",
+        "Keep only the relevant recent context and summarize older interaction when needed.",
+        "Add tests proving that execution state and user preferences are stored separately.",
+        "Set a maximum history size."
+      ],
+      "deliverable": "A bounded short-term state manager for conversations and in-progress tasks.",
+      "acceptance_criteria": [
+        "State has a documented schema.",
+        "Old history is handled under a defined policy.",
+        "User memory is not confused with transient tool results."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 9,
+      "date": "2026-11-13",
+      "weekday": "Friday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Embeddings and document preparation",
+      "learning_objective": "Prepare text for semantic retrieval and understand the limits of embedding similarity.",
+      "concepts": [
+        "Embedding models and vectors",
+        "Token-aware chunking",
+        "Chunk overlap trade-offs",
+        "Metadata and source IDs",
+        "Embedding model consistency"
+      ],
+      "hands_on_tasks": [
+        "Load a small set of Markdown or text documents.",
+        "Split documents into chunks with source and section metadata.",
+        "Generate embeddings using one embedding model.",
+        "Compare chunk sizes on a few example queries and inspect poor matches."
+      ],
+      "deliverable": "A repeatable document-ingestion script that creates chunks, metadata, and embeddings.",
+      "acceptance_criteria": [
+        "Each chunk retains a stable source reference.",
+        "The same embedding model is used for indexing and querying.",
+        "Empty or malformed documents are handled."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 10,
+      "date": "2026-11-14",
+      "weekday": "Saturday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Vector storage with PostgreSQL and pgvector",
+      "learning_objective": "Store embeddings and retrieve semantically similar chunks from a vector database.",
+      "concepts": [
+        "PostgreSQL tables and indexes",
+        "pgvector extension",
+        "Vector distance and similarity ordering",
+        "Metadata filters",
+        "Database migrations and connection management"
+      ],
+      "hands_on_tasks": [
+        "Create a PostgreSQL database with pgvector enabled.",
+        "Create a documents/chunks table with source metadata and an embedding column.",
+        "Insert sample chunks and query nearest neighbors.",
+        "Add a metadata filter and test empty-result behavior."
+      ],
+      "deliverable": "A PostgreSQL-backed vector store with an ingestion and similarity-search path.",
+      "acceptance_criteria": [
+        "Vectors can be inserted and queried.",
+        "Returned chunks include source metadata.",
+        "Database credentials are environment-configured."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 11,
+      "date": "2026-11-15",
+      "weekday": "Sunday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Basic RAG pipeline and grounded answers",
+      "learning_objective": "Build retrieval-augmented generation with source-aware answer formatting.",
+      "concepts": [
+        "Query embedding",
+        "Top-k retrieval",
+        "Prompt context assembly",
+        "Source attribution",
+        "Grounding and abstention"
+      ],
+      "hands_on_tasks": [
+        "Embed a user question and retrieve relevant chunks.",
+        "Pass retrieved passages and source identifiers to the model.",
+        "Require the answer to cite the supplied source identifiers.",
+        "Return an explicit insufficient-evidence response when retrieval is empty or weak."
+      ],
+      "deliverable": "A document question-answering service that returns answers with traceable source references.",
+      "acceptance_criteria": [
+        "Every factual answer cites retrieved source IDs.",
+        "No-source questions trigger abstention or a clarification.",
+        "Retrieval and generation are separately testable."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 12,
+      "date": "2026-11-16",
+      "weekday": "Monday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Retrieval quality and relevance evaluation",
+      "learning_objective": "Measure whether retrieved chunks are useful before trusting generated answers.",
+      "concepts": [
+        "Recall@k and precision concepts",
+        "Relevance grading",
+        "Reranking concepts",
+        "Duplicate and stale chunk handling",
+        "Golden query sets"
+      ],
+      "hands_on_tasks": [
+        "Create a small set of questions with expected source documents.",
+        "Score retrieved chunks using a structured relevance rubric or a separate grader.",
+        "Compare top-k results for several chunking configurations.",
+        "Record misses and false positives."
+      ],
+      "deliverable": "A small retrieval evaluation dataset and a report showing retrieval failure cases.",
+      "acceptance_criteria": [
+        "Evaluation queries have expected source references.",
+        "Retrieval results can be inspected and scored.",
+        "The report identifies at least three improvement opportunities."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 13,
+      "date": "2026-11-17",
+      "weekday": "Tuesday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "learn_build",
+      "title": "Agentic retrieval and CRAG-inspired correction",
+      "learning_objective": "Let the agent decide whether retrieval is sufficient, reformulate a query, or use a fallback source.",
+      "concepts": [
+        "Retrieval grading",
+        "Query rewriting",
+        "Bounded retrieval retries",
+        "External search fallback",
+        "CRAG-inspired control flow"
+      ],
+      "hands_on_tasks": [
+        "Create a retrieval-grader schema with relevant, partially_relevant, and insufficient outcomes.",
+        "If results are insufficient, rewrite the search query and retry a limited number of times.",
+        "Add an optional external search adapter behind an interface; use a mock in tests.",
+        "Require the final response to distinguish internal documents from external sources."
+      ],
+      "deliverable": "An agentic retrieval flow with relevance grading, bounded query rewriting, and a testable fallback.",
+      "acceptance_criteria": [
+        "Retries are bounded.",
+        "External search is called only under the defined fallback condition.",
+        "Sources are labeled by origin."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 14,
+      "date": "2026-11-18",
+      "weekday": "Wednesday",
+      "week": 2,
+      "phase": "Agentic RAG and Memory",
+      "day_type": "project_build",
+      "title": "Long-term memory and Week 2 integration",
+      "learning_objective": "Persist selected facts across sessions without storing every conversation indiscriminately.",
+      "concepts": [
+        "Semantic memory records",
+        "Memory retrieval and update",
+        "User consent and retention",
+        "Memory deduplication",
+        "RAG vs. memory"
+      ],
+      "hands_on_tasks": [
+        "Persist explicitly selected preferences or project facts in PostgreSQL.",
+        "Retrieve relevant memories for a new session.",
+        "Add update/delete operations and a retention policy.",
+        "Integrate short-term state, document RAG, and long-term memory in Project 2."
+      ],
+      "deliverable": "Project 2: an agentic research assistant with document retrieval, retrieval correction, citations, and opt-in persistent memory.",
+      "acceptance_criteria": [
+        "Memory is scoped to the correct user or test profile.",
+        "Users can inspect and delete stored memories.",
+        "The agent does not treat retrieved memory as trusted instructions."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 15,
+      "date": "2026-11-19",
+      "weekday": "Thursday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "LangGraph state, nodes, and edges",
+      "learning_objective": "Translate a manually implemented agent loop into a state graph.",
+      "concepts": [
+        "Graph state schema",
+        "Nodes as computation steps",
+        "Edges and entry points",
+        "State updates",
+        "Graph execution"
+      ],
+      "hands_on_tasks": [
+        "Install LangGraph in a separate project environment.",
+        "Define a typed workflow state.",
+        "Create nodes for planning, retrieval, and response generation.",
+        "Connect nodes and run a basic acyclic workflow before adding loops."
+      ],
+      "deliverable": "A small LangGraph workflow with explicit state and independently testable nodes.",
+      "acceptance_criteria": [
+        "State transitions are visible and deterministic where possible.",
+        "Each node has a clear input/output contract.",
+        "A simple workflow runs end to end."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 16,
+      "date": "2026-11-20",
+      "weekday": "Friday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "Conditional edges and cyclic workflows",
+      "learning_objective": "Model branching, tool execution, retries, and completion as graph transitions.",
+      "concepts": [
+        "Conditional routing",
+        "Tool nodes",
+        "Cycles and exit conditions",
+        "State reducers",
+        "Error branches"
+      ],
+      "hands_on_tasks": [
+        "Add a route that chooses between retrieval, a tool, or a final answer.",
+        "Add a bounded retry edge for insufficient retrieval.",
+        "Add an error-handling node and an explicit terminal state.",
+        "Test each branch with controlled fixtures."
+      ],
+      "deliverable": "A cyclic LangGraph workflow with tested conditional routing and terminal conditions.",
+      "acceptance_criteria": [
+        "Every possible route has a defined outcome.",
+        "Cycles have a bounded exit condition.",
+        "Errors do not silently disappear."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 17,
+      "date": "2026-11-21",
+      "weekday": "Saturday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "Checkpointing and persistent graph state",
+      "learning_objective": "Persist graph execution state so an in-progress thread can be resumed.",
+      "concepts": [
+        "Checkpointers",
+        "Thread identifiers",
+        "Checkpoint lifecycle",
+        "State restoration",
+        "Persistence boundaries"
+      ],
+      "hands_on_tasks": [
+        "Configure a supported LangGraph checkpointer for development.",
+        "Run a workflow, stop it, and resume using the same thread identifier.",
+        "Inspect which state is persisted and which secrets must not be persisted.",
+        "Write a restart/resume test."
+      ],
+      "deliverable": "A checkpointed workflow that can resume an interrupted thread.",
+      "acceptance_criteria": [
+        "A resumed thread restores expected state.",
+        "Thread IDs isolate separate conversations.",
+        "Secrets are excluded from persisted state."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 18,
+      "date": "2026-11-22",
+      "weekday": "Sunday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "Interrupts and human approval",
+      "learning_objective": "Pause a workflow at a controlled point and resume it after an explicit human decision.",
+      "concepts": [
+        "Interrupt/resume pattern",
+        "Approval payloads",
+        "Approve/reject paths",
+        "Audit records",
+        "Stale approval handling"
+      ],
+      "hands_on_tasks": [
+        "Add an approval checkpoint before a mock publishing action.",
+        "Pause with a structured approval request.",
+        "Resume with approve and reject decisions.",
+        "Test restart between pause and resume and reject stale or mismatched approval IDs."
+      ],
+      "deliverable": "A workflow that pauses for approval and resumes on an explicit decision.",
+      "acceptance_criteria": [
+        "No publishing action occurs before approval.",
+        "Rejecting approval terminates or reroutes the workflow.",
+        "Approval decisions are auditable."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 19,
+      "date": "2026-11-23",
+      "weekday": "Monday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "Multi-agent patterns and supervisor design",
+      "learning_objective": "Understand when specialized agents help and how a supervisor coordinates them.",
+      "concepts": [
+        "Supervisor/router pattern",
+        "Specialist responsibilities",
+        "Handoffs and shared state",
+        "Sequential vs. parallel execution",
+        "Coordination and termination"
+      ],
+      "hands_on_tasks": [
+        "Define researcher, fact-checker, and writer responsibilities.",
+        "Create a supervisor routing decision with typed outputs.",
+        "Use bounded handoffs and a shared task state.",
+        "Compare a multi-agent design with a simpler single-agent workflow."
+      ],
+      "deliverable": "A documented multi-agent design with clear role boundaries and a supervisor route.",
+      "acceptance_criteria": [
+        "Each specialist has a narrow responsibility.",
+        "The supervisor can stop or request another step.",
+        "The design explains why multiple agents are justified."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 20,
+      "date": "2026-11-24",
+      "weekday": "Tuesday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "learn_build",
+      "title": "MCP server and client fundamentals",
+      "learning_objective": "Connect tools through the Model Context Protocol rather than custom one-off integrations.",
+      "concepts": [
+        "MCP host, client, and server roles",
+        "Tools and resources concepts",
+        "Transport configuration",
+        "Input schemas",
+        "Trust boundaries"
+      ],
+      "hands_on_tasks": [
+        "Read the current MCP Python SDK documentation for the installed SDK release.",
+        "Build a local MCP server exposing one read-only project search tool.",
+        "Connect to it with a small MCP client.",
+        "Validate inputs and document server permissions and transport settings."
+      ],
+      "deliverable": "A local MCP server and client that exchange a validated tool request and result.",
+      "acceptance_criteria": [
+        "The client discovers and calls the intended tool.",
+        "The server exposes only explicitly registered capabilities.",
+        "Transport and permissions are documented."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 21,
+      "date": "2026-11-25",
+      "weekday": "Wednesday",
+      "week": 3,
+      "phase": "State Graphs, MCP, and Multi-Agent Orchestration",
+      "day_type": "project_build",
+      "title": "Integrate LangGraph, MCP, and specialist agents",
+      "learning_objective": "Combine graph orchestration with MCP-backed tools in a complete research workflow.",
+      "concepts": [
+        "Graph/tool integration",
+        "Supervisor and specialist nodes",
+        "Source verification",
+        "Workflow state and error paths",
+        "Integration testing"
+      ],
+      "hands_on_tasks": [
+        "Connect the researcher to an MCP search tool.",
+        "Connect the fact-checker to source retrieval/verification tools.",
+        "Route unsupported claims back to research with a retry limit.",
+        "Generate a cited report and run end-to-end tests."
+      ],
+      "deliverable": "Project 3: a LangGraph research workflow using MCP tools and specialist roles.",
+      "acceptance_criteria": [
+        "The graph can research, verify, and write a report.",
+        "Unsupported claims trigger a bounded correction path.",
+        "Tool permissions and error paths are tested."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 22,
+      "date": "2026-11-26",
+      "weekday": "Thursday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Authorization and human control boundaries",
+      "learning_objective": "Define who can request, approve, and execute consequential agent actions.",
+      "concepts": [
+        "Authentication vs. authorization",
+        "Role and permission checks",
+        "Tool-level permissions",
+        "Approval identity",
+        "Audit events"
+      ],
+      "hands_on_tasks": [
+        "Define read-only, draft, and publish permission levels.",
+        "Enforce authorization in Python tool handlers, not only in prompts.",
+        "Bind approval decisions to an authenticated approver and a specific action payload.",
+        "Add audit events for denied and approved actions."
+      ],
+      "deliverable": "A permission layer that separates agent intent from authorization to execute actions.",
+      "acceptance_criteria": [
+        "Unauthorized tool calls are denied server-side.",
+        "Approval is bound to the exact pending action.",
+        "Authorization outcomes are logged."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 23,
+      "date": "2026-11-27",
+      "weekday": "Friday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Budgets, timeouts, retries, and cancellation",
+      "learning_objective": "Prevent runaway loops and control resource use across model and tool calls.",
+      "concepts": [
+        "Iteration and token budgets",
+        "Per-tool timeouts",
+        "Exponential backoff and retry limits",
+        "Cancellation propagation",
+        "Cost tracking"
+      ],
+      "hands_on_tasks": [
+        "Add max-step, wall-clock, and tool-call budgets.",
+        "Add timeouts and bounded retries for transient tool failures.",
+        "Use idempotency keys where retries could repeat a side effect.",
+        "Test cancellation and budget exhaustion."
+      ],
+      "deliverable": "A reusable execution policy applied to all agent runs and tools.",
+      "acceptance_criteria": [
+        "Runs stop when configured budgets are reached.",
+        "Transient failures retry only within limits.",
+        "Side-effecting calls are protected against accidental duplication."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 24,
+      "date": "2026-11-28",
+      "weekday": "Saturday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Input/output validation and safe error recovery",
+      "learning_objective": "Recover from malformed model output and tool failures without trusting arbitrary generated instructions.",
+      "concepts": [
+        "Pydantic validation at boundaries",
+        "Structured error categories",
+        "Safe retry prompts",
+        "Redaction",
+        "Fallback and abstention"
+      ],
+      "hands_on_tasks": [
+        "Validate every tool argument and important model output.",
+        "Return compact, redacted error summaries to the model when a retry is allowed.",
+        "Keep full diagnostics in protected logs, not in user-visible output.",
+        "Add fallback or human escalation for non-recoverable errors."
+      ],
+      "deliverable": "A validation and error-recovery layer with safe, structured failure handling.",
+      "acceptance_criteria": [
+        "Invalid inputs never reach sensitive tools.",
+        "Secrets and private data are redacted from model feedback.",
+        "Repeated failures end in a clear failure state or human escalation."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 25,
+      "date": "2026-11-29",
+      "weekday": "Sunday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Prompt injection and tool security",
+      "learning_objective": "Protect agent workflows from malicious instructions in user input and retrieved content.",
+      "concepts": [
+        "Direct and indirect prompt injection",
+        "Untrusted retrieved content",
+        "Least privilege",
+        "Path and command restrictions",
+        "Data exfiltration risks"
+      ],
+      "hands_on_tasks": [
+        "Add adversarial test documents containing instructions that conflict with system policy.",
+        "Mark retrieved content as untrusted data and keep tool policy in application code.",
+        "Restrict file, network, and database tool capabilities.",
+        "Test attempts to reveal secrets or trigger unauthorized actions."
+      ],
+      "deliverable": "A prompt-injection test suite and a set of enforced tool security controls.",
+      "acceptance_criteria": [
+        "Retrieved text cannot change server-side permissions.",
+        "Secrets are not available to the model unless explicitly needed.",
+        "Unauthorized or out-of-scope actions are blocked."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 26,
+      "date": "2026-11-30",
+      "weekday": "Monday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Idempotency, auditability, and fallbacks",
+      "learning_objective": "Make side-effecting operations safe to retry and easier to investigate.",
+      "concepts": [
+        "Idempotency keys",
+        "Action records",
+        "Transactional boundaries",
+        "Outbox/reconciliation concepts",
+        "Manual fallback"
+      ],
+      "hands_on_tasks": [
+        "Create an action record before executing a mock publish operation.",
+        "Use a stable idempotency key to prevent duplicate execution.",
+        "Record actor, requested action, approval, result, and timestamps.",
+        "Simulate a timeout after an action succeeds and verify a retry does not duplicate it."
+      ],
+      "deliverable": "An auditable mock publishing tool with duplicate-execution protection.",
+      "acceptance_criteria": [
+        "A repeated request with the same idempotency key does not repeat the side effect.",
+        "Action status can be reconciled after a timeout.",
+        "Audit records identify the decision and outcome."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 27,
+      "date": "2026-12-01",
+      "weekday": "Tuesday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "learn_build",
+      "title": "Agent evaluation and failure simulation",
+      "learning_objective": "Evaluate both final answers and the sequence of actions taken to produce them.",
+      "concepts": [
+        "Golden datasets",
+        "Task success and answer quality",
+        "Tool selection and trajectory checks",
+        "Regression testing",
+        "Human review rubric"
+      ],
+      "hands_on_tasks": [
+        "Create test cases for success, ambiguity, tool failure, prompt injection, and approval rejection.",
+        "Score task completion, source support, policy compliance, and tool-use correctness.",
+        "Compare expected tool behavior with recorded traces.",
+        "Run a regression suite after changing prompts or tools."
+      ],
+      "deliverable": "A repeatable agent evaluation suite with a documented scoring rubric.",
+      "acceptance_criteria": [
+        "The dataset includes normal and adversarial cases.",
+        "Scores are reproducible for a fixed model/configuration where possible.",
+        "Failures include trace IDs and actionable diagnoses."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 28,
+      "date": "2026-12-02",
+      "weekday": "Wednesday",
+      "week": 4,
+      "phase": "Human-in-the-Loop, Guardrails, and Reliability",
+      "day_type": "project_build",
+      "title": "Integrate the guarded publishing pipeline",
+      "learning_objective": "Harden the research workflow with authorization, checkpoints, budgets, and evaluations.",
+      "concepts": [
+        "End-to-end workflow integration",
+        "Approval state",
+        "Guardrail regression",
+        "Failure recovery",
+        "Operational documentation"
+      ],
+      "hands_on_tasks": [
+        "Integrate the researcher, fact checker, writer, and mock publisher.",
+        "Add approval interrupts, role checks, timeouts, idempotency, and audit events.",
+        "Run the evaluation suite and fix critical failures.",
+        "Document the safe operating procedure and known limitations."
+      ],
+      "deliverable": "Project 4: a guarded research-and-publishing pipeline that requires approval before publishing.",
+      "acceptance_criteria": [
+        "Publishing is impossible without valid approval.",
+        "Prompt injection and duplicate-action tests pass.",
+        "The workflow can resume after a pause or process restart."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 29,
+      "date": "2026-12-03",
+      "weekday": "Thursday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "FastAPI service design for agents",
+      "learning_objective": "Expose agent runs through a backend API with validated requests and explicit run lifecycle.",
+      "concepts": [
+        "FastAPI routes and Pydantic request/response models",
+        "Dependency injection",
+        "Run IDs and status",
+        "Authentication boundary",
+        "Background execution choices"
+      ],
+      "hands_on_tasks": [
+        "Create endpoints to submit a task, retrieve run status, and fetch a completed result.",
+        "Validate request size and parameters.",
+        "Return a stable run ID and explicit lifecycle states.",
+        "Keep provider and orchestration code outside route handlers."
+      ],
+      "deliverable": "A FastAPI service that starts agent runs and exposes status and results.",
+      "acceptance_criteria": [
+        "API contracts are validated.",
+        "Long-running work does not block the request handler.",
+        "Run ownership and authorization are checked."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 30,
+      "date": "2026-12-04",
+      "weekday": "Friday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "Async execution and progress streaming",
+      "learning_objective": "Deliver useful execution progress to a frontend without exposing private internal reasoning.",
+      "concepts": [
+        "asyncio fundamentals",
+        "Async tool calls and sync boundaries",
+        "Server-Sent Events",
+        "WebSocket trade-offs",
+        "Cancellation and reconnect behavior"
+      ],
+      "hands_on_tasks": [
+        "Implement an SSE endpoint for run events.",
+        "Emit events such as agent_started, tool_started, tool_completed, approval_required, and agent_completed.",
+        "Do not stream hidden chain-of-thought; provide concise status summaries only.",
+        "Test disconnect and reconnect behavior."
+      ],
+      "deliverable": "A streaming endpoint that emits structured, user-safe progress events.",
+      "acceptance_criteria": [
+        "Events are ordered and include run IDs.",
+        "No hidden reasoning or secrets are streamed.",
+        "A client can recover final status after reconnecting."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 31,
+      "date": "2026-12-05",
+      "weekday": "Saturday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "Persistence and resumable production runs",
+      "learning_objective": "Persist conversations, workflow state, and action records with clear ownership and retention.",
+      "concepts": [
+        "PostgreSQL schema design",
+        "Graph checkpointer storage",
+        "Transactions and migrations",
+        "State retention",
+        "Recovery and cleanup"
+      ],
+      "hands_on_tasks": [
+        "Persist run metadata, user/session ownership, approval status, and final result.",
+        "Configure durable graph checkpointing using the selected supported backend.",
+        "Create migrations and test recovery after process restart.",
+        "Define retention and cleanup for old runs."
+      ],
+      "deliverable": "A durable persistence layer for agent runs and resumable workflow state.",
+      "acceptance_criteria": [
+        "Runs survive application restart.",
+        "User/session boundaries are enforced.",
+        "Schema changes are managed through migrations."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 32,
+      "date": "2026-12-06",
+      "weekday": "Sunday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "Tracing and observability",
+      "learning_objective": "Inspect model calls, tool calls, latency, errors, and run costs across agent workflows.",
+      "concepts": [
+        "Trace and span concepts",
+        "Trace correlation IDs",
+        "Tool latency and model usage",
+        "Sensitive-data filtering",
+        "Langfuse or Arize Phoenix"
+      ],
+      "hands_on_tasks": [
+        "Integrate one tracing platform, choosing Langfuse or Arize Phoenix.",
+        "Trace each run and its model/tool spans.",
+        "Record latency, outcome, and token/cost metadata when available.",
+        "Redact secrets and sensitive content before export."
+      ],
+      "deliverable": "A traceable agent service with correlated model and tool spans.",
+      "acceptance_criteria": [
+        "A run can be inspected end to end.",
+        "Errors and latency can be attributed to a step.",
+        "Sensitive fields are filtered from telemetry."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 33,
+      "date": "2026-12-07",
+      "weekday": "Monday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "Docker and deployment readiness",
+      "learning_objective": "Package the service reproducibly and prepare a safe deployment configuration.",
+      "concepts": [
+        "Dockerfile and container lifecycle",
+        "Environment configuration",
+        "Health checks",
+        "Secrets management",
+        "CI test/build stages"
+      ],
+      "hands_on_tasks": [
+        "Create a Docker image for the FastAPI service.",
+        "Keep secrets outside the image and source repository.",
+        "Add health/readiness endpoints and structured logs.",
+        "Run the container locally with a production-like environment configuration."
+      ],
+      "deliverable": "A containerized service with documented configuration and health checks.",
+      "acceptance_criteria": [
+        "The image builds from a clean checkout.",
+        "Secrets are injected at runtime.",
+        "Health checks reflect service readiness."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 34,
+      "date": "2026-12-08",
+      "weekday": "Tuesday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "learn_build",
+      "title": "Production evaluation, load, and cost review",
+      "learning_objective": "Measure whether the deployed agent is reliable, responsive, and affordable enough for its intended workload.",
+      "concepts": [
+        "Offline and online evaluations",
+        "Latency percentiles",
+        "Token and tool cost",
+        "Concurrency and rate limits",
+        "Regression gates"
+      ],
+      "hands_on_tasks": [
+        "Run the evaluation dataset against the deployed service.",
+        "Measure success rate, failure rate, latency, and cost per completed task.",
+        "Test moderate concurrency and provider/tool rate limits.",
+        "Define release thresholds and a rollback procedure."
+      ],
+      "deliverable": "A production-readiness report with evaluation, latency, cost, and known-risk metrics.",
+      "acceptance_criteria": [
+        "Metrics are measured rather than guessed.",
+        "Release thresholds are explicit.",
+        "Critical regression failures block release."
+      ],
+      "estimated_minutes": 120
+    },
+    {
+      "day": 35,
+      "date": "2026-12-09",
+      "weekday": "Wednesday",
+      "week": 5,
+      "phase": "Deployment, Tracing, and AgentOps",
+      "day_type": "capstone",
+      "title": "Final capstone review and demo",
+      "learning_objective": "Demonstrate the complete agentic system and explain its architecture, safety, and operational behavior.",
+      "concepts": [
+        "Architecture walkthrough",
+        "Threat and failure review",
+        "Evaluation evidence",
+        "Deployment demo",
+        "Next-steps backlog"
+      ],
+      "hands_on_tasks": [
+        "Demonstrate research, source verification, approval pause/resume, and mock or controlled publishing.",
+        "Show a trace for a successful run and a failed run.",
+        "Present evaluation results, limitations, and cost/latency measurements.",
+        "Tag a release and publish setup, architecture, and operations documentation."
+      ],
+      "deliverable": "Project 5: a production-oriented Agentic Research & Publishing API with evaluation and observability.",
+      "acceptance_criteria": [
+        "A fresh setup can run using documented steps.",
+        "Approval and authorization gates work.",
+        "Evaluation and tracing evidence are included.",
+        "The demo clearly states what is mocked and what is connected to live services."
+      ],
+      "estimated_minutes": 120
+    }
+  ]
+}
