@@ -6,6 +6,7 @@ import { CurriculumService } from '../../services/curriculum.service';
 import { CurriculumDetailService } from '../../services/curriculum-detail.service';
 import { DailyTask, TopicGroup, ProofLabel, PROOF_LABELS } from '../../models/curriculum.model';
 import { TOPIC_GROUPS, WEEKS_LIST } from '../../shared/constants/curriculum.constants';
+import { CurriculumFormatter, FormattedDeliverable, FormattedOutcome } from '../../shared/utils/curriculum-formatter.util';
 
 @Component({
   selector: 'app-daily-tracker',
@@ -76,6 +77,36 @@ export class DailyTrackerComponent implements OnInit {
       case 'Documentation': return '📄';
       default: return '🔗';
     }
+  }
+
+  getPrerequisites(task: DailyTask | null): string[] {
+    const detail = this.detailService.currentDetail();
+    const detailPrereqs = (detail && detail.day === task?.day) ? detail.prerequisites : undefined;
+    return CurriculumFormatter.getPrerequisites(task?.inputs, detailPrereqs);
+  }
+
+  getExerciseSteps(task: DailyTask | null): string[] {
+    const detail = this.detailService.currentDetail();
+    const detailSteps = (detail && detail.day === task?.day) ? detail.implementationChecklist : undefined;
+    return CurriculumFormatter.getExerciseSteps(task?.handsOnExercise, detailSteps);
+  }
+
+  getDeliverable(task: DailyTask | null): FormattedDeliverable {
+    const detail = this.detailService.currentDetail();
+    const detailDeliv = (detail && detail.day === task?.day) ? detail.deliverables : undefined;
+    return CurriculumFormatter.getDeliverable(task?.deliverableOutput, detailDeliv);
+  }
+
+  getOutcome(task: DailyTask | null): FormattedOutcome {
+    const detail = this.detailService.currentDetail();
+    const isMatch = detail && detail.day === task?.day;
+    const detailGoal = isMatch ? detail.goal : undefined;
+    const detailCriteria = isMatch ? detail.completionCriteria : undefined;
+    return CurriculumFormatter.getOutcome(task?.outcome, detailGoal, detailCriteria);
+  }
+
+  formatCodeSpans(text: string): string {
+    return CurriculumFormatter.formatCodeSpans(text);
   }
 
   onWeekFilterChange(week: number | 'all' | string) {

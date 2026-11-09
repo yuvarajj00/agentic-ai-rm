@@ -255,24 +255,77 @@
             <h2 class="mission-task-title">{{ today.task }}</h2>
             <div class="mission-topic-sub">// Topic: {{ today.topic }} • Week {{ today.week }}</div>
 
+            <!-- 1. PREREQUISITES & INPUTS -->
             <div class="mission-block">
-              <div class="block-title">PREREQUISITES & INPUTS</div>
-              <p class="block-desc">{{ today.inputs }}</p>
+              <div class="block-title-row">
+                <div class="block-title">PREREQUISITES & INPUTS</div>
+                <span class="block-count-badge">{{ getPrerequisites(today).length }} Required</span>
+              </div>
+              <div class="prereq-grid">
+                @for (req of getPrerequisites(today); track req) {
+                  <div class="prereq-item">
+                    <span class="prereq-bullet">⚡</span>
+                    <span class="prereq-text">{{ req }}</span>
+                  </div>
+                }
+              </div>
             </div>
 
+            <!-- 2. HANDS-ON EXERCISE (STEP-BY-STEP IMPLEMENTATION CHECKLIST) -->
             <div class="mission-block">
-              <div class="block-title">HANDS-ON EXERCISE (CODE FROM SCRATCH)</div>
-              <p class="block-desc exercise-highlight">{{ today.handsOnExercise }}</p>
+              <div class="block-title-row">
+                <div class="block-title">HANDS-ON EXERCISE (CODE FROM SCRATCH)</div>
+                <span class="block-count-badge">{{ getExerciseSteps(today).length }} Steps</span>
+              </div>
+              <div class="exercise-steps-container">
+                @for (step of getExerciseSteps(today); track step; let idx = $index) {
+                  <div class="exercise-step-row">
+                    <div class="step-badge">{{ idx + 1 < 10 ? '0' + (idx + 1) : (idx + 1) }}</div>
+                    <div class="step-body" [innerHTML]="formatCodeSpans(step)"></div>
+                  </div>
+                }
+              </div>
             </div>
 
+            <!-- 3. DELIVERABLE FILE & EXPECTED OUTPUT -->
             <div class="mission-block">
               <div class="block-title">DELIVERABLE FILE & EXPECTED OUTPUT</div>
-              <code class="deliverable-code">{{ today.deliverableOutput }}</code>
+              <div class="deliverable-card">
+                <p class="deliverable-summary">{{ getDeliverable(today).description }}</p>
+                @if (getDeliverable(today).files.length > 0) {
+                  <div class="deliverable-files-heading">REQUIRED ARTIFACT FILES:</div>
+                  <div class="deliverable-files-grid">
+                    @for (file of getDeliverable(today).files; track file) {
+                      <span class="deliverable-file-pill">
+                        <span class="file-icon">📄</span>
+                        <code class="file-name">{{ file }}</code>
+                      </span>
+                    }
+                  </div>
+                }
+              </div>
             </div>
 
+            <!-- 4. OUTCOME & MASTERY CRITERIA -->
             <div class="mission-block">
               <div class="block-title">OUTCOME & MASTERY CRITERIA</div>
-              <p class="block-desc">{{ today.outcome }}</p>
+              <div class="outcome-card">
+                <div class="outcome-goal-row">
+                  <span class="goal-tag">GOAL</span>
+                  <span class="goal-text">{{ getOutcome(today).goal }}</span>
+                </div>
+                @if (getOutcome(today).criteria.length > 0) {
+                  <div class="criteria-header">COMPLETION & ACCEPTANCE CRITERIA:</div>
+                  <ul class="criteria-list">
+                    @for (crit of getOutcome(today).criteria; track crit) {
+                      <li class="criteria-item">
+                        <span class="criteria-check">✓</span>
+                        <span class="criteria-text" [innerHTML]="formatCodeSpans(crit)"></span>
+                      </li>
+                    }
+                  </ul>
+                }
+              </div>
             </div>
 
             <div class="recall-box">

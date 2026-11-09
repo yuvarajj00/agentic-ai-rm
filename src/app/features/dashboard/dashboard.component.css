@@ -709,3 +709,244 @@
 :root[data-theme="light"] .flight-day-cell:hover {
   box-shadow: 0 0 8px rgba(4, 120, 87, 0.2);
 }
+
+
+/* ==========================================================================
+   STRUCTURED MISSION BLOCKS (PREREQUISITES, STEPS, DELIVERABLES, OUTCOMES)
+   ========================================================================== */
+
+.block-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.block-count-badge {
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.5rem;
+  border-radius: 10px;
+  background: rgba(110, 181, 255, 0.12);
+  color: var(--accent2);
+  border: 1px solid rgba(110, 181, 255, 0.25);
+  letter-spacing: 0.04em;
+}
+
+.prereq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.prereq-item {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+  padding: 0.45rem 0.75rem;
+  background: rgba(255, 255, 255, 0.02);
+  border-left: 2px solid var(--accent2);
+  border-radius: 0 4px 4px 0;
+  font-size: 0.84rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.prereq-bullet {
+  font-size: 0.75rem;
+  color: var(--accent2);
+  flex-shrink: 0;
+}
+
+.prereq-text {
+  flex: 1;
+}
+
+.exercise-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.exercise-step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  background: rgba(110, 181, 255, 0.04);
+  border: 1px solid rgba(110, 181, 255, 0.15);
+  border-radius: 6px;
+  transition: all 0.15s ease;
+}
+
+.exercise-step-row:hover {
+  border-color: rgba(110, 181, 255, 0.35);
+  background: rgba(110, 181, 255, 0.08);
+}
+
+.step-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(110, 181, 255, 0.15);
+  color: var(--accent2);
+  border: 1px solid rgba(110, 181, 255, 0.3);
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.step-body {
+  font-size: 0.84rem;
+  color: var(--text);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.deliverable-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.deliverable-summary {
+  font-size: 0.85rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.deliverable-files-heading {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.deliverable-files-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.deliverable-file-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 4px;
+  padding: 0.2rem 0.55rem;
+}
+
+.file-icon {
+  font-size: 0.72rem;
+}
+
+.file-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.76rem;
+  color: var(--accent);
+}
+
+.outcome-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.85rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.outcome-goal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.6rem;
+}
+
+.goal-tag {
+  font-size: 0.66rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  background: var(--accent);
+  color: #fff;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.goal-text {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.criteria-header {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+
+.criteria-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.criteria-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.criteria-check {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.82rem;
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.inline-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.78rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  color: var(--accent2);
+}
+
+:root[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0369a1;
+}
+
+:root[data-theme="light"] .exercise-step-row {
+  background: rgba(14, 165, 233, 0.04);
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+:root[data-theme="light"] .prereq-item {
+  background: rgba(0, 0, 0, 0.02);
+}

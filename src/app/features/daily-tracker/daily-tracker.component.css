@@ -2110,3 +2110,263 @@
 :root[data-theme="light"] .solution-code-box pre {
   color: #0369a1;
 }
+
+
+/* ==========================================================================
+   INSPECTOR STRUCTURED CONTENT (PREREQUISITES, STEPS, DELIVERABLES, OUTCOMES)
+   ========================================================================== */
+
+.inspector-sec-label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inspector-count-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  color: var(--accent2);
+  background: rgba(110, 181, 255, 0.1);
+  border: 1px solid rgba(110, 181, 255, 0.25);
+  padding: 0.12rem 0.45rem;
+  border-radius: 4px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.inspector-prereq-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  margin-top: 0.25rem;
+}
+
+.inspector-prereq-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.45rem 0.7rem;
+  transition: all 0.15s ease;
+}
+
+.inspector-prereq-item:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.inspector-prereq-item .prereq-bullet {
+  font-size: 0.75rem;
+  color: #facc15;
+  line-height: 1.4;
+  flex-shrink: 0;
+}
+
+.inspector-prereq-item .prereq-text {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.inspector-steps-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.25rem;
+}
+
+.inspector-step-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  background: rgba(14, 165, 233, 0.03);
+  border: 1px solid rgba(14, 165, 233, 0.15);
+  border-radius: 6px;
+  padding: 0.55rem 0.75rem;
+  transition: all 0.15s ease;
+}
+
+.inspector-step-row:hover {
+  background: rgba(14, 165, 233, 0.07);
+  border-color: rgba(14, 165, 233, 0.35);
+  transform: translateX(2px);
+}
+
+.inspector-step-row .step-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 4px;
+  background: rgba(110, 181, 255, 0.15);
+  color: var(--accent2);
+  border: 1px solid rgba(110, 181, 255, 0.3);
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.inspector-step-row .step-body {
+  font-size: 0.82rem;
+  color: var(--text);
+  line-height: 1.55;
+  flex: 1;
+}
+
+.inspector-deliverable-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 0.25rem;
+}
+
+.inspector-deliverable-card .deliverable-desc {
+  font-size: 0.83rem;
+  color: var(--text);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.files-tag-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.files-tag-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.file-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  border-radius: 4px;
+  padding: 0.18rem 0.5rem;
+}
+
+.file-tag-pill .file-icon {
+  font-size: 0.7rem;
+}
+
+.file-tag-pill .file-name {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.75rem;
+  color: var(--accent);
+}
+
+.inspector-outcome-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 0.75rem 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.outcome-goal-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.55rem;
+}
+
+.outcome-goal-row .goal-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 0.15rem 0.4rem;
+  border-radius: 3px;
+  background: var(--accent);
+  color: #fff;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+
+.outcome-goal-row .goal-text {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.criteria-tag-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin-top: 0.2rem;
+}
+
+.inspector-criteria-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.inspector-criteria-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.81rem;
+  color: var(--text);
+  line-height: 1.5;
+}
+
+.inspector-criteria-item .criteria-check {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.82rem;
+  line-height: 1;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+.inspector-criteria-item .criteria-text {
+  flex: 1;
+}
+
+.inline-code {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.77rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  color: var(--accent2);
+}
+
+:root[data-theme="light"] .inline-code {
+  background: rgba(0, 0, 0, 0.05);
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #0369a1;
+}
+
+:root[data-theme="light"] .inspector-step-row {
+  background: rgba(14, 165, 233, 0.04);
+  border-color: rgba(14, 165, 233, 0.2);
+}
+
+:root[data-theme="light"] .inspector-prereq-item {
+  background: rgba(0, 0, 0, 0.02);
+}

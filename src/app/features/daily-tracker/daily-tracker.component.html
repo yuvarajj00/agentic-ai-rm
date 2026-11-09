@@ -354,28 +354,77 @@
           </div>
         </div>
 
-        <!-- INPUTS & PREREQUISITES -->
+        <!-- 1. PREREQUISITES & INPUTS -->
         <div class="inspector-section">
-          <div class="inspector-sec-label">PREREQUISITES & INPUTS</div>
-          <p class="inspector-text">{{ sel.inputs }}</p>
+          <div class="inspector-sec-label">
+            <span>PREREQUISITES & INPUTS</span>
+            <span class="inspector-count-tag">{{ getPrerequisites(sel).length }} Required</span>
+          </div>
+          <div class="inspector-prereq-grid">
+            @for (req of getPrerequisites(sel); track req) {
+              <div class="inspector-prereq-item">
+                <span class="prereq-bullet">⚡</span>
+                <span class="prereq-text">{{ req }}</span>
+              </div>
+            }
+          </div>
         </div>
 
-        <!-- HANDS-ON EXERCISE -->
+        <!-- 2. HANDS-ON EXERCISE (STEP-BY-STEP CHECKLIST) -->
         <div class="inspector-section">
-          <div class="inspector-sec-label">HANDS-ON EXERCISE</div>
-          <div class="exercise-card-box">{{ sel.handsOnExercise }}</div>
+          <div class="inspector-sec-label">
+            <span>HANDS-ON EXERCISE (CODE FROM SCRATCH)</span>
+            <span class="inspector-count-tag">{{ getExerciseSteps(sel).length }} Steps</span>
+          </div>
+          <div class="inspector-steps-container">
+            @for (step of getExerciseSteps(sel); track step; let idx = $index) {
+              <div class="inspector-step-row">
+                <div class="step-badge">{{ idx + 1 < 10 ? '0' + (idx + 1) : (idx + 1) }}</div>
+                <div class="step-body" [innerHTML]="formatCodeSpans(step)"></div>
+              </div>
+            }
+          </div>
         </div>
 
-        <!-- DELIVERABLE FILE -->
+        <!-- 3. DELIVERABLE FILE & EXPECTED OUTPUT -->
         <div class="inspector-section">
-          <div class="inspector-sec-label">DELIVERABLE OUTPUT FILE</div>
-          <code class="deliverable-badge">{{ sel.deliverableOutput }}</code>
+          <div class="inspector-sec-label">DELIVERABLE OUTPUT FILE & EXPECTED ARTIFACTS</div>
+          <div class="inspector-deliverable-card">
+            <p class="deliverable-desc">{{ getDeliverable(sel).description }}</p>
+            @if (getDeliverable(sel).files.length > 0) {
+              <div class="files-tag-label">REQUIRED ARTIFACT FILES:</div>
+              <div class="files-tag-grid">
+                @for (file of getDeliverable(sel).files; track file) {
+                  <span class="file-tag-pill">
+                    <span class="file-icon">📄</span>
+                    <code class="file-name">{{ file }}</code>
+                  </span>
+                }
+              </div>
+            }
+          </div>
         </div>
 
-        <!-- EXPECTED OUTCOME -->
+        <!-- 4. EXPECTED OUTCOME & CRITERIA -->
         <div class="inspector-section">
           <div class="inspector-sec-label">OUTCOME / MASTERY CRITERIA</div>
-          <p class="inspector-text">{{ sel.outcome }}</p>
+          <div class="inspector-outcome-card">
+            <div class="outcome-goal-row">
+              <span class="goal-tag">GOAL</span>
+              <span class="goal-text">{{ getOutcome(sel).goal }}</span>
+            </div>
+            @if (getOutcome(sel).criteria.length > 0) {
+              <div class="criteria-tag-label">COMPLETION & ACCEPTANCE CRITERIA:</div>
+              <ul class="inspector-criteria-list">
+                @for (crit of getOutcome(sel).criteria; track crit) {
+                  <li class="inspector-criteria-item">
+                    <span class="criteria-check">✓</span>
+                    <span class="criteria-text" [innerHTML]="formatCodeSpans(crit)"></span>
+                  </li>
+                }
+              </ul>
+            }
+          </div>
         </div>
 
         <!-- ACTIVE RECALL -->

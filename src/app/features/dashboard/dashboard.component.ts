@@ -1,10 +1,12 @@
-import { Component, computed, inject, signal, OnInit, OnDestroy } from '@angular/core';
+import { Component, computed, inject, signal, effect, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { CurriculumService } from '../../services/curriculum.service';
+import { CurriculumDetailService } from '../../services/curriculum-detail.service';
 import { DailyTask, ProofLabel, PROOF_LABELS } from '../../models/curriculum.model';
 import { ROTATING_QUOTES, MotivationalQuote } from '../../shared/constants/curriculum.constants';
+import { CurriculumFormatter, FormattedDeliverable, FormattedOutcome } from '../../shared/utils/curriculum-formatter.util';
 
 @Component({
   selector: 'app-dashboard',
@@ -15,6 +17,7 @@ import { ROTATING_QUOTES, MotivationalQuote } from '../../shared/constants/curri
 })
 export class DashboardComponent implements OnInit, OnDestroy {
   readonly curriculum = inject(CurriculumService);
+  readonly detailService = inject(CurriculumDetailService);
   private readonly router = inject(Router);
 
   readonly quotes: MotivationalQuote[] = ROTATING_QUOTES;
@@ -27,6 +30,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
   readonly proofLabels: ProofLabel[] = PROOF_LABELS;
   selectedProofLabel: ProofLabel = 'GitHub Repo';
   newProofUrl: string = '';
+
+  constructor() {
+    effect(() => {
+      const today = this.curriculum.calendarPacing().todayTask || this.curriculum.currentActiveDay();
+      if (today) {
+        this.detailService.loadDayDetail(today.day);
+      }
+    });
+  }
 
   // Group all 35 days by week for visual flight map on the Dashboard
   readonly daysByWeek = computed(() => {
@@ -65,6 +77,36 @@ export class DashboardComponent implements OnInit, OnDestroy {
       case 'Documentation': return '📄';
       default: return '🔗';
     }
+  }
+
+  getPrerequisites(task: DailyTask | null): string[] {
+    const detail = this.detailService.currentDetail();
+    const detailPrereqs = (detail && detail.day === task?.day) ? detail.prerequisites : undefined;
+    return CurriculumFormatter.getPrerequisites(task?.inputs, detailPrereqs);
+  }
+
+  getExerciseSteps(task: DailyTask | null): string[] {
+    const detail = this.detailService.currentDetail();
+    const detailSteps = (detail && detail.day === task?.day) ? detail.implementationChecklist : undefined;
+    return CurriculumFormatter.getExerciseSteps(task?.handsOnExercise, detailSteps);
+  }
+
+  getDeliverable(task: DailyTask | null): FormattedDeliverable {
+    const detail = this.detailService.currentDetail();
+    const detailDeliv = (detail && detail.day === task?.day) ? detail.deliverables : undefined;
+    return CurriculumFormatter.getDeliverable(task?.deliverableOutput, detailDeliv);
+  }
+
+  getOutcome(task: DailyTask | null): FormattedOutcome {
+    const detail = this.detailService.currentDetail();
+    const isMatch = detail && detail.day === task?.day;
+    const detailGoal = isMatch ? detail.goal : undefined;
+    const detailCriteria = isMatch ? detail.completionCriteria : undefined;
+    return CurriculumFormatter.getOutcome(task?.outcome, detailGoal, detailCriteria);
+  }
+
+  formatCodeSpans(text: string): string {
+    return CurriculumFormatter.formatCodeSpans(text);
   }
 
   startQuoteRotation() {
