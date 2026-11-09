@@ -47,8 +47,8 @@
 
     <a
       class="nav-btn nav-btn-guide"
-      [routerLink]="['/detailedview', 'day' + (curriculum.calendarPacing().expectedDayNumber || 1)]"
-      (click)="navigateTo('/detailedview/day' + (curriculum.calendarPacing().expectedDayNumber || 5), $event)"
+      [routerLink]="['/detailedview', 'day' + currentGuideDay()]"
+      (click)="navigateTo('/detailedview/day' + currentGuideDay(), $event)"
       routerLinkActive="active"
       title="Detailed Learning Guide"
     >
@@ -59,7 +59,7 @@
         </svg>
       </span>
       <span class="btn-label">Day Guide</span>
-      <span class="nav-badge badge-accent">D{{ curriculum.calendarPacing().expectedDayNumber || 5 }}</span>
+      <span class="nav-badge badge-accent">D{{ currentGuideDay() }}</span>
     </a>
 
     <a

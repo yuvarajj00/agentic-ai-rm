@@ -149,6 +149,9 @@ try {
 
 const weekdayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
+existingPlan.start_date = allDays[0].isoDate;
+existingPlan.end_date = allDays[allDays.length - 1].isoDate;
+
 existingPlan.days = allDays.map((d) => {
   const dateObj = new Date(d.isoDate);
   const weekday = weekdayNames[dateObj.getUTCDay()];

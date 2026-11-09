@@ -199,8 +199,8 @@ export const INITIAL_TECH_STACK: TechSkill[] = [
 export const INITIAL_MILESTONES: WeeklyMilestone[] = [
   {
     "week": 1,
-    "startDate": "2026-11-05",
-    "endDate": "2026-11-11",
+    "startDate": "2026-11-11",
+    "endDate": "2026-11-17",
     "milestone": "Week 1: Raw LLM and Function Calling",
     "weeklyProject": "P1: Zero-Framework CLI Coding Assistant",
     "recommendedDataset": "Workspace Root & Sample Codebase (Python, One provider SDK: Google GenAI or OpenAI, Pydantic, pytest, python-dotenv)",
@@ -228,8 +228,8 @@ export const INITIAL_MILESTONES: WeeklyMilestone[] = [
   },
   {
     "week": 2,
-    "startDate": "2026-11-12",
-    "endDate": "2026-11-18",
+    "startDate": "2026-11-18",
+    "endDate": "2026-11-24",
     "milestone": "Week 2: Agentic RAG and Memory",
     "weeklyProject": "P2: Self-Correcting Research and Knowledge Agent",
     "recommendedDataset": "Workspace Root & Sample Codebase (Python, One LLM and embedding provider, Pydantic, PostgreSQL, pgvector, FastAPI optional for a thin API)",
@@ -257,8 +257,8 @@ export const INITIAL_MILESTONES: WeeklyMilestone[] = [
   },
   {
     "week": 3,
-    "startDate": "2026-11-19",
-    "endDate": "2026-11-25",
+    "startDate": "2026-11-25",
+    "endDate": "2026-12-01",
     "milestone": "Week 3: LangGraph, MCP, and Multi-Agent Systems",
     "weeklyProject": "P3: LangGraph MCP Multi-Agent Research Workflow",
     "recommendedDataset": "Workspace Root & Sample Codebase (Python, LangGraph, MCP Python SDK, Pydantic, PostgreSQL checkpointer or supported development checkpointer)",
@@ -286,8 +286,8 @@ export const INITIAL_MILESTONES: WeeklyMilestone[] = [
   },
   {
     "week": 4,
-    "startDate": "2026-11-26",
-    "endDate": "2026-12-02",
+    "startDate": "2026-12-02",
+    "endDate": "2026-12-08",
     "milestone": "Week 4: Human-in-the-Loop, Guardrails, and Reliability",
     "weeklyProject": "P4: Guarded Research and Publishing Pipeline",
     "recommendedDataset": "Workspace Root & Sample Codebase (Python, LangGraph interrupts/checkpointing, Pydantic, PostgreSQL, pytest)",
@@ -315,8 +315,8 @@ export const INITIAL_MILESTONES: WeeklyMilestone[] = [
   },
   {
     "week": 5,
-    "startDate": "2026-12-03",
-    "endDate": "2026-12-09",
+    "startDate": "2026-12-09",
+    "endDate": "2026-12-15",
     "milestone": "Week 5: Deployment, Tracing, and AgentOps",
     "weeklyProject": "P5: Production-Oriented Agentic Research and Publishing API",
     "recommendedDataset": "Workspace Root & Sample Codebase (Python, FastAPI, LangGraph, PostgreSQL, Pydantic, Docker, One tracing platform: Langfuse or Arize Phoenix, SSE for one-way progress streaming)",
@@ -349,7 +349,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-1",
     "day": 1,
-    "date": "November 5, 2026",
+    "date": "November 11, 2026",
     "week": 1,
     "task": "Day 1 — LLM foundations and first API call",
     "topic": "LLM foundations and first API call",
@@ -374,7 +374,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-2",
     "day": 2,
-    "date": "November 6, 2026",
+    "date": "November 12, 2026",
     "week": 1,
     "task": "Day 2 — Structured outputs and Pydantic",
     "topic": "Structured outputs and Pydantic",
@@ -399,7 +399,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-3",
     "day": 3,
-    "date": "November 7, 2026",
+    "date": "November 13, 2026",
     "week": 1,
     "task": "Day 3 — Tool definitions and function calling",
     "topic": "Tool definitions and function calling",
@@ -424,7 +424,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-4",
     "day": 4,
-    "date": "November 8, 2026",
+    "date": "November 14, 2026",
     "week": 1,
     "task": "Day 4 — Multi-turn tool execution loop",
     "topic": "Multi-turn tool execution loop",
@@ -449,7 +449,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-5",
     "day": 5,
-    "date": "November 9, 2026",
+    "date": "November 15, 2026",
     "week": 1,
     "task": "Day 5 — Short-term memory and conversation state",
     "topic": "Short-term memory and conversation state",
@@ -474,7 +474,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-6",
     "day": 6,
-    "date": "November 10, 2026",
+    "date": "November 16, 2026",
     "week": 1,
     "task": "Day 6 — Prompt injection and input validation basics",
     "topic": "Prompt injection and input validation basics",
@@ -499,7 +499,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-7",
     "day": 7,
-    "date": "November 11, 2026",
+    "date": "November 17, 2026",
     "week": 1,
     "task": "Day 7 — Week 1 Integration & Milestone Project 1",
     "topic": "Week 1 Integration & Milestone Project 1",
@@ -524,7 +524,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-8",
     "day": 8,
-    "date": "November 12, 2026",
+    "date": "November 18, 2026",
     "week": 2,
     "task": "Day 8 — Agent state and short-term memory",
     "topic": "Agent state and short-term memory",
@@ -549,7 +549,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-9",
     "day": 9,
-    "date": "November 13, 2026",
+    "date": "November 19, 2026",
     "week": 2,
     "task": "Day 9 — Embeddings and document preparation",
     "topic": "Embeddings and document preparation",
@@ -574,7 +574,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-10",
     "day": 10,
-    "date": "November 14, 2026",
+    "date": "November 20, 2026",
     "week": 2,
     "task": "Day 10 — Vector storage with PostgreSQL and pgvector",
     "topic": "Vector storage with PostgreSQL and pgvector",
@@ -599,7 +599,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-11",
     "day": 11,
-    "date": "November 15, 2026",
+    "date": "November 21, 2026",
     "week": 2,
     "task": "Day 11 — Basic RAG pipeline and grounded answers",
     "topic": "Basic RAG pipeline and grounded answers",
@@ -624,7 +624,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-12",
     "day": 12,
-    "date": "November 16, 2026",
+    "date": "November 22, 2026",
     "week": 2,
     "task": "Day 12 — Retrieval quality and relevance evaluation",
     "topic": "Retrieval quality and relevance evaluation",
@@ -649,7 +649,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-13",
     "day": 13,
-    "date": "November 17, 2026",
+    "date": "November 23, 2026",
     "week": 2,
     "task": "Day 13 — Agentic retrieval and CRAG-inspired correction",
     "topic": "Agentic retrieval and CRAG-inspired correction",
@@ -674,7 +674,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-14",
     "day": 14,
-    "date": "November 18, 2026",
+    "date": "November 24, 2026",
     "week": 2,
     "task": "Day 14 — Long-term memory and Week 2 integration",
     "topic": "Long-term memory and Week 2 integration",
@@ -699,7 +699,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-15",
     "day": 15,
-    "date": "November 19, 2026",
+    "date": "November 25, 2026",
     "week": 3,
     "task": "Day 15 — LangGraph state, nodes, and edges",
     "topic": "LangGraph state, nodes, and edges",
@@ -724,7 +724,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-16",
     "day": 16,
-    "date": "November 20, 2026",
+    "date": "November 26, 2026",
     "week": 3,
     "task": "Day 16 — Conditional edges and cyclic workflows",
     "topic": "Conditional edges and cyclic workflows",
@@ -749,7 +749,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-17",
     "day": 17,
-    "date": "November 21, 2026",
+    "date": "November 27, 2026",
     "week": 3,
     "task": "Day 17 — Checkpointing and persistent graph state",
     "topic": "Checkpointing and persistent graph state",
@@ -774,7 +774,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-18",
     "day": 18,
-    "date": "November 22, 2026",
+    "date": "November 28, 2026",
     "week": 3,
     "task": "Day 18 — Interrupts and human approval",
     "topic": "Interrupts and human approval",
@@ -799,7 +799,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-19",
     "day": 19,
-    "date": "November 23, 2026",
+    "date": "November 29, 2026",
     "week": 3,
     "task": "Day 19 — Multi-agent patterns and supervisor design",
     "topic": "Multi-agent patterns and supervisor design",
@@ -824,7 +824,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-20",
     "day": 20,
-    "date": "November 24, 2026",
+    "date": "November 30, 2026",
     "week": 3,
     "task": "Day 20 — MCP server and client fundamentals",
     "topic": "MCP server and client fundamentals",
@@ -849,7 +849,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-21",
     "day": 21,
-    "date": "November 25, 2026",
+    "date": "December 1, 2026",
     "week": 3,
     "task": "Day 21 — Integrate LangGraph, MCP, and specialist agents",
     "topic": "Integrate LangGraph, MCP, and specialist agents",
@@ -874,7 +874,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-22",
     "day": 22,
-    "date": "November 26, 2026",
+    "date": "December 2, 2026",
     "week": 4,
     "task": "Day 22 — Authorization and human control boundaries",
     "topic": "Authorization and human control boundaries",
@@ -899,7 +899,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-23",
     "day": 23,
-    "date": "November 27, 2026",
+    "date": "December 3, 2026",
     "week": 4,
     "task": "Day 23 — Budgets, timeouts, retries, and cancellation",
     "topic": "Budgets, timeouts, retries, and cancellation",
@@ -924,7 +924,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-24",
     "day": 24,
-    "date": "November 28, 2026",
+    "date": "December 4, 2026",
     "week": 4,
     "task": "Day 24 — Input/output validation and safe error recovery",
     "topic": "Input/output validation and safe error recovery",
@@ -949,7 +949,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-25",
     "day": 25,
-    "date": "November 29, 2026",
+    "date": "December 5, 2026",
     "week": 4,
     "task": "Day 25 — Prompt injection and tool security",
     "topic": "Prompt injection and tool security",
@@ -974,7 +974,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-26",
     "day": 26,
-    "date": "November 30, 2026",
+    "date": "December 6, 2026",
     "week": 4,
     "task": "Day 26 — Idempotency, auditability, and fallbacks",
     "topic": "Idempotency, auditability, and fallbacks",
@@ -999,7 +999,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-27",
     "day": 27,
-    "date": "December 1, 2026",
+    "date": "December 7, 2026",
     "week": 4,
     "task": "Day 27 — Agent evaluation and failure simulation",
     "topic": "Agent evaluation and failure simulation",
@@ -1024,7 +1024,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-28",
     "day": 28,
-    "date": "December 2, 2026",
+    "date": "December 8, 2026",
     "week": 4,
     "task": "Day 28 — Integrate the guarded publishing pipeline",
     "topic": "Integrate the guarded publishing pipeline",
@@ -1049,7 +1049,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-29",
     "day": 29,
-    "date": "December 3, 2026",
+    "date": "December 9, 2026",
     "week": 5,
     "task": "Day 29 — FastAPI service design for agents",
     "topic": "FastAPI service design for agents",
@@ -1074,7 +1074,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-30",
     "day": 30,
-    "date": "December 4, 2026",
+    "date": "December 10, 2026",
     "week": 5,
     "task": "Day 30 — Async execution and progress streaming",
     "topic": "Async execution and progress streaming",
@@ -1099,7 +1099,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-31",
     "day": 31,
-    "date": "December 5, 2026",
+    "date": "December 11, 2026",
     "week": 5,
     "task": "Day 31 — Persistence and resumable production runs",
     "topic": "Persistence and resumable production runs",
@@ -1124,7 +1124,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-32",
     "day": 32,
-    "date": "December 6, 2026",
+    "date": "December 12, 2026",
     "week": 5,
     "task": "Day 32 — Tracing and observability",
     "topic": "Tracing and observability",
@@ -1149,7 +1149,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-33",
     "day": 33,
-    "date": "December 7, 2026",
+    "date": "December 13, 2026",
     "week": 5,
     "task": "Day 33 — Docker and deployment readiness",
     "topic": "Docker and deployment readiness",
@@ -1174,7 +1174,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-34",
     "day": 34,
-    "date": "December 8, 2026",
+    "date": "December 14, 2026",
     "week": 5,
     "task": "Day 34 — Production evaluation, load, and cost review",
     "topic": "Production evaluation, load, and cost review",
@@ -1199,7 +1199,7 @@ export const INITIAL_DAILY_TASKS: DailyTask[] = [
   {
     "id": "day-35",
     "day": 35,
-    "date": "December 9, 2026",
+    "date": "December 15, 2026",
     "week": 5,
     "task": "Day 35 — Final capstone review and demo",
     "topic": "Final capstone review and demo",

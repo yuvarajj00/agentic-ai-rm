@@ -18,6 +18,11 @@ export class NavbarComponent {
   readonly calendarService = inject(SprintCalendarService);
   readonly router = inject(Router);
 
+  readonly currentGuideDay = computed<number>(() => {
+    const expected = this.curriculum.calendarPacing().expectedDayNumber;
+    return expected > 0 ? expected : 1;
+  });
+
   readonly paceTooltip = computed(() => {
     const pacing = this.curriculum.calendarPacing();
     if (pacing.paceStatus === 'critical' || pacing.paceStatus === 'behind') {

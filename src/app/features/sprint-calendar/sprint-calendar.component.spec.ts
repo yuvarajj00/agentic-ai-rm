@@ -38,15 +38,15 @@ describe('SprintCalendarComponent', () => {
   });
 
   it('should compute calendar days including sprint tasks', () => {
-    // Navigate to November 2026 where Day 1 starts on Nov 5
+    // Navigate to November 2026 where Day 1 starts on Nov 11
     calendarService.currentMonth.set(new Date(2026, 10, 1));
     fixture.detectChanges();
 
     const days = component.calendarDays();
     expect(days.length).toBeGreaterThanOrEqual(35);
 
-    // Find November 5, 2026 (Day 1)
-    const day1 = days.find(d => d.isoDate === '2026-11-05');
+    // Find November 11, 2026 (Day 1)
+    const day1 = days.find(d => d.isoDate === '2026-11-11');
     expect(day1).toBeDefined();
     expect(day1?.isSprintDay).toBe(true);
     expect(day1?.dayNumber).toBe(1);
@@ -57,7 +57,7 @@ describe('SprintCalendarComponent', () => {
     calendarService.currentMonth.set(new Date(2026, 10, 1));
     fixture.detectChanges();
 
-    const day1 = component.calendarDays().find(d => d.isoDate === '2026-11-05');
+    const day1 = component.calendarDays().find(d => d.isoDate === '2026-11-11');
     expect(day1).toBeDefined();
 
     component.onHoverDay(day1!);

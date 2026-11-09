@@ -27,8 +27,8 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
     service = TestBed.inject(CurriculumService);
   });
 
-  it('should identify pre-sprint phase before November 5, 2026', () => {
-    service.setSimulationDate('2026-10-29');
+  it('should identify pre-sprint phase before November 11, 2026', () => {
+    service.setSimulationDate('2026-11-04');
     const pacing = service.calendarPacing();
 
     expect(pacing.isPreSprint).toBe(true);
@@ -38,8 +38,8 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
     expect(pacing.overdueCount).toBe(0);
   });
 
-  it('should identify Day 1 on sprint kickoff date November 5, 2026', () => {
-    service.setSimulationDate('2026-11-05');
+  it('should identify Day 1 on sprint kickoff date November 11, 2026', () => {
+    service.setSimulationDate('2026-11-11');
     const pacing = service.calendarPacing();
 
     expect(pacing.isPreSprint).toBe(false);
@@ -48,7 +48,7 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
   });
 
   it('should accurately detect overdue untracked tasks and critical pacing when behind', () => {
-    service.setSimulationDate('2026-11-16'); // Day 12
+    service.setSimulationDate('2026-11-22'); // Day 12
     const pacing = service.calendarPacing();
 
     expect(pacing.expectedDayNumber).toBe(12);
@@ -69,7 +69,7 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
   });
 
   it('should filter only overdue tasks when filterStatus is set to overdue', () => {
-    service.setSimulationDate('2026-11-16');
+    service.setSimulationDate('2026-11-22'); // Day 12
     service.filterStatus.set('overdue');
 
     const filtered = service.filteredTasks();
@@ -79,7 +79,7 @@ describe('CurriculumService - Calendar Pacing & Untracked Day Alerts', () => {
   });
 
   it('should reduce overdue count when an untracked day is completed', () => {
-    service.setSimulationDate('2026-11-16');
+    service.setSimulationDate('2026-11-22'); // Day 12
     const initialOverdue = service.overdueCount();
 
     const day5 = service.dailyTasks().find(t => t.day === 5)!;

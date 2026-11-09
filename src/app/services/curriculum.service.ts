@@ -9,9 +9,9 @@ import { MongoAtlasService, RoadmapStatePayload } from './mongo-atlas.service';
 export class CurriculumService {
   private readonly atlas = inject(MongoAtlasService);
 
-  // Curriculum Sprint Constants (Nov 5, 2026 - Dec 9, 2026 = 35 Days)
-  static readonly SPRINT_START_UTC = Date.UTC(2026, 10, 5); // Month 10 = November 5
-  static readonly SPRINT_END_UTC = Date.UTC(2026, 11, 9);   // Month 11 = December 9 (35 Days)
+  // Curriculum Sprint Constants (Nov 11, 2026 - Dec 15, 2026 = 35 Days)
+  static readonly SPRINT_START_UTC = Date.UTC(2026, 10, 11); // Month 10 = November 11
+  static readonly SPRINT_END_UTC = Date.UTC(2026, 11, 15);   // Month 11 = December 15 (35 Days)
 
   // MongoDB Atlas Connection & Sync Signals
   readonly syncStatus = this.atlas.syncStatus;
@@ -101,7 +101,7 @@ export class CurriculumService {
     if (data && data.dailyTasks && Array.isArray(data.dailyTasks) && data.dailyTasks.length > 0) {
       this.dailyTasks.set(this.reconcileDailyTasks(data.dailyTasks));
       if (data.milestones && data.milestones.length > 0) {
-        this.milestones.set(data.milestones);
+        this.milestones.set(this.reconcileMilestones(data.milestones));
       }
       if (data.techStack && data.techStack.length > 0) {
         this.techStack.set(this.reconcileTechStack(data.techStack));
@@ -153,7 +153,7 @@ export class CurriculumService {
     const data = await this.atlas.fetchProgress();
     if (data && data.dailyTasks && Array.isArray(data.dailyTasks)) {
       this.dailyTasks.set(this.reconcileDailyTasks(data.dailyTasks));
-      if (data.milestones && Array.isArray(data.milestones)) this.milestones.set(data.milestones);
+      if (data.milestones && Array.isArray(data.milestones)) this.milestones.set(this.reconcileMilestones(data.milestones));
       if (data.techStack && Array.isArray(data.techStack)) this.techStack.set(this.reconcileTechStack(data.techStack));
       if (this.selectedDay()) {
         const found = this.dailyTasks().find(t => t.id === this.selectedDay()!.id);
@@ -173,24 +173,59 @@ export class CurriculumService {
     }
     if (data && data.dailyTasks && Array.isArray(data.dailyTasks)) {
       this.dailyTasks.set(this.reconcileDailyTasks(data.dailyTasks));
-      if (data.milestones && Array.isArray(data.milestones)) this.milestones.set(data.milestones);
+      if (data.milestones && Array.isArray(data.milestones)) this.milestones.set(this.reconcileMilestones(data.milestones));
       if (data.techStack && Array.isArray(data.techStack)) this.techStack.set(this.reconcileTechStack(data.techStack));
     }
   }
 
   reconcileDailyTasks(loadedTasks: DailyTask[]): DailyTask[] {
-    return loadedTasks.map(t => {
-      let proofs = Array.isArray(t.proofUrls) ? [...t.proofUrls] : [];
-      if (proofs.length === 0 && t.evidenceUrl && t.evidenceUrl.trim()) {
+    const taskMap = new Map<number, DailyTask>();
+    for (const t of loadedTasks) {
+      taskMap.set(t.day, t);
+    }
+    return INITIAL_DAILY_TASKS.map(def => {
+      const match = taskMap.get(def.day);
+      if (!match) return def;
+      let proofs = Array.isArray(match.proofUrls) ? [...match.proofUrls] : [];
+      if (proofs.length === 0 && match.evidenceUrl && match.evidenceUrl.trim()) {
         proofs.push({
-          id: `proof-${t.id}-legacy`,
+          id: `proof-${def.id}-legacy`,
           label: 'GitHub Repo',
-          url: t.evidenceUrl.trim()
+          url: match.evidenceUrl.trim()
         });
       }
       return {
-        ...t,
-        proofUrls: proofs
+        ...def,
+        status: match.status || def.status,
+        studyDone: match.studyDone ?? def.studyDone,
+        exerciseDone: match.exerciseDone ?? def.exerciseDone,
+        codeSaved: match.codeSaved ?? def.codeSaved,
+        reviewDone: match.reviewDone ?? def.reviewDone,
+        evidenceUrl: match.evidenceUrl || def.evidenceUrl,
+        proofUrls: proofs,
+        reflection: match.reflection || def.reflection,
+        whatTrippedMeUp: match.whatTrippedMeUp || def.whatTrippedMeUp,
+        ahaMoment: match.ahaMoment || def.ahaMoment
+      };
+    });
+  }
+
+  reconcileMilestones(loadedMilestones: WeeklyMilestone[]): WeeklyMilestone[] {
+    const map = new Map<number, WeeklyMilestone>();
+    for (const m of loadedMilestones) {
+      map.set(m.week, m);
+    }
+    return INITIAL_MILESTONES.map(def => {
+      const match = map.get(def.week);
+      if (!match) return def;
+      return {
+        ...def,
+        projectShipped: match.projectShipped ?? def.projectShipped,
+        projectUrl: match.projectUrl || def.projectUrl,
+        liveDemoUrl: match.liveDemoUrl || def.liveDemoUrl,
+        videoDemoUrl: match.videoDemoUrl || def.videoDemoUrl,
+        reviewComplete: match.reviewComplete ?? def.reviewComplete,
+        weeklyReflection: match.weeklyReflection || def.weeklyReflection
       };
     });
   }
@@ -265,7 +300,7 @@ export class CurriculumService {
       year: 'numeric'
     });
 
-    // 1. Pre-Sprint Phase (before November 5, 2026)
+    // 1. Pre-Sprint Phase (before November 11, 2026)
     if (diffDays < 0) {
       const daysUntil = Math.abs(diffDays);
       return {
@@ -277,7 +312,7 @@ export class CurriculumService {
         isSprintFinished: false,
         daysUntilSprint: daysUntil,
         expectedDayNumber: 0,
-        expectedDateFormatted: 'Starts Nov 5, 2026',
+        expectedDateFormatted: 'Starts Nov 11, 2026',
         actualCompletedDays: completedCount,
         paceDelta: 0,
         paceStatus: 'pre_sprint',
@@ -291,7 +326,7 @@ export class CurriculumService {
       };
     }
 
-    // 2. Post-Sprint Phase (after December 9, 2026)
+    // 2. Post-Sprint Phase (after December 15, 2026)
     if (effUtc > endUtc) {
       const overdue = tasks.filter(t => t.status !== 'completed');
       const isComplete = overdue.length === 0;
@@ -304,7 +339,7 @@ export class CurriculumService {
         isSprintFinished: true,
         daysUntilSprint: 0,
         expectedDayNumber: 35,
-        expectedDateFormatted: 'December 9, 2026',
+        expectedDateFormatted: 'December 15, 2026',
         actualCompletedDays: completedCount,
         paceDelta: completedCount - (tasks.length || 35),
         paceStatus: isComplete ? 'completed' : 'critical',
@@ -318,7 +353,7 @@ export class CurriculumService {
       };
     }
 
-    // 3. Active Sprint (Nov 5, 2026 - Dec 9, 2026 = 35 Days)
+    // 3. Active Sprint (Nov 11, 2026 - Dec 15, 2026 = 35 Days)
     const totalDays = tasks.length || 35;
     const expectedDay = Math.min(totalDays, Math.max(1, Math.floor((effUtc - startUtc) / MS_PER_DAY) + 1));
 
