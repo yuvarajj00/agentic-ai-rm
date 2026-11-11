@@ -13,25 +13,45 @@ export class FlipUnitComponent {
   readonly current = this._current.asReadonly();
   readonly previous = signal<string>('00');
   readonly flipTick = signal<number>(0);
-  private initialized = false;
 
-  @Input() badge = '';
-  @Input() showFanEdge = false;
+  private initialized = false;
+  private lastForceCount = 0;
+  private didFlipThisCycle = false;
+
+  @Input() isSeconds = false;
+  @Input() amPmBadge = '';
+  @Input() isGradientText = false;
 
   @Input({ required: true }) set value(next: string) {
-    const clean = next ?? '00';
     if (!this.initialized) {
+      this._current.set(next);
+      this.previous.set(next);
       this.initialized = true;
-      this._current.set(clean);
-      this.previous.set(clean);
       return;
     }
 
-    const curr = this._current();
-    if (curr !== clean) {
-      this.previous.set(curr);
-      this._current.set(clean);
-      this.flipTick.update(n => n + 1);
+    if (next === this._current()) {
+      return;
+    }
+
+    this.previous.set(this._current());
+    this._current.set(next);
+    this.flipTick.update((count) => count + 1);
+    this.didFlipThisCycle = true;
+    queueMicrotask(() => {
+      this.didFlipThisCycle = false;
+    });
+  }
+
+  @Input() set forceFlipCount(count: number) {
+    if (count === this.lastForceCount) {
+      return;
+    }
+    this.lastForceCount = count;
+
+    if (this.initialized && !this.didFlipThisCycle) {
+      this.previous.set(this._current());
+      this.flipTick.update((n) => n + 1);
     }
   }
 }

@@ -1,46 +1,31 @@
 <div
-  class="flip-unit"
-  [class.has-fan]="showFanEdge"
-  [class.flip-odd]="flipTick() > 0 && flipTick() % 2 === 1"
-  [class.flip-even]="flipTick() > 0 && flipTick() % 2 === 0"
+  class="flip-housing"
+  [class.is-seconds]="isSeconds"
+  [class.is-gradient-text]="isGradientText"
+  [class.flip-anim-a]="flipTick() > 0 && flipTick() % 2 === 1"
+  [class.flip-anim-b]="flipTick() > 0 && flipTick() % 2 === 0"
 >
-  @if (showFanEdge) {
-    <div class="fan-stack" aria-hidden="true">
-      <div class="fan-blade fan-1"></div>
-      <div class="fan-blade fan-2"></div>
-      <div class="fan-blade fan-3"></div>
-      <div class="fan-blade fan-4"></div>
+  <div class="half half-top-static">
+    <div class="digit-face">{{ current() }}</div>
+  </div>
+
+  <div class="half half-bottom-static">
+    <div class="digit-face">{{ previous() }}</div>
+  </div>
+
+  @if (flipTick() > 0) {
+    <div class="half half-top-flip">
+      <div class="digit-face">{{ previous() }}</div>
+    </div>
+
+    <div class="half half-bottom-flip">
+      <div class="digit-face">{{ current() }}</div>
     </div>
   }
 
-  <div class="card-housing">
-    <!-- Static upper half (upcoming/current digit) -->
-    <div class="half half-top static-top">
-      <div class="digit-face">{{ current() }}</div>
-      @if (badge) {
-        <div class="card-badge">{{ badge }}</div>
-      }
-    </div>
+  <div class="center-split" aria-hidden="true"></div>
 
-    <!-- Static lower half (outgoing digit until covered by landing flap) -->
-    <div class="half half-bottom static-bottom">
-      <div class="digit-face">{{ previous() }}</div>
-    </div>
-
-    <!-- Folding upper flap (outgoing 0deg -> -90deg) -->
-    <div class="half half-top flap-top" aria-hidden="true">
-      <div class="digit-face">{{ previous() }}</div>
-      @if (badge) {
-        <div class="card-badge">{{ badge }}</div>
-      }
-    </div>
-
-    <!-- Unfolding lower flap (incoming 90deg -> 0deg) -->
-    <div class="half half-bottom flap-bottom" aria-hidden="true">
-      <div class="digit-face">{{ current() }}</div>
-    </div>
-
-    <!-- Mechanical split hinge seam across exact middle -->
-    <div class="split-seam" aria-hidden="true"></div>
-  </div>
+  @if (amPmBadge) {
+    <div class="ampm-badge">{{ amPmBadge }}</div>
+  }
 </div>

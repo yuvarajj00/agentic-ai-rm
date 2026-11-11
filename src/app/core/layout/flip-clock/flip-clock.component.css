@@ -1,308 +1,1280 @@
-/* ==========================================================================
-   STANDALONE RETRO FLIP CLOCK VIEW (/clock)
-   Clean Plain Background • Faithful Vintage Mechanical Clock Proportions
-   ========================================================================== */
-
 :host {
   display: block;
   width: 100%;
   min-height: 100vh;
 }
 
+/* =====================================================================
+   20 CURATED 3D SPLIT-FLAP ARCHITECTURAL THEMES (SCOPED TO CLOCK VIEW)
+   ===================================================================== */
+
+/* 01. Fliqlo Matte (Default) */
+.plain-clock-screen,
+.plain-clock-screen[data-clock-theme='fliqlo'] {
+  --bg-canvas: #09090b;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.03) 0%, transparent 65%);
+  --card-top-bg: #18181b;
+  --card-bottom-bg: #141417;
+  --card-pattern: none;
+  --card-border: rgba(255, 255, 255, 0.07);
+  --card-radius: 18px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.88), 0 4px 12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --inner-ring: none;
+  --text-color: #f4f4f6;
+  --seconds-text-color: #f4f4f6;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Oswald', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #000000;
+  --split-height: 3px;
+  --hinge-color: transparent;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #71717a;
+  --date-bg: transparent;
+  --badge-bg: rgba(255, 255, 255, 0.07);
+  --badge-text: #a1a1aa;
+  --colon-color: rgba(255, 255, 255, 0.16);
+}
+
+/* 02. Cyber Glass */
+.plain-clock-screen[data-clock-theme='cyber'] {
+  --bg-canvas: #040711;
+  --bg-glow: radial-gradient(
+    circle at 50% 42%,
+    rgba(0, 240, 255, 0.15) 0%,
+    rgba(244, 63, 94, 0.08) 42%,
+    transparent 72%
+  );
+  --card-top-bg: rgba(15, 23, 42, 0.68);
+  --card-bottom-bg: rgba(10, 15, 29, 0.78);
+  --card-pattern: linear-gradient(
+    135deg,
+    rgba(0, 240, 255, 0.07) 0%,
+    transparent 50%,
+    rgba(251, 113, 133, 0.06) 100%
+  );
+  --card-border: rgba(0, 240, 255, 0.32);
+  --card-radius: 20px;
+  --card-clip: none;
+  --card-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.92), 0 0 30px rgba(0, 240, 255, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  --inner-ring: none;
+  --text-color: #ecfeff;
+  --seconds-text-color: #fb7185;
+  --text-gradient: none;
+  --text-shadow: 0 0 22px rgba(0, 240, 255, 0.55);
+  --font-clock: 'Space Grotesk', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: rgba(0, 240, 255, 0.45);
+  --split-height: 2px;
+  --hinge-color: #00f0ff;
+  --hinge-width: 5px;
+  --hinge-height: 12px;
+  --date-color: #22d3ee;
+  --date-bg: rgba(0, 240, 255, 0.06);
+  --badge-bg: rgba(0, 240, 255, 0.16);
+  --badge-text: #67e8f9;
+  --colon-color: rgba(0, 240, 255, 0.5);
+}
+
+/* 03. Dieter Rams / Braun */
+.plain-clock-screen[data-clock-theme='braun'] {
+  --bg-canvas: #121316;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(255, 85, 0, 0.05) 0%, transparent 65%);
+  --card-top-bg: #222428;
+  --card-bottom-bg: #1c1e22;
+  --card-pattern: none;
+  --card-border: rgba(255, 255, 255, 0.09);
+  --card-radius: 12px;
+  --card-clip: none;
+  --card-shadow: 0 20px 38px rgba(0, 0, 0, 0.82), 0 2px 6px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --inner-ring: none;
+  --text-color: #f3f4f6;
+  --seconds-text-color: #ff5500;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Inter', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #0d0e11;
+  --split-height: 3px;
+  --hinge-color: #ff5500;
+  --hinge-width: 5px;
+  --hinge-height: 12px;
+  --date-color: #9ca3af;
+  --date-bg: transparent;
+  --badge-bg: #ff5500;
+  --badge-text: #ffffff;
+  --colon-color: rgba(255, 85, 0, 0.65);
+}
+
+/* 04. Crimson & Gold Circuit */
+.plain-clock-screen[data-clock-theme='luxury'] {
+  --bg-canvas: #090305;
+  --bg-glow: radial-gradient(
+    circle at 50% 45%,
+    rgba(212, 175, 55, 0.11) 0%,
+    rgba(153, 27, 27, 0.09) 45%,
+    transparent 70%
+  );
+  --card-top-bg: #1c080b;
+  --card-bottom-bg: #140508;
+  --card-pattern: radial-gradient(circle at 50% 0%, rgba(212, 175, 55, 0.12), transparent 70%);
+  --card-border: rgba(212, 175, 55, 0.42);
+  --card-radius: 22px;
+  --card-clip: none;
+  --card-shadow: 0 28px 55px rgba(0, 0, 0, 0.94), 0 0 24px rgba(212, 175, 55, 0.09),
+    inset 0 1px 0 rgba(253, 230, 138, 0.25);
+  --inner-ring: inset 0 0 0 3px rgba(212, 175, 55, 0.08);
+  --text-color: #fef3c7;
+  --seconds-text-color: #f59e0b;
+  --text-gradient: none;
+  --text-shadow: 0 2px 14px rgba(212, 175, 55, 0.32);
+  --font-clock: 'Cinzel', serif;
+  --font-date: 'Inter', sans-serif;
+  --split-line: #2a0c12;
+  --split-height: 2px;
+  --hinge-color: #d4af37;
+  --hinge-width: 4px;
+  --hinge-height: 12px;
+  --date-color: #d4af37;
+  --date-bg: rgba(212, 175, 55, 0.07);
+  --badge-bg: rgba(212, 175, 55, 0.18);
+  --badge-text: #fde68a;
+  --colon-color: rgba(212, 175, 55, 0.45);
+}
+
+/* 05. Nordic Paper */
+.plain-clock-screen[data-clock-theme='nordic'] {
+  --bg-canvas: #1c1b18;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(244, 241, 234, 0.08) 0%, transparent 65%);
+  --card-top-bg: #f4f1ea;
+  --card-bottom-bg: #e9e4d9;
+  --card-pattern: none;
+  --card-border: rgba(24, 24, 27, 0.14);
+  --card-radius: 16px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  --inner-ring: none;
+  --text-color: #111113;
+  --seconds-text-color: #52525b;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'DM Sans', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #cfc8b8;
+  --split-height: 2px;
+  --hinge-color: #71717a;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #e4e4e7;
+  --date-bg: transparent;
+  --badge-bg: rgba(17, 17, 19, 0.1);
+  --badge-text: #18181b;
+  --colon-color: rgba(244, 241, 234, 0.35);
+}
+
+/* 06. Nixie Amber Glow */
+.plain-clock-screen[data-clock-theme='nixie'] {
+  --bg-canvas: #070504;
+  --bg-glow: radial-gradient(
+    circle at 50% 45%,
+    rgba(255, 123, 0, 0.16) 0%,
+    rgba(234, 88, 12, 0.05) 45%,
+    transparent 70%
+  );
+  --card-top-bg: #0f0a07;
+  --card-bottom-bg: #0a0705;
+  --card-pattern: radial-gradient(rgba(255, 136, 0, 0.12) 1px, transparent 1px) 0 0 / 8px 8px;
+  --card-border: rgba(255, 123, 0, 0.32);
+  --card-radius: 24px;
+  --card-clip: none;
+  --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.95), 0 0 32px rgba(255, 123, 0, 0.14),
+    inset 0 0 18px rgba(255, 102, 0, 0.12);
+  --inner-ring: none;
+  --text-color: #ff8800;
+  --seconds-text-color: #ffaa33;
+  --text-gradient: none;
+  --text-shadow: 0 0 12px rgba(255, 123, 0, 0.85), 0 0 28px rgba(255, 68, 0, 0.55);
+  --font-clock: 'Share Tech Mono', monospace;
+  --font-date: 'Share Tech Mono', monospace;
+  --split-line: rgba(255, 123, 0, 0.35);
+  --split-height: 2px;
+  --hinge-color: #ff7b00;
+  --hinge-width: 4px;
+  --hinge-height: 12px;
+  --date-color: #fb923c;
+  --date-bg: rgba(255, 123, 0, 0.08);
+  --badge-bg: rgba(255, 123, 0, 0.2);
+  --badge-text: #ffedd5;
+  --colon-color: rgba(255, 123, 0, 0.65);
+}
+
+/* 07. Tokyo Cyberpunk 2099 */
+.plain-clock-screen[data-clock-theme='cyberpunk'] {
+  --bg-canvas: #08080c;
+  --bg-glow: radial-gradient(
+    circle at 50% 45%,
+    rgba(252, 238, 10, 0.12) 0%,
+    rgba(0, 240, 255, 0.07) 50%,
+    transparent 72%
+  );
+  --card-top-bg: #121217;
+  --card-bottom-bg: #0c0c10;
+  --card-pattern: linear-gradient(135deg, rgba(252, 238, 10, 0.08) 0%, transparent 35%);
+  --card-border: #fcee0a;
+  --card-radius: 4px;
+  --card-clip: polygon(
+    0 0,
+    calc(100% - 18px) 0,
+    100% 18px,
+    100% 100%,
+    18px 100%,
+    0 calc(100% - 18px)
+  );
+  --card-shadow: 0 20px 40px rgba(0, 0, 0, 0.9);
+  --inner-ring: inset 0 0 0 1px rgba(0, 240, 255, 0.35);
+  --text-color: #fcee0a;
+  --seconds-text-color: #00f0ff;
+  --text-gradient: none;
+  --text-shadow: 2px 2px 0px rgba(0, 240, 255, 0.45);
+  --font-clock: 'Orbitron', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #00f0ff;
+  --split-height: 2px;
+  --hinge-color: #fcee0a;
+  --hinge-width: 8px;
+  --hinge-height: 6px;
+  --date-color: #fcee0a;
+  --date-bg: rgba(252, 238, 10, 0.1);
+  --badge-bg: #fcee0a;
+  --badge-text: #000000;
+  --colon-color: #00f0ff;
+}
+
+/* 08. Matcha Zen */
+.plain-clock-screen[data-clock-theme='matcha'] {
+  --bg-canvas: #0d1510;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(132, 169, 140, 0.1) 0%, transparent 65%);
+  --card-top-bg: #1b2a20;
+  --card-bottom-bg: #152219;
+  --card-pattern: none;
+  --card-border: rgba(232, 237, 223, 0.14);
+  --card-radius: 26px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.75), inset 0 1px 0 rgba(232, 237, 223, 0.12);
+  --inner-ring: none;
+  --text-color: #e8eddf;
+  --seconds-text-color: #a3b18a;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Plus Jakarta Sans', sans-serif;
+  --font-date: 'DM Sans', sans-serif;
+  --split-line: #0c140f;
+  --split-height: 3px;
+  --hinge-color: #a3b18a;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #a3b18a;
+  --date-bg: rgba(163, 177, 138, 0.08);
+  --badge-bg: rgba(232, 237, 223, 0.12);
+  --badge-text: #e8eddf;
+  --colon-color: rgba(163, 177, 138, 0.45);
+}
+
+/* 09. Monolith Obsidian */
+.plain-clock-screen[data-clock-theme='obsidian'] {
+  --bg-canvas: #000000;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+  --card-top-bg: #070708;
+  --card-bottom-bg: #040405;
+  --card-pattern: none;
+  --card-border: #1f1f23;
+  --card-radius: 10px;
+  --card-clip: none;
+  --card-shadow: 0 30px 60px rgba(0, 0, 0, 1), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  --inner-ring: none;
+  --text-color: #d4d4d8;
+  --seconds-text-color: #71717a;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Syne', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #000000;
+  --split-height: 4px;
+  --hinge-color: #27272a;
+  --hinge-width: 3px;
+  --hinge-height: 14px;
+  --date-color: #52525b;
+  --date-bg: transparent;
+  --badge-bg: #18181b;
+  --badge-text: #a1a1aa;
+  --colon-color: #27272a;
+}
+
+/* 10. Solari Udine Airport */
+.plain-clock-screen[data-clock-theme='solari'] {
+  --bg-canvas: #111317;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(250, 204, 21, 0.05) 0%, transparent 65%);
+  --card-top-bg: #1e2024;
+  --card-bottom-bg: #181a1d;
+  --card-pattern: none;
+  --card-border: rgba(255, 255, 255, 0.12);
+  --card-radius: 8px;
+  --card-clip: none;
+  --card-shadow: 0 18px 36px rgba(0, 0, 0, 0.88), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --inner-ring: none;
+  --text-color: #ffffff;
+  --seconds-text-color: #facc15;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Oswald', sans-serif;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: #090a0c;
+  --split-height: 4px;
+  --hinge-color: #facc15;
+  --hinge-width: 8px;
+  --hinge-height: 16px;
+  --date-color: #facc15;
+  --date-bg: rgba(250, 204, 21, 0.1);
+  --badge-bg: #facc15;
+  --badge-text: #111317;
+  --colon-color: rgba(250, 204, 21, 0.55);
+}
+
+/* 11. Emerald Art Deco */
+.plain-clock-screen[data-clock-theme='artdeco'] {
+  --bg-canvas: #04100c;
+  --bg-glow: radial-gradient(
+    circle at 50% 45%,
+    rgba(212, 175, 55, 0.1) 0%,
+    rgba(16, 185, 129, 0.06) 45%,
+    transparent 70%
+  );
+  --card-top-bg: #071f18;
+  --card-bottom-bg: #051611;
+  --card-pattern: repeating-linear-gradient(
+    45deg,
+    rgba(212, 175, 55, 0.03) 0px,
+    rgba(212, 175, 55, 0.03) 1px,
+    transparent 1px,
+    transparent 10px
+  );
+  --card-border: #d4af37;
+  --card-radius: 14px;
+  --card-clip: none;
+  --card-shadow: 0 26px 52px rgba(0, 0, 0, 0.9), inset 0 0 0 4px #071f18,
+    inset 0 0 0 5px rgba(212, 175, 55, 0.45);
+  --inner-ring: inset 0 0 0 5px rgba(212, 175, 55, 0.35);
+  --text-color: #fef08a;
+  --seconds-text-color: #6ee7b7;
+  --text-gradient: none;
+  --text-shadow: 0 2px 10px rgba(212, 175, 55, 0.25);
+  --font-clock: 'Cormorant Garamond', serif;
+  --font-date: 'Cinzel', serif;
+  --split-line: #d4af37;
+  --split-height: 2px;
+  --hinge-color: #d4af37;
+  --hinge-width: 6px;
+  --hinge-height: 10px;
+  --date-color: #fde047;
+  --date-bg: rgba(212, 175, 55, 0.08);
+  --badge-bg: rgba(212, 175, 55, 0.2);
+  --badge-text: #fef08a;
+  --colon-color: #d4af37;
+}
+
+/* 12. Synthwave Outrun */
+.plain-clock-screen[data-clock-theme='synthwave'] {
+  --bg-canvas: #0b0418;
+  --bg-glow: radial-gradient(
+    circle at 50% 45%,
+    rgba(236, 72, 153, 0.18) 0%,
+    rgba(139, 92, 246, 0.1) 45%,
+    transparent 72%
+  );
+  --card-top-bg: #190b33;
+  --card-bottom-bg: #120726;
+  --card-pattern: linear-gradient(
+    180deg,
+    rgba(244, 63, 94, 0.08) 0%,
+    rgba(56, 189, 248, 0.08) 100%
+  );
+  --card-border: rgba(236, 72, 153, 0.45);
+  --card-radius: 20px;
+  --card-clip: none;
+  --card-shadow: 0 24px 50px rgba(0, 0, 0, 0.9), 0 0 30px rgba(236, 72, 153, 0.2);
+  --inner-ring: none;
+  --text-color: #ff71ce;
+  --seconds-text-color: #01cdfe;
+  --text-gradient: linear-gradient(180deg, #fffb96 0%, #ff71ce 55%, #b967ff 100%);
+  --text-shadow: 0 0 18px rgba(255, 113, 206, 0.45);
+  --font-clock: 'Righteous', cursive;
+  --font-date: 'Orbitron', sans-serif;
+  --split-line: #ff71ce;
+  --split-height: 2px;
+  --hinge-color: #01cdfe;
+  --hinge-width: 5px;
+  --hinge-height: 12px;
+  --date-color: #01cdfe;
+  --date-bg: rgba(1, 205, 254, 0.08);
+  --badge-bg: rgba(255, 113, 206, 0.2);
+  --badge-text: #fffb96;
+  --colon-color: #ff71ce;
+}
+
+/* 13. Swiss Railway (SBB) */
+.plain-clock-screen[data-clock-theme='swiss'] {
+  --bg-canvas: #16181d;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.07) 0%, transparent 65%);
+  --card-top-bg: #ffffff;
+  --card-bottom-bg: #f4f4f6;
+  --card-pattern: none;
+  --card-border: #d4d4d8;
+  --card-radius: 14px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.65), 0 4px 12px rgba(0, 0, 0, 0.35);
+  --inner-ring: inset 0 0 0 2px #18181b;
+  --text-color: #09090b;
+  --seconds-text-color: #eb0000;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Inter', sans-serif;
+  --font-date: 'Inter', sans-serif;
+  --split-line: #a1a1aa;
+  --split-height: 2px;
+  --hinge-color: #eb0000;
+  --hinge-width: 5px;
+  --hinge-height: 12px;
+  --date-color: #f4f4f6;
+  --date-bg: #eb0000;
+  --badge-bg: #09090b;
+  --badge-text: #ffffff;
+  --colon-color: #eb0000;
+}
+
+/* 14. Terminal Matrix */
+.plain-clock-screen[data-clock-theme='matrix'] {
+  --bg-canvas: #020804;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(0, 255, 102, 0.14) 0%, transparent 68%);
+  --card-top-bg: #051409;
+  --card-bottom-bg: #030e06;
+  --card-pattern: repeating-linear-gradient(
+    0deg,
+    rgba(0, 255, 102, 0.06) 0px,
+    rgba(0, 255, 102, 0.06) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  --card-border: rgba(0, 255, 102, 0.38);
+  --card-radius: 12px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.95), 0 0 24px rgba(0, 255, 102, 0.15);
+  --inner-ring: none;
+  --text-color: #00ff66;
+  --seconds-text-color: #86efac;
+  --text-gradient: none;
+  --text-shadow: 0 0 14px rgba(0, 255, 102, 0.65);
+  --font-clock: 'JetBrains Mono', monospace;
+  --font-date: 'JetBrains Mono', monospace;
+  --split-line: rgba(0, 255, 102, 0.45);
+  --split-height: 2px;
+  --hinge-color: #00ff66;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #00ff66;
+  --date-bg: rgba(0, 255, 102, 0.08);
+  --badge-bg: rgba(0, 255, 102, 0.18);
+  --badge-text: #00ff66;
+  --colon-color: #00ff66;
+}
+
+/* 15. Titanium Brushed Metal */
+.plain-clock-screen[data-clock-theme='titanium'] {
+  --bg-canvas: #0e1013;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(148, 163, 184, 0.1) 0%, transparent 65%);
+  --card-top-bg: #272b33;
+  --card-bottom-bg: #1e2229;
+  --card-pattern: repeating-linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0.02) 0px,
+      rgba(255, 255, 255, 0.02) 1px,
+      transparent 1px,
+      transparent 3px
+    ),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      transparent 50%,
+      rgba(0, 0, 0, 0.25) 100%
+    );
+  --card-border: rgba(226, 232, 240, 0.25);
+  --card-radius: 14px;
+  --card-clip: none;
+  --card-shadow: 0 25px 50px rgba(0, 0, 0, 0.88), inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  --inner-ring: inset 0 0 0 1px rgba(0, 0, 0, 0.6);
+  --text-color: #f8fafc;
+  --seconds-text-color: #38bdf8;
+  --text-gradient: none;
+  --text-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+  --font-clock: 'Chakra Petch', sans-serif;
+  --font-date: 'IBM Plex Mono', monospace;
+  --split-line: #090b0e;
+  --split-height: 3px;
+  --hinge-color: #94a3b8;
+  --hinge-width: 6px;
+  --hinge-height: 12px;
+  --date-color: #94a3b8;
+  --date-bg: rgba(148, 163, 184, 0.08);
+  --badge-bg: rgba(56, 189, 248, 0.16);
+  --badge-text: #7dd3fc;
+  --colon-color: #64748b;
+}
+
+/* 16. Terracotta Brutalist */
+.plain-clock-screen[data-clock-theme='brutalist'] {
+  --bg-canvas: #191716;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(200, 90, 50, 0.08) 0%, transparent 65%);
+  --card-top-bg: #d6d3cd;
+  --card-bottom-bg: #c7c3bc;
+  --card-pattern: none;
+  --card-border: #18181b;
+  --card-radius: 4px;
+  --card-clip: none;
+  --card-shadow: 8px 8px 0px #c85a32;
+  --inner-ring: inset 0 0 0 2px #18181b;
+  --text-color: #18181b;
+  --seconds-text-color: #c85a32;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Archivo Black', sans-serif;
+  --font-date: 'IBM Plex Mono', monospace;
+  --split-line: #18181b;
+  --split-height: 3px;
+  --hinge-color: #c85a32;
+  --hinge-width: 7px;
+  --hinge-height: 14px;
+  --date-color: #d6d3cd;
+  --date-bg: #c85a32;
+  --badge-bg: #c85a32;
+  --badge-text: #ffffff;
+  --colon-color: #c85a32;
+}
+
+/* 17. Royal Sapphire Velvet */
+.plain-clock-screen[data-clock-theme='sapphire'] {
+  --bg-canvas: #040814;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(59, 130, 246, 0.15) 0%, transparent 68%);
+  --card-top-bg: #0c1633;
+  --card-bottom-bg: #081026;
+  --card-pattern: radial-gradient(circle at 50% 0%, rgba(96, 165, 250, 0.16), transparent 65%);
+  --card-border: rgba(96, 165, 250, 0.3);
+  --card-radius: 22px;
+  --card-clip: none;
+  --card-shadow: 0 26px 52px rgba(0, 0, 0, 0.92), 0 0 28px rgba(37, 99, 235, 0.15),
+    inset 0 1px 0 rgba(191, 219, 254, 0.2);
+  --inner-ring: none;
+  --text-color: #eff6ff;
+  --seconds-text-color: #60a5fa;
+  --text-gradient: none;
+  --text-shadow: 0 2px 16px rgba(96, 165, 250, 0.3);
+  --font-clock: 'Outfit', sans-serif;
+  --font-date: 'Inter', sans-serif;
+  --split-line: #040814;
+  --split-height: 3px;
+  --hinge-color: #60a5fa;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #93c5fd;
+  --date-bg: rgba(59, 130, 246, 0.1);
+  --badge-bg: rgba(59, 130, 246, 0.2);
+  --badge-text: #bfdbfe;
+  --colon-color: rgba(96, 165, 250, 0.45);
+}
+
+/* 18. E-Ink Kindle Matte */
+.plain-clock-screen[data-clock-theme='eink'] {
+  --bg-canvas: #d6d5cf;
+  --bg-glow: none;
+  --card-top-bg: #e8e7e2;
+  --card-bottom-bg: #dfded8;
+  --card-pattern: none;
+  --card-border: #b8b7b0;
+  --card-radius: 12px;
+  --card-clip: none;
+  --card-shadow: 0 2px 0px #b8b7b0;
+  --inner-ring: none;
+  --text-color: #1c1c1a;
+  --seconds-text-color: #4a4a46;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Merriweather', serif;
+  --font-date: 'IBM Plex Mono', monospace;
+  --split-line: #b8b7b0;
+  --split-height: 2px;
+  --hinge-color: #787772;
+  --hinge-width: 4px;
+  --hinge-height: 8px;
+  --date-color: #2c2c2a;
+  --date-bg: rgba(0, 0, 0, 0.05);
+  --badge-bg: #2c2c2a;
+  --badge-text: #e8e7e2;
+  --colon-color: #787772;
+}
+
+/* 19. Rose Quartz Minimal */
+.plain-clock-screen[data-clock-theme='rosequartz'] {
+  --bg-canvas: #130b0e;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(244, 180, 196, 0.1) 0%, transparent 65%);
+  --card-top-bg: #2b1a21;
+  --card-bottom-bg: #22141a;
+  --card-pattern: none;
+  --card-border: rgba(244, 209, 214, 0.22);
+  --card-radius: 28px;
+  --card-clip: none;
+  --card-shadow: 0 24px 48px rgba(0, 0, 0, 0.85), inset 0 1px 0 rgba(251, 226, 230, 0.15);
+  --inner-ring: none;
+  --text-color: #fce7f3;
+  --seconds-text-color: #f472b6;
+  --text-gradient: none;
+  --text-shadow: none;
+  --font-clock: 'Quicksand', sans-serif;
+  --font-date: 'DM Sans', sans-serif;
+  --split-line: #130b0e;
+  --split-height: 3px;
+  --hinge-color: #f472b6;
+  --hinge-width: 4px;
+  --hinge-height: 10px;
+  --date-color: #f9a8d4;
+  --date-bg: rgba(244, 114, 182, 0.08);
+  --badge-bg: rgba(244, 114, 182, 0.2);
+  --badge-text: #fbcfe8;
+  --colon-color: rgba(244, 114, 182, 0.45);
+}
+
+/* 20. Blueprint CAD */
+.plain-clock-screen[data-clock-theme='blueprint'] {
+  --bg-canvas: #061529;
+  --bg-glow: radial-gradient(circle at 50% 45%, rgba(56, 189, 248, 0.12) 0%, transparent 70%);
+  --card-top-bg: #0b2545;
+  --card-bottom-bg: #081c36;
+  --card-pattern: linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px) 0 0 / 16px 16px,
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px) 0 0 / 16px 16px;
+  --card-border: rgba(255, 255, 255, 0.48);
+  --card-radius: 6px;
+  --card-clip: none;
+  --card-shadow: 0 22px 44px rgba(0, 0, 0, 0.85), inset 0 0 0 4px #0b2545,
+    inset 0 0 0 5px rgba(255, 255, 255, 0.2);
+  --inner-ring: inset 0 0 0 5px rgba(255, 255, 255, 0.18);
+  --text-color: #ffffff;
+  --seconds-text-color: #38bdf8;
+  --text-gradient: none;
+  --text-shadow: 0 0 10px rgba(56, 189, 248, 0.35);
+  --font-clock: 'IBM Plex Mono', monospace;
+  --font-date: 'IBM Plex Mono', monospace;
+  --split-line: rgba(255, 255, 255, 0.65);
+  --split-height: 1.5px;
+  --hinge-color: #38bdf8;
+  --hinge-width: 8px;
+  --hinge-height: 4px;
+  --date-color: #e0f2fe;
+  --date-bg: rgba(56, 189, 248, 0.14);
+  --badge-bg: rgba(255, 255, 255, 0.18);
+  --badge-text: #ffffff;
+  --colon-color: rgba(255, 255, 255, 0.55);
+}
+
+/* =====================================================================
+   SCREEN LAYOUT & CONTROLS
+   ===================================================================== */
+
 .plain-clock-screen {
-  position: relative;
-  width: 100%;
   min-height: 100vh;
-  background: #0d0e11;
+  width: 100%;
+  background-color: var(--bg-canvas);
+  background-image: var(--bg-glow);
+  transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 1.25rem;
+  flex-direction: row;
+  align-items: stretch;
+  font-family: 'Inter', sans-serif !important;
+  color: #f4f4f5;
+  overflow-x: hidden;
+  user-select: none;
   box-sizing: border-box;
 }
 
-:root[data-theme="light"] .plain-clock-screen {
-  background: #f2f4f7;
+.clock-workspace {
+  flex: 1;
+  min-width: 0;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
 }
 
-/* Ghost controls: unobtrusive at rest, crisp on hover */
-.clock-ghost-controls {
-  position: fixed;
-  top: 1.25rem;
-  right: 1.5rem;
+.clock-top-bar {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 18px 20px 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  z-index: 40;
+  box-sizing: border-box;
+}
+
+.clock-top-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.clock-back-btn,
+.clock-fullscreen-btn,
+.theme-dropdown-trigger {
   display: inline-flex;
   align-items: center;
-  gap: 0.5rem;
-  opacity: 0.25;
-  transition: opacity 0.2s ease;
-  z-index: 20;
-}
-
-.clock-ghost-controls:hover,
-.clock-ghost-controls:focus-within {
-  opacity: 1;
-}
-
-.ghost-btn {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-  font-size: 0.76rem;
-  font-weight: 500;
-  letter-spacing: 0.03em;
-  color: #cbd5e1;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 6px;
-  padding: 0.38rem 0.72rem;
+  justify-content: center;
+  background: rgba(24, 24, 27, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #e4e4e7;
+  font-family: 'Inter', sans-serif !important;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition: background-color 0.18s ease, border-color 0.18s ease, color 0.18s ease;
 }
 
-.ghost-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
+.clock-back-btn {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.clock-fullscreen-btn {
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border-radius: 10px;
+}
+
+.clock-fullscreen-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.clock-back-btn:hover,
+.clock-fullscreen-btn:hover,
+.theme-dropdown-trigger:hover {
+  background: rgba(39, 39, 42, 0.92);
+  border-color: rgba(255, 255, 255, 0.28);
   color: #ffffff;
+}
+
+/* 20-Theme Dropdown */
+.theme-dropdown {
+  position: relative;
+}
+
+.theme-dropdown-trigger {
+  height: 36px;
+  padding: 0 12px;
+  border-radius: 10px;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.theme-trigger-label {
+  white-space: nowrap;
+}
+
+.theme-swatch {
+  width: 12px;
+  height: 12px;
+  border-radius: 9999px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  flex-shrink: 0;
+}
+
+.theme-chevron {
+  width: 15px;
+  height: 15px;
+  color: #a1a1aa;
+  transition: transform 0.2s ease;
+}
+
+.theme-chevron.is-open {
+  transform: rotate(180deg);
+}
+
+.theme-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 276px;
+  max-height: min(400px, calc(100vh - 140px));
+  overflow-y: auto;
+  padding: 6px;
+  border-radius: 14px;
+  background: rgba(12, 12, 15, 0.96);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 50px rgba(0, 0, 0, 0.78);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.theme-dropdown-menu::-webkit-scrollbar {
+  width: 6px;
+}
+
+.theme-dropdown-menu::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.theme-dropdown-menu::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
+
+.theme-option {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 9px;
+  border: 1px solid transparent;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.14s ease, border-color 0.14s ease;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.theme-option:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.theme-option.is-active {
+  background: rgba(255, 255, 255, 0.14);
   border-color: rgba(255, 255, 255, 0.28);
 }
 
-:root[data-theme="light"] .ghost-btn {
-  color: #334155;
-  background: rgba(15, 23, 42, 0.06);
-  border-color: rgba(15, 23, 42, 0.14);
-}
-
-:root[data-theme="light"] .ghost-btn:hover {
-  background: rgba(15, 23, 42, 0.12);
-  color: #0f172a;
-}
-
-/* Main Clock Sculpture Container */
-.clock-assembly {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1.65rem;
-}
-
-.clock-drums-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* Top Chrome T-Bracket Overhang matching photo */
-.chrome-top-bracket {
-  position: relative;
-  z-index: 12;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  width: 146px;
-  height: 16px;
-  margin-bottom: -6px;
-  margin-right: 170px; /* Centered squarely above the HRS | MIN chrome column */
-  pointer-events: none;
-}
-
-.bracket-finger {
+.theme-option-text {
   flex: 1;
-  height: 8px;
-  background: linear-gradient(180deg, #f8fafc 0%, #9ca3af 55%, #374151 100%);
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.55);
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
 }
 
-.bracket-left {
-  border-radius: 4px 0 0 2px;
+.theme-option-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #f4f4f5;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.bracket-right {
-  border-radius: 0 4px 2px 0;
+.theme-option-tag {
+  font-size: 10px;
+  color: #a1a1aa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.bracket-head {
-  width: 34px;
+.theme-check {
+  width: 15px;
   height: 15px;
-  background: linear-gradient(90deg, #374151 0%, #e5e7eb 35%, #ffffff 50%, #9ca3af 70%, #1f2937 100%);
-  border-radius: 3px 3px 0 0;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+  color: #34d399;
+  flex-shrink: 0;
 }
 
-/* Three Mechanical Drums Row */
-.clock-drums-row {
-  position: relative;
-  z-index: 4;
-  display: inline-flex;
+/* Main Split-Flap Stage */
+.clock-main-stage {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-}
-
-/* Polished Cylindrical Chrome Spine between Hours & Minutes */
-.chrome-center-pillar {
+  justify-content: center;
+  padding: 20px 16px;
   position: relative;
-  width: 22px;
-  height: 192px;
-  margin-top: -10px;
-  margin-bottom: -8px;
-  border-radius: 3px;
-  background: linear-gradient(
-    90deg,
-    #181b22 0%,
-    #6b7280 20%,
-    #f3f4f6 42%,
-    #ffffff 50%,
-    #cbd5e1 68%,
-    #4b5563 86%,
-    #111827 100%
-  );
-  box-shadow:
-    0 12px 26px rgba(0, 0, 0, 0.65),
-    inset 0 1px 0 rgba(255, 255, 255, 0.85);
   z-index: 10;
 }
 
-.pillar-pin {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #4b5563 85%);
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+.clock-stage {
+  --card-w: clamp(92px, 22vw, 224px);
+  --card-h: calc(var(--card-w) * 1.15);
+  --font-sz: calc(var(--card-w) * 0.64);
+  --group-gap: 24px;
+  --scale-factor: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--group-gap);
+  transform: scale(var(--scale-factor));
+  transition: transform 0.25s ease, gap 0.25s ease;
 }
 
-.pin-top { top: 28px; }
-.pin-bottom { bottom: 32px; }
-
-/* Clean gap separating Minutes and Seconds drums */
-.drum-spacer {
-  width: 18px;
-  height: 10px;
+/* Optional Dividers */
+.colon-separator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  transition: opacity 0.3s ease;
 }
 
-/* Matte Solid Walnut Desk Pedestal Block matching photo */
-.walnut-pedestal {
-  position: relative;
-  z-index: 2;
-  margin-top: -6px;
-  width: calc(100% + 26px);
-  height: 30px;
-  border-radius: 3px 3px 5px 5px;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 210, 170, 0.03) 0px,
-      rgba(255, 210, 170, 0.03) 2px,
-      transparent 2px,
-      transparent 14px
-    ),
-    linear-gradient(
-      180deg,
-      #784629 0%,
-      #5c331b 24%,
-      #422210 78%,
-      #271307 100%
-    );
-  border-top: 1px solid rgba(255, 215, 180, 0.28);
-  border-bottom: 3px solid #1a0b04;
-  box-shadow:
-    0 22px 42px rgba(0, 0, 0, 0.65),
-    0 8px 14px rgba(0, 0, 0, 0.45);
+.colon-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background-color: var(--colon-color);
+  transition: all 0.3s ease;
 }
 
-:root[data-theme="light"] .walnut-pedestal {
-  box-shadow:
-    0 18px 34px rgba(15, 23, 42, 0.22),
-    0 6px 12px rgba(15, 23, 42, 0.14);
+.colon-separator.hairline-mode .colon-dot:first-child {
+  width: 2px;
+  height: calc(var(--card-h) * 0.48);
+  border-radius: 2px;
 }
 
-/* Minimalist Date Display [dd/mm/yyyy] */
+.colon-separator.hairline-mode .colon-dot:last-child {
+  display: none;
+}
+
+/* Date Readout */
 .clock-date-readout {
-  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
-  font-size: 1.15rem;
+  margin-top: 36px;
+  padding: 4px 14px;
+  border-radius: 8px;
+  font-family: var(--font-date) !important;
+  font-size: clamp(12px, 1.35vw, 14px);
+  font-weight: 600;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--date-color);
+  background: var(--date-bg);
+  text-align: center;
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+/* Collapsed: floating icons-only centered vertically at middle-right; Expanded: Azure DevOps right sidebar */
+.clock-right-sidebar {
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: auto;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  z-index: 45;
+  box-sizing: border-box;
+}
+
+.clock-right-sidebar.is-expanded {
+  position: sticky;
+  right: 0;
+  top: 0;
+  transform: none;
+  width: 256px;
+  height: 100vh;
+  flex-shrink: 0;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0;
+  background: rgba(12, 12, 16, 0.92);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.45);
+}
+
+.sidebar-nav-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-list {
+  align-items: stretch;
+  gap: 4px;
+  padding: 16px 8px;
+  overflow-y: auto;
+}
+
+.sidebar-nav-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgba(228, 228, 231, 0.72);
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px;
   font-weight: 500;
-  letter-spacing: 0.22em;
-  color: #8b93a1;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  box-sizing: border-box;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-btn {
+  width: 100%;
+  height: auto;
+  min-height: 40px;
+  border-radius: 8px;
+  justify-content: flex-start;
+  padding: 0 10px;
+  color: #d4d4d8;
+}
+
+.sidebar-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Light-canvas icon contrast when collapsed */
+.plain-clock-screen[data-clock-theme='eink'] .clock-right-sidebar:not(.is-expanded) .sidebar-nav-btn,
+.plain-clock-screen[data-clock-theme='eink'] .clock-right-sidebar:not(.is-expanded) .sidebar-toggle-btn {
+  color: rgba(28, 28, 26, 0.75);
+}
+
+.plain-clock-screen[data-clock-theme='eink'] .clock-right-sidebar:not(.is-expanded) .sidebar-nav-btn:hover,
+.plain-clock-screen[data-clock-theme='eink'] .clock-right-sidebar:not(.is-expanded) .sidebar-toggle-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #09090b;
+}
+
+/* Azure DevOps vertical active bar indicator (shown only inside expanded sidebar) */
+.clock-right-sidebar.is-expanded .sidebar-nav-btn.is-active::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: 9px;
+  bottom: 9px;
+  width: 3px;
+  border-radius: 9999px;
+  background: #3b82f6;
+}
+
+.sidebar-nav-btn.is-accent-on .sidebar-icon {
+  color: #34d399;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-btn.is-accent-on.is-active::before {
+  background: #34d399;
+}
+
+.sidebar-nav-btn.is-accent-cyan .sidebar-icon {
+  color: #22d3ee;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-btn.is-accent-cyan.is-active::before {
+  background: #22d3ee;
+}
+
+.sidebar-nav-flip {
+  color: #6ee7b7;
+}
+
+.sidebar-nav-flip:hover {
+  background: rgba(16, 185, 129, 0.16);
+  color: #a7f3d0;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-nav-flip:hover {
+  background: rgba(16, 185, 129, 0.14);
+  border-color: rgba(16, 185, 129, 0.25);
+}
+
+.sidebar-icon {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.sidebar-label {
+  flex: 1;
+  min-width: 0;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 500;
+  color: #e4e4e7;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebar-value-pill {
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.08);
+  font-size: 11px;
+  font-weight: 700;
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.sidebar-value-pill.text-on {
+  color: #34d399;
+}
+
+.sidebar-value-pill.text-off {
+  color: #a1a1aa;
+}
+
+.sidebar-value-pill.text-cyan {
+  color: #22d3ee;
+}
+
+.sidebar-divider {
+  height: 1px;
+  margin: 6px 4px;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px 10px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.sidebar-slider-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.sidebar-slider-title {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #d4d4d8;
+}
+
+.sidebar-value-readout {
+  font-size: 11px;
+  font-weight: 600;
+  color: #a1a1aa;
   font-variant-numeric: tabular-nums;
-  user-select: none;
 }
 
-:root[data-theme="light"] .clock-date-readout {
-  color: #475569;
+.sidebar-slider {
+  width: 100%;
+  height: 5px;
+  accent-color: #2563eb;
+  cursor: pointer;
 }
 
-/* Responsive Proportions */
-@media (max-width: 720px) {
-  .chrome-top-bracket {
-    width: 108px;
-    height: 12px;
-    margin-right: 118px;
-  }
-
-  .bracket-head {
-    width: 26px;
-    height: 11px;
-  }
-
-  .bracket-finger {
-    height: 6px;
-  }
-
-  .chrome-center-pillar {
-    width: 16px;
-    height: 136px;
-  }
-
-  .drum-spacer {
-    width: 12px;
-  }
-
-  .walnut-pedestal {
-    height: 24px;
-    width: calc(100% + 16px);
-  }
-
-  .clock-date-readout {
-    font-size: 0.98rem;
-    letter-spacing: 0.18em;
-  }
+.sidebar-footer {
+  padding: 0;
+  border-top: none;
 }
 
-@media (max-width: 480px) {
-  .chrome-top-bracket {
-    width: 88px;
-    height: 10px;
-    margin-right: 94px;
+.clock-right-sidebar.is-expanded .sidebar-footer {
+  padding: 10px 8px 14px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.sidebar-toggle-btn {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 9999px;
+  background: transparent;
+  color: rgba(228, 228, 231, 0.72);
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-toggle-btn {
+  width: 100%;
+  justify-content: flex-start;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #d4d4d8;
+}
+
+.sidebar-toggle-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+}
+
+.clock-right-sidebar.is-expanded .sidebar-toggle-btn:hover {
+  border-color: rgba(255, 255, 255, 0.22);
+}
+
+@media (max-width: 768px) {
+  .clock-top-bar {
+    padding: 12px 14px 4px;
   }
 
-  .bracket-head {
-    width: 22px;
-    height: 10px;
+  .clock-stage {
+    --card-w: clamp(80px, 21vw, 224px);
   }
 
-  .chrome-center-pillar {
-    width: 13px;
-    height: 112px;
+  .clock-right-sidebar {
+    right: 8px;
   }
 
-  .pin-top { top: 18px; }
-  .pin-bottom { bottom: 20px; }
-
-  .drum-spacer {
-    width: 9px;
-  }
-
-  .walnut-pedestal {
-    height: 20px;
-    width: calc(100% + 12px);
-  }
-
-  .clock-date-readout {
-    font-size: 0.88rem;
-    letter-spacing: 0.16em;
-  }
-
-  .clock-ghost-controls {
-    top: 0.85rem;
-    right: 0.9rem;
-    opacity: 0.55;
+  .clock-right-sidebar.is-expanded {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 244px;
+    z-index: 70;
   }
 }
