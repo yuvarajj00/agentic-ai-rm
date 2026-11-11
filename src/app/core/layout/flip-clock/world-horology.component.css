@@ -1,0 +1,2174 @@
+:host {
+  display: block;
+}
+
+.world-stage-host {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Inter', sans-serif !important;
+  color: #f4f4f5;
+}
+
+.world-svg-defs {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+/* =====================================================================
+   1. QLOCKTWO WORD MATRIX
+   ===================================================================== */
+.word-matrix-frame {
+  width: clamp(310px, 84vw, 540px);
+  aspect-ratio: 1 / 1;
+  border-radius: 20px;
+  padding: clamp(16px, 3vw, 32px);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: linear-gradient(145deg, #18181b 0%, #09090b 60%, #000000 100%);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.92), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.wm-header-bar,
+.wm-footer-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #a1a1aa;
+}
+
+.wm-header-bar {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wm-footer-bar {
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.wm-date-title {
+  color: #7dd3fc;
+  font-weight: 700;
+}
+
+.wm-sec-pill {
+  padding: 2px 12px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.wm-corner-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background: #27272a;
+}
+
+.wm-corner-dot.lit {
+  background: #38bdf8;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.word-grid-11x10 {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: clamp(3px, 0.7vw, 8px);
+  flex: 1;
+  margin: 10px 0;
+  align-items: center;
+  justify-items: center;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.word-cell {
+  font-weight: 700;
+  font-size: clamp(13px, 2.3vw, 24px);
+  color: #71717a;
+  opacity: 0.18;
+  line-height: 1;
+  transition: opacity 0.35s ease, transform 0.35s cubic-bezier(0.22, 1, 0.36, 1), color 0.35s ease;
+}
+
+.word-cell.lit {
+  opacity: 1;
+  color: #ffffff;
+  transform: scale(1.1);
+  text-shadow: 0 0 14px var(--accent-primary), 0 0 28px var(--accent-primary);
+}
+
+/* =====================================================================
+   2. 144 MINI ANALOG CLOCKS ("A MILLION TIMES")
+   ===================================================================== */
+.million-times-board {
+  padding: clamp(14px, 2.5vw, 28px);
+  border-radius: 22px;
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.million-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 0 6px 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  color: #a1a1aa;
+}
+
+.million-date {
+  color: #fcd34d;
+  font-weight: 700;
+}
+
+.million-groups-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 20px);
+}
+
+.million-pair {
+  display: flex;
+  gap: 6px;
+}
+
+.million-colon {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 20px;
+  color: #52525b;
+}
+
+.digit-clock-matrix {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  gap: clamp(2px, 0.35vw, 4px);
+}
+
+.micro-dial {
+  width: clamp(13px, 2vw, 23px);
+  height: clamp(13px, 2vw, 23px);
+  border-radius: 9999px;
+  position: relative;
+  background: rgba(24, 24, 27, 0.92);
+  border: 1px solid rgba(128, 128, 128, 0.22);
+}
+
+.micro-hand {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 46%;
+  height: 2px;
+  transform-origin: 0% 50%;
+  border-radius: 2px;
+  transition: transform 0.55s cubic-bezier(0.34, 1.25, 0.64, 1);
+}
+
+.micro-hand.hand-h {
+  background: #ffffff;
+}
+
+.micro-hand.hand-m {
+  background: #fbbf24;
+}
+
+/* =====================================================================
+   3. URWERK SATELLITE CAROUSEL
+   ===================================================================== */
+.urwerk-housing {
+  width: clamp(320px, 86vw, 460px);
+  height: clamp(340px, 60vw, 390px);
+  border-radius: 36px;
+  background: linear-gradient(180deg, #27272a 0%, #18181b 55%, #000000 100%);
+  border: 2px solid #52525b;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.urwerk-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.urwerk-chip {
+  padding: 3px 10px;
+  border-radius: 6px;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.urwerk-chip.lime {
+  background: rgba(163, 230, 53, 0.14);
+  border: 1px solid rgba(163, 230, 53, 0.42);
+  color: #bef264;
+}
+
+.urwerk-chip.orange {
+  background: rgba(249, 115, 22, 0.18);
+  border: 1px solid rgba(249, 115, 22, 0.42);
+  color: #fdba74;
+}
+
+.urwerk-center-deck {
+  flex: 1;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.urwerk-carousel {
+  width: 192px;
+  height: 192px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(9, 9, 11, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.urwerk-tourbillon {
+  position: absolute;
+  width: 146px;
+  height: 146px;
+  border-radius: 50%;
+  border: 1px dashed rgba(163, 230, 53, 0.45);
+  transition: transform 0.45s ease;
+}
+
+.urwerk-beacon {
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  background: #a3e635;
+  box-shadow: 0 0 10px #a3e635;
+}
+
+.urwerk-hour-core {
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.urwerk-sub-lbl {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  color: #a1a1aa;
+}
+
+.urwerk-hour-pod {
+  margin-top: 4px;
+  width: 78px;
+  height: 78px;
+  border-radius: 16px;
+  background: linear-gradient(145deg, #27272a, #000000);
+  border: 2px solid #a3e635;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 36px;
+  font-weight: 800;
+  color: #ffffff;
+  box-shadow: 0 0 24px rgba(163, 230, 53, 0.28);
+}
+
+.urwerk-minsec {
+  margin-top: 4px;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fb923c;
+}
+
+.urwerk-needle {
+  position: absolute;
+  bottom: 12px;
+  width: 5px;
+  height: 110px;
+  border-radius: 9999px;
+  background: linear-gradient(0deg, #f97316, #a3e635);
+  transform-origin: bottom center;
+  transition: transform 0.5s ease;
+  opacity: 0.72;
+}
+
+.urwerk-arc-scale {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #bef264;
+}
+
+.urwerk-min-pill {
+  padding: 2px 8px;
+  border-radius: 5px;
+  background: #a3e635;
+  color: #09090b;
+  font-weight: 800;
+}
+
+/* =====================================================================
+   4, 13, 18. CONCENTRIC ORBITAL RINGS & ASTROLABE
+   ===================================================================== */
+.orbital-dial {
+  position: relative;
+  width: clamp(310px, 78vw, 410px);
+  height: clamp(310px, 78vw, 410px);
+  border-radius: 50%;
+  background: #09090b;
+  border: 2px solid rgba(0, 240, 255, 0.5);
+  box-shadow: 0 0 70px rgba(0, 0, 0, 0.95);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.orbital-dial.is-orloj {
+  background: radial-gradient(circle, #0c1938 0%, #091226 60%, #000000 100%);
+  border-color: rgba(245, 158, 11, 0.65);
+}
+
+.orbital-dial.is-venetian {
+  background: radial-gradient(circle, #2a1b08 0%, #170f04 60%, #000000 100%);
+  border-color: rgba(234, 179, 8, 0.65);
+}
+
+.orbital-dock-bar {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 36px;
+  background: rgba(255, 255, 255, 0.05);
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  pointer-events: none;
+  z-index: 6;
+}
+
+.orbital-dock-left {
+  color: #fcd34d;
+}
+
+.orbital-dock-right {
+  color: #7dd3fc;
+}
+
+.orbit-ring {
+  position: absolute;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.45s ease;
+}
+
+.orbit-h {
+  width: 88%;
+  height: 88%;
+  border: 2px dashed rgba(251, 191, 36, 0.48);
+}
+
+.orbit-m {
+  width: 64%;
+  height: 64%;
+  border: 2px solid rgba(56, 189, 248, 0.48);
+}
+
+.orbit-s {
+  width: 42%;
+  height: 42%;
+  border: 1px solid rgba(244, 63, 94, 0.5);
+}
+
+.orbit-tag {
+  position: absolute;
+  top: 8px;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.orbit-tag.amber {
+  color: #fcd34d;
+}
+
+.orbit-tag.sky {
+  color: #7dd3fc;
+}
+
+.orbit-sec-pip {
+  position: absolute;
+  top: -5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #f43f5e;
+  box-shadow: 0 0 10px #f43f5e;
+}
+
+.orbital-core-box {
+  z-index: 12;
+  padding: 10px 18px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  text-align: center;
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.85);
+}
+
+.orbital-core-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #fcd34d;
+}
+
+.orbital-core-time {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(1.5rem, 4vw, 1.95rem);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.orbital-core-date {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: #a1a1aa;
+}
+
+/* =====================================================================
+   5, 15. LINEAR VERNIER & BRAUN DN50 DRUM VISOR
+   ===================================================================== */
+.vernier-viewport {
+  height: clamp(260px, 42vw, 370px);
+  position: relative;
+  overflow: hidden;
+  border-radius: 20px;
+  padding: 0 clamp(12px, 2.8vw, 30px);
+  background: #09090b;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(6px, 1.4vw, 16px);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.95), inset 0 0 40px rgba(0, 0, 0, 0.85);
+}
+
+.vernier-viewport.is-braun {
+  background: #141416;
+  border: 2px solid #3f3f46;
+}
+
+.vernier-col {
+  height: 100%;
+  position: relative;
+}
+
+.vernier-strip {
+  position: relative;
+  top: 50%;
+  margin-top: -26px;
+  width: clamp(34px, 6.2vw, 62px);
+  border-radius: 8px;
+  background: rgba(24, 24, 27, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.vernier-cell {
+  height: 52px;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-weight: 700;
+  font-size: clamp(16px, 2.6vw, 28px);
+  color: #71717a;
+  opacity: 0.25;
+  border-left: 1px solid rgba(255, 255, 255, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.12);
+  transition: opacity 0.3s ease, transform 0.3s ease, color 0.3s ease;
+}
+
+.vernier-cell.active-mark {
+  opacity: 1;
+  color: #ffffff;
+  transform: scale(1.16);
+}
+
+.vernier-cursor-bar {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  right: 0;
+  height: 54px;
+  transform: translateY(-50%);
+  pointer-events: none;
+  z-index: 20;
+  border-top: 2px solid var(--accent-primary);
+  border-bottom: 2px solid var(--accent-primary);
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.03));
+}
+
+/* =====================================================================
+   6. SOLARI TERMINAL BOARD
+   ===================================================================== */
+.solari-terminal-board {
+  border-radius: 18px;
+  padding: clamp(14px, 2.6vw, 28px);
+  background: linear-gradient(180deg, #16181d 0%, #0d0e12 100%);
+  border: 2px solid #2e323b;
+  box-shadow: 0 30px 70px rgba(0, 0, 0, 0.95), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.solari-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  color: #facc15;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.solari-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+}
+
+.flap-tile {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: clamp(19px, 3.4vw, 38px);
+  height: clamp(28px, 5vw, 54px);
+  background: linear-gradient(180deg, #23262d 0%, #181a20 49%, #090a0c 50%, #1c1f26 51%, #14161b 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  font-family: 'Oswald', sans-serif !important;
+  font-weight: 700;
+  font-size: clamp(15px, 2.7vw, 30px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.7);
+}
+
+.flap-tile[data-tone='white'] {
+  color: #ffffff;
+}
+
+.flap-tile[data-tone='amber'] {
+  color: #fcd34d;
+}
+
+.flap-tile[data-tone='yellow'] {
+  color: #facc15;
+}
+
+.flap-tile[data-tone='green'] {
+  color: #34d399;
+}
+
+/* =====================================================================
+   7. FERROLIC MAGNETIC LIQUID TANK
+   ===================================================================== */
+.ferro-panoramic-tank {
+  width: clamp(310px, 86vw, 720px);
+  height: clamp(220px, 34vw, 310px);
+  border-radius: 28px;
+  padding: 24px;
+  background: linear-gradient(180deg, #18181b 0%, #09090b 55%, #000000 100%);
+  border: 2px solid rgba(245, 158, 11, 0.36);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 32px 75px rgba(0, 0, 0, 0.95), inset 0 0 50px rgba(0, 0, 0, 0.9);
+}
+
+.ferro-blobs-layer {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  opacity: 0.45;
+  filter: url(#gooeyFerro);
+  pointer-events: none;
+}
+
+.ferro-morph-blob {
+  animation: blobFloat 5s ease-in-out infinite;
+}
+
+.ferro-morph-blob.blob-a {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(45deg, #f59e0b, #9333ea);
+}
+
+.ferro-morph-blob.blob-b {
+  width: 170px;
+  height: 170px;
+  background: linear-gradient(45deg, #facc15, #db2777);
+  animation-delay: -2s;
+}
+
+.ferro-morph-blob.blob-c {
+  width: 140px;
+  height: 140px;
+  background: linear-gradient(45deg, #f59e0b, #4f46e5);
+  animation-delay: -3.5s;
+}
+
+@keyframes blobFloat {
+  0%,
+  100% {
+    border-radius: 44% 56% 62% 38% / 44% 48% 52% 56%;
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    border-radius: 58% 42% 40% 60% / 56% 62% 38% 44%;
+    transform: translate(6px, -5px) scale(1.04, 0.96);
+  }
+  66% {
+    border-radius: 38% 62% 54% 46% / 60% 38% 62% 40%;
+    transform: translate(-6px, 4px) scale(0.97, 1.03);
+  }
+}
+
+.ferro-kicker {
+  position: relative;
+  z-index: 4;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: #fcd34d;
+  margin-bottom: 8px;
+}
+
+.ferro-main-time {
+  position: relative;
+  z-index: 4;
+  font-family: 'Syne', sans-serif !important;
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 6px 25px rgba(0, 0, 0, 0.95);
+}
+
+.ferro-date-pill {
+  position: relative;
+  z-index: 4;
+  margin-top: 16px;
+  padding: 5px 16px;
+  border-radius: 9999px;
+  background: rgba(0, 0, 0, 0.72);
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fde68a;
+}
+
+/* =====================================================================
+   8. BERLIN MENGENLEHREUHR
+   ===================================================================== */
+.berlin-monolith {
+  width: clamp(320px, 84vw, 480px);
+  padding: 24px;
+  border-radius: 24px;
+  background: #09090b;
+  border: 2px solid #3f3f46;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.berlin-sec-lamp {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid #52525b;
+  background: #18181b;
+  transition: background-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.berlin-sec-lamp.lit {
+  background: #facc15;
+  box-shadow: 0 0 25px #facc15;
+}
+
+.berlin-row-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  width: 100%;
+  height: 36px;
+}
+
+.berlin-row-11 {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  gap: 6px;
+  width: 100%;
+  height: 32px;
+}
+
+.berlin-block,
+.berlin-block-sm {
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #18181b;
+}
+
+.berlin-block-sm {
+  border-radius: 4px;
+}
+
+.lit-red {
+  background: #ef4444 !important;
+  box-shadow: 0 0 14px #ef4444;
+}
+
+.lit-yellow {
+  background: #facc15 !important;
+  box-shadow: 0 0 14px #facc15;
+}
+
+.berlin-decoder {
+  width: 100%;
+  margin-top: 6px;
+  padding: 8px 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  display: flex;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  color: #e4e4e7;
+}
+
+.berlin-dec-time {
+  color: #facc15;
+  font-weight: 700;
+}
+
+/* =====================================================================
+   9. NAGRA REEL-TO-REEL TAPE DECK
+   ===================================================================== */
+.nagra-deck {
+  width: clamp(320px, 86vw, 540px);
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #27272a 0%, #18181b 50%, #09090b 100%);
+  border: 2px solid #52525b;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.nagra-reels-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+}
+
+.nagra-reel {
+  width: clamp(106px, 24vw, 156px);
+  height: clamp(106px, 24vw, 156px);
+  border-radius: 50%;
+  background: linear-gradient(135deg, #d4d4d8, #a1a1aa, #52525b);
+  border: 4px solid #3f3f46;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.nagra-reel-ring {
+  position: absolute;
+  inset: 8px;
+  border-radius: 50%;
+  border: 4px dashed rgba(39, 39, 42, 0.7);
+}
+
+.spinning-reel {
+  animation: reelSpin 4.5s linear infinite;
+}
+
+.spinning-reel.fast {
+  animation-duration: 3s;
+}
+
+@keyframes reelSpin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.nagra-hub {
+  z-index: 4;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: #09090b;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.nagra-hub.amber {
+  border: 2px solid #f97316;
+  color: #fb923c;
+}
+
+.nagra-hub.green {
+  border: 2px solid #22c55e;
+  color: #4ade80;
+}
+
+.nagra-hub-lbl {
+  font-size: 9px;
+}
+
+.nagra-hub-val {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.nagra-hub-val.sm {
+  font-size: 13px;
+}
+
+.nagra-center-head {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.nagra-tape-tag {
+  padding: 4px 10px;
+  border-radius: 4px;
+  background: #fef3c7;
+  color: #09090b;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.nagra-sec-box {
+  padding: 4px 12px;
+  border-radius: 8px;
+  background: #000000;
+  border: 1px solid #f97316;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fb923c;
+}
+
+.nagra-vu-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.nagra-vu {
+  height: 64px;
+  border-radius: 12px;
+  background: rgba(254, 243, 199, 0.95);
+  border: 2px solid #3f3f46;
+  padding: 6px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px;
+  font-weight: 700;
+  color: #18181b;
+  overflow: hidden;
+}
+
+.nagra-needle {
+  width: 2px;
+  height: 38px;
+  background: #dc2626;
+  transform-origin: bottom center;
+  transition: transform 0.25s ease;
+}
+
+/* =====================================================================
+   10. KYOTO WATER SIPHON COLUMNS
+   ===================================================================== */
+.siphon-rack {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(9, 9, 11, 0.92);
+  border: 1px solid rgba(16, 185, 129, 0.32);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2.2vw, 20px);
+}
+
+.siphon-col-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.siphon-column {
+  width: clamp(46px, 8vw, 84px);
+  height: clamp(200px, 34vw, 300px);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  border: 1.5px solid rgba(255, 255, 255, 0.22);
+  background: rgba(10, 15, 28, 0.72);
+  box-shadow: inset 0 0 22px rgba(0, 0, 0, 0.85), 0 16px 36px rgba(0, 0, 0, 0.75);
+}
+
+.siphon-ticks {
+  position: absolute;
+  inset: 8px auto 8px 4px;
+  width: 8px;
+  border-right: 1px solid rgba(255, 255, 255, 0.22);
+  pointer-events: none;
+  z-index: 4;
+}
+
+.siphon-liquid {
+  width: 100%;
+  position: relative;
+  transition: height 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.siphon-liquid::before {
+  content: '';
+  position: absolute;
+  top: -5px;
+  left: 0;
+  right: 0;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.52);
+  filter: blur(1px);
+}
+
+.siphon-emerald {
+  background: linear-gradient(0deg, rgba(16, 185, 129, 0.85), rgba(94, 234, 212, 0.92));
+}
+
+.siphon-teal {
+  background: linear-gradient(0deg, rgba(20, 184, 166, 0.85), rgba(103, 232, 249, 0.92));
+}
+
+.siphon-cyan {
+  background: linear-gradient(0deg, rgba(6, 182, 212, 0.85), rgba(125, 211, 252, 0.92));
+}
+
+.siphon-indigo {
+  background: linear-gradient(0deg, rgba(99, 102, 241, 0.85), rgba(192, 132, 252, 0.92));
+}
+
+.siphon-purple {
+  background: linear-gradient(0deg, rgba(168, 85, 247, 0.85), rgba(244, 114, 182, 0.92));
+}
+
+.siphon-val {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(18px, 3vw, 26px);
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+  z-index: 6;
+}
+
+.siphon-label {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: #6ee7b7;
+}
+
+/* =====================================================================
+   11, 19. NERV TACTICAL HEX-HUD & CYBERPUNK VISOR
+   ===================================================================== */
+.nerv-console {
+  width: clamp(320px, 88vw, 590px);
+  padding: 24px;
+  border-radius: 16px;
+  background: rgba(0, 0, 0, 0.92);
+  border: 2px solid #ff5500;
+  box-shadow: 0 0 50px rgba(255, 85, 0, 0.25);
+  color: #ff5500;
+  font-family: 'JetBrains Mono', monospace !important;
+}
+
+.nerv-console.is-cyber {
+  border-color: #fcee0a;
+  color: #fcee0a;
+  box-shadow: 0 0 50px rgba(252, 238, 10, 0.2);
+}
+
+.nerv-header,
+.nerv-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.nerv-header {
+  padding-bottom: 10px;
+  margin-bottom: 16px;
+  border-bottom: 1px solid currentColor;
+}
+
+.nerv-footer {
+  padding-top: 12px;
+  margin-top: 16px;
+  border-top: 1px solid currentColor;
+}
+
+.nerv-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  text-align: center;
+}
+
+.nerv-cell {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.nerv-unit {
+  font-size: 10px;
+  color: #a1a1aa;
+}
+
+.nerv-num {
+  font-size: clamp(2rem, 6vw, 3.6rem);
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.nerv-num.accent {
+  color: inherit;
+}
+
+.nerv-date {
+  color: #ffffff;
+}
+
+.nerv-alert-badge {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #dc2626;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+/* =====================================================================
+   14. SBB MONDAINE SWISS RAILWAY
+   ===================================================================== */
+.sbb-stage {
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(24, 24, 27, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+}
+
+.sbb-analog-dial {
+  width: clamp(210px, 42vw, 256px);
+  height: clamp(210px, 42vw, 256px);
+  border-radius: 50%;
+  background: #ffffff;
+  border: 10px solid #d4d4d8;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sbb-marker-arm {
+  position: absolute;
+  inset: 8px;
+  display: flex;
+  justify-content: center;
+}
+
+.sbb-baton {
+  width: 7px;
+  height: 20px;
+  background: #09090b;
+}
+
+.sbb-hand-h,
+.sbb-hand-m,
+.sbb-hand-s {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  transform-origin: bottom center;
+}
+
+.sbb-hand-h {
+  width: 9px;
+  height: 64px;
+  background: #09090b;
+}
+
+.sbb-hand-m {
+  width: 7px;
+  height: 92px;
+  background: #09090b;
+}
+
+.sbb-hand-s {
+  width: 3px;
+  height: 92px;
+  background: #eb0000;
+  transition: transform 0.25s ease;
+}
+
+.sbb-lollipop {
+  position: absolute;
+  top: -8px;
+  left: -6px;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #eb0000;
+}
+
+.sbb-cap {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #eb0000;
+  z-index: 4;
+}
+
+.sbb-platform-sign {
+  width: 248px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #003399;
+  border: 2px solid #ffffff;
+  color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.sbb-sign-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.32);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.sbb-gleis {
+  padding: 2px 8px;
+  border-radius: 4px;
+  background: #eb0000;
+  font-size: 10px;
+}
+
+.sbb-sign-time {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 28px;
+  font-weight: 800;
+}
+
+.sbb-sign-date {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  color: #bae6fd;
+  line-height: 1.4;
+}
+
+/* =====================================================================
+   16. DNA DOUBLE-HELIX BIO-CHRONOMETER
+   ===================================================================== */
+.dna-frame {
+  width: clamp(320px, 88vw, 620px);
+  padding: 24px;
+  border-radius: 24px;
+  background: rgba(9, 9, 11, 0.92);
+  border: 1px solid rgba(34, 211, 238, 0.36);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.dna-title {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #67e8f9;
+  text-transform: uppercase;
+}
+
+.dna-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+}
+
+.dna-rung {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px 6px;
+  border-radius: 16px;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.15) 0%, transparent 50%, rgba(217, 70, 239, 0.15) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dna-node {
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+}
+
+.dna-node.cyan {
+  background: #22d3ee;
+  box-shadow: 0 0 10px #22d3ee;
+}
+
+.dna-node.magenta {
+  background: #e879f9;
+  box-shadow: 0 0 10px #e879f9;
+}
+
+.dna-strand {
+  width: 2px;
+  height: 18px;
+  margin: 4px 0;
+}
+
+.dna-strand.top {
+  background: linear-gradient(180deg, #22d3ee, #e879f9);
+}
+
+.dna-strand.bottom {
+  background: linear-gradient(180deg, #e879f9, #22d3ee);
+}
+
+.dna-val {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 20px;
+  font-weight: 800;
+  color: #ffffff;
+}
+
+.dna-lbl {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 9px;
+  color: #a1a1aa;
+}
+
+/* =====================================================================
+   17. IBM 1964 HOLLERITH PUNCHED CARD
+   ===================================================================== */
+.ibm-card {
+  width: clamp(320px, 88vw, 640px);
+  padding: 20px;
+  border-radius: 12px;
+  background: #f3e5ab;
+  color: #18181b;
+  border: 2px solid rgba(120, 53, 15, 0.5);
+  clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 0 100%);
+  font-family: 'IBM Plex Mono', monospace !important;
+}
+
+.ibm-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #27272a;
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.ibm-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 4px;
+  text-align: center;
+}
+
+.ibm-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.ibm-col-hdr {
+  font-size: 10px;
+  font-weight: 700;
+  color: #78350f;
+}
+
+.ibm-cell {
+  width: 100%;
+  height: 16px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 700;
+  background: rgba(120, 53, 15, 0.12);
+  color: #3f3f46;
+}
+
+.ibm-cell.punched {
+  background: #09090b;
+  color: #fcd34d;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+/* =====================================================================
+   20. SOROBAN ABACUS
+   ===================================================================== */
+.abacus-housing {
+  width: clamp(320px, 88vw, 600px);
+  padding: 20px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, #3e2723 0%, #1b0f0d 100%);
+  border: 4px solid rgba(180, 83, 9, 0.85);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.abacus-header {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 12px;
+  color: #fde68a;
+}
+
+.abacus-rods {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+  padding: 16px;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(245, 158, 11, 0.32);
+}
+
+.abacus-rod {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.abacus-rod-lbl {
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 4px;
+}
+
+.abacus-heaven {
+  height: 40px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-bottom: 2px solid #f59e0b;
+  position: relative;
+}
+
+.abacus-earth {
+  height: 92px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+  padding-top: 4px;
+  position: relative;
+}
+
+.abacus-wire {
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  background: rgba(180, 83, 9, 0.6);
+}
+
+.abacus-bead {
+  width: 28px;
+  height: 14px;
+  border-radius: 9999px;
+  background: #78350f;
+  z-index: 4;
+  transition: transform 0.28s ease, background-color 0.25s ease;
+}
+
+.abacus-heaven .abacus-bead.lit {
+  transform: translateY(16px);
+  background: #fbbf24;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+.abacus-earth .abacus-bead {
+  transform: translateY(4px);
+}
+
+.abacus-earth .abacus-bead.lit {
+  transform: translateY(-4px);
+  background: #fbbf24;
+  box-shadow: 0 0 8px #f59e0b;
+}
+
+/* =====================================================================
+   21. SEIKO 1977 QUARTZ LCD
+   ===================================================================== */
+.lcd-bezel {
+  width: clamp(320px, 84vw, 500px);
+  padding: 22px;
+  border-radius: 34px;
+  background: linear-gradient(135deg, #ca8a04, #fbbf24, #a16207);
+  border: 4px solid #fef08a;
+  box-shadow: 0 28px 65px rgba(0, 0, 0, 0.9);
+}
+
+.lcd-inner-case {
+  padding: 20px;
+  border-radius: 18px;
+  background: #09090b;
+  border: 2px solid #3f3f46;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.lcd-brand {
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Share Tech Mono', monospace !important;
+  font-size: 11px;
+  font-weight: 700;
+  color: #fbbf24;
+}
+
+.lcd-screen {
+  padding: 18px;
+  border-radius: 12px;
+  background: #9bbc88;
+  border: 4px solid #27272a;
+  color: #0f1f14;
+  font-family: 'Share Tech Mono', monospace !important;
+  box-shadow: inset 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.lcd-meta {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(15, 31, 20, 0.3);
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.lcd-digits {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+  padding-top: 8px;
+}
+
+.lcd-hm {
+  font-size: clamp(2.6rem, 7vw, 3.8rem);
+  font-weight: 800;
+}
+
+.lcd-sec {
+  font-size: clamp(1.4rem, 4vw, 2rem);
+  font-weight: 800;
+}
+
+/* =====================================================================
+   23. KLYSTRON RADAR SCOPE
+   ===================================================================== */
+.radar-scope {
+  position: relative;
+  width: clamp(300px, 76vw, 390px);
+  height: clamp(300px, 76vw, 390px);
+  border-radius: 50%;
+  background: #021208;
+  border: 4px solid rgba(16, 185, 129, 0.62);
+  box-shadow: 0 0 70px rgba(0, 255, 102, 0.22);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: 'VT323', monospace !important;
+}
+
+.radar-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  pointer-events: none;
+}
+
+.radar-ring.r-outer {
+  inset: 24px;
+}
+
+.radar-ring.r-inner {
+  inset: 64px;
+}
+
+.radar-cross-h,
+.radar-cross-v {
+  position: absolute;
+  background: rgba(16, 185, 129, 0.25);
+  pointer-events: none;
+}
+
+.radar-cross-h {
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+}
+
+.radar-cross-v {
+  inset-block: 0;
+  left: 50%;
+  width: 1px;
+}
+
+.radar-sweep-cone {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, rgba(0, 255, 102, 0.35) 0deg, transparent 65deg);
+  animation: radarSweep360 4s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes radarSweep360 {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.radar-core {
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  text-align: center;
+}
+
+.radar-badge {
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: rgba(16, 185, 129, 0.2);
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  font-size: 14px;
+  color: #6ee7b7;
+}
+
+.radar-time {
+  font-size: clamp(2.8rem, 7vw, 3.6rem);
+  line-height: 1;
+  color: #00ff66;
+  text-shadow: 0 0 15px #00ff66;
+}
+
+.radar-date {
+  font-size: 16px;
+  letter-spacing: 0.14em;
+  color: #6ee7b7;
+}
+
+/* =====================================================================
+   24. BAUHAUS DESSAU GEOMETRY
+   ===================================================================== */
+.bauhaus-canvas {
+  width: clamp(310px, 84vw, 470px);
+  padding: 24px;
+  border-radius: 16px;
+  background: #f4f1ea;
+  color: #09090b;
+  border: 4px solid #09090b;
+  box-shadow: 12px 12px 0 #dc2626;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+}
+
+.bauhaus-top {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 8px;
+  border-bottom: 2px solid #09090b;
+  font-family: 'Plus Jakarta Sans', sans-serif !important;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.bauhaus-date-chip {
+  padding: 2px 8px;
+  background: #09090b;
+  color: #ffffff;
+}
+
+.bauhaus-stage {
+  position: relative;
+  width: 224px;
+  height: 224px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bauhaus-circle {
+  position: absolute;
+  width: 176px;
+  height: 176px;
+  border-radius: 50%;
+  border: 6px solid #dc2626;
+  transition: transform 0.5s ease;
+}
+
+.bauhaus-dot {
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #dc2626;
+}
+
+.bauhaus-square {
+  position: absolute;
+  width: 128px;
+  height: 128px;
+  border: 6px solid #2563eb;
+  transition: transform 0.5s ease;
+}
+
+.bauhaus-center-disc {
+  width: 98px;
+  height: 98px;
+  border-radius: 50%;
+  background: #eab308;
+  border: 2px solid #09090b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+}
+
+.bauhaus-time {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 17px;
+  font-weight: 800;
+}
+
+/* =====================================================================
+   25. ILDA LASER GALVO
+   ===================================================================== */
+.laser-stage {
+  width: clamp(320px, 86vw, 590px);
+  padding: 28px;
+  border-radius: 24px;
+  background: #09090b;
+  border: 1px solid rgba(52, 211, 153, 0.5);
+  box-shadow: 0 0 60px rgba(0, 255, 136, 0.2);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.laser-kicker {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  color: #f472b6;
+  text-align: center;
+}
+
+.laser-vector-glow {
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: clamp(2.3rem, 7vw, 4.3rem);
+  font-weight: 800;
+  color: rgba(0, 255, 136, 0.14);
+  -webkit-text-stroke: 1.5px #00ff88;
+  animation: laserFlicker 1.8s infinite;
+}
+
+@keyframes laserFlicker {
+  0%,
+  100% {
+    opacity: 1;
+    filter: drop-shadow(0 0 12px var(--accent-primary));
+  }
+  50% {
+    opacity: 0.85;
+    filter: drop-shadow(0 0 22px var(--accent-secondary));
+  }
+}
+
+.laser-scanline {
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, #ec4899, transparent);
+}
+
+/* =====================================================================
+   27. BATHYSCAPHE TRIESTE GAUGES
+   ===================================================================== */
+.bathy-panel {
+  padding: 24px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, #3e2723 0%, #1a0f0a 100%);
+  border: 4px solid rgba(217, 119, 6, 0.72);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+
+.bathy-porthole {
+  width: clamp(134px, 28vw, 174px);
+  height: clamp(134px, 28vw, 174px);
+  border-radius: 50%;
+  background: #09090b;
+  border: 8px solid #d97706;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Chakra Petch', sans-serif !important;
+}
+
+.bathy-title {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: #fbbf24;
+}
+
+.bathy-val {
+  font-size: 34px;
+  font-weight: 800;
+  color: #5eead4;
+}
+
+.bathy-sub {
+  font-size: 10px;
+  color: #fde68a;
+  font-weight: 700;
+}
+
+.bathy-needle {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  width: 3px;
+  height: 54px;
+  background: #f97316;
+  border-radius: 9999px;
+  transform-origin: bottom center;
+  opacity: 0.75;
+  pointer-events: none;
+}
+
+/* =====================================================================
+   28. BLETCHLEY BINARY BCD + MORSE
+   ===================================================================== */
+.bletchley-rack {
+  width: clamp(320px, 88vw, 580px);
+  padding: 24px;
+  border-radius: 24px;
+  background: #09090b;
+  border: 2px solid rgba(14, 165, 233, 0.42);
+  font-family: 'IBM Plex Mono', monospace !important;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bletchley-hdr {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #7dd3fc;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bcd-grid {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 8px;
+}
+
+.bcd-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 4px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bcd-lbl {
+  font-size: 10px;
+  color: #a1a1aa;
+}
+
+.bcd-bit {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  background: #18181b;
+  color: #52525b;
+}
+
+.bcd-bit.on {
+  background: #38bdf8;
+  color: #09090b;
+  font-weight: 800;
+  box-shadow: 0 0 10px #38bdf8;
+}
+
+.bcd-val {
+  font-size: 14px;
+  font-weight: 700;
+  color: #ffffff;
+}
+
+.morse-strip {
+  padding: 8px 12px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  text-align: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fcd34d;
+  letter-spacing: 0.14em;
+}
+
+/* =====================================================================
+   29. CHRYSLER ART DECO ZIGGURAT
+   ===================================================================== */
+.chrysler-ziggurat {
+  width: clamp(320px, 84vw, 520px);
+  padding: 28px;
+  border-radius: 120px 120px 16px 16px;
+  background: linear-gradient(180deg, #071f18 0%, #05140f 55%, #000000 100%);
+  border: 4px solid #d4af37;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.chrysler-kicker {
+  font-family: 'Cinzel', serif !important;
+  font-size: 12px;
+  letter-spacing: 0.26em;
+  color: #d4af37;
+}
+
+.chrysler-time {
+  font-family: 'Cinzel', serif !important;
+  font-size: clamp(2.4rem, 7vw, 3.8rem);
+  font-weight: 700;
+  color: #fef3c7;
+  padding: 12px 24px;
+  border-top: 2px solid #d4af37;
+  border-bottom: 2px solid #d4af37;
+}
+
+.chrysler-date {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  color: #6ee7b7;
+}
+
+/* =====================================================================
+   30. INTERSTELLAR 5D TESSERACT
+   ===================================================================== */
+.tesseract-box {
+  width: clamp(320px, 86vw, 580px);
+  padding: 28px;
+  border-radius: 24px;
+  background: #000000;
+  border: 2px solid rgba(245, 158, 11, 0.5);
+  box-shadow: 0 0 70px rgba(245, 158, 11, 0.25);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.tesseract-grid-bg {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(rgba(245, 158, 11, 0.18) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99, 102, 241, 0.18) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.tesseract-kicker {
+  position: relative;
+  z-index: 4;
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  color: #fcd34d;
+}
+
+.tesseract-time {
+  position: relative;
+  z-index: 4;
+  font-family: 'Orbitron', sans-serif !important;
+  font-size: clamp(2.4rem, 7vw, 3.9rem);
+  font-weight: 800;
+  color: #ffffff;
+  text-shadow: 0 0 20px rgba(245, 158, 11, 0.85);
+}
+
+.tesseract-epoch {
+  position: relative;
+  z-index: 4;
+  padding: 6px 16px;
+  border-radius: 12px;
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.42);
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fde68a;
+  letter-spacing: 0.12em;
+}
+
+/* =====================================================================
+   12, 22, 26. ISOMETRIC MONOLITH / CONCRETE / ORIGAMI WALL
+   ===================================================================== */
+.iso-wall {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(10px, 2vw, 20px);
+  padding: 16px;
+}
+
+.iso-digit-card {
+  width: clamp(58px, 10vw, 104px);
+  height: clamp(86px, 14vw, 146px);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.iso-digit-card.is-concrete {
+  background: #c7c3bc;
+  color: #18181b;
+  border: 2px solid #27272a;
+  box-shadow: 10px 10px 0 #ea580c;
+}
+
+.iso-digit-card.is-origami {
+  background: linear-gradient(135deg, rgba(244, 63, 94, 0.3), rgba(252, 211, 77, 0.2));
+  color: #ffffff;
+  border: 1px solid rgba(253, 164, 175, 0.42);
+}
+
+.iso-digit-card.is-cubes {
+  background: linear-gradient(135deg, rgba(236, 72, 153, 0.3), rgba(99, 102, 241, 0.25) 55%, #18181b);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 20px 36px rgba(0, 0, 0, 0.6);
+}
+
+.iso-lbl {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  opacity: 0.72;
+}
+
+.iso-val {
+  font-family: 'JetBrains Mono', monospace !important;
+  font-size: clamp(1.8rem, 4.5vw, 3rem);
+  font-weight: 800;
+}
+
+@media (max-width: 640px) {
+  .dna-grid,
+  .abacus-rods,
+  .bcd-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .ibm-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}

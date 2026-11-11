@@ -1,0 +1,231 @@
+<div
+  class="bulb-vessel"
+  [class.twin-mode]="isTwinMode"
+  [attr.data-engine]="engine"
+  [attr.data-theme-id]="themeId"
+  [attr.data-shape]="shape"
+  [style.--bulb-glow]="glowColor"
+  [style.--bulb-secondary]="secondaryGlow"
+  [style.--bulb-font]="fontCss"
+>
+  <!-- Top Crown Halo -->
+  <div class="crown-halo" aria-hidden="true"></div>
+
+  <!-- Glass Dome / Vessel -->
+  <div
+    class="glass-bell-jar"
+    [class.no-glass]="!showGlassDome"
+    [class.shape-pear]="shape === 'pear'"
+    [class.shape-cube]="shape === 'cube'"
+    [class.shape-round]="shape === 'round'"
+    [style.background]="showGlassDome ? glassTint : 'transparent'"
+  >
+    <!-- Unit Header Tag -->
+    @if (label) {
+      <span class="bulb-tag">{{ label }}</span>
+    }
+
+    <!-- Engine Switch -->
+    <div class="bulb-engine-stage" [ngClass]="flipPhaseClass()">
+      @switch (engine) {
+        @case ('acrylic_stack') {
+          <div class="acrylic-stack-core" [class.glitch-active]="themeId === 'shibuya'">
+            <div class="acrylic-ghost-stack" aria-hidden="true">
+              @for (ghost of stackGhostDigits; track $index) {
+                <span class="acrylic-ghost-char" [style.--layer-idx]="$index">{{ ghost }}</span>
+              }
+            </div>
+            <div class="bulb-digit-text acrylic-active-digit">{{ current() }}</div>
+            <div class="acrylic-base-glow" aria-hidden="true"></div>
+          </div>
+        }
+
+        @case ('split_flap') {
+          <div
+            class="bell-flap-pod"
+            [class.pod-bauhaus]="themeId === 'bauhaus'"
+            [class.pod-origami]="themeId === 'origami'"
+            [class.pod-braun]="themeId === 'braunvisor'"
+            [style.--bauhaus-bg]="bauhausBg()"
+          >
+            <div class="pod-card" [ngClass]="flipPhaseClass()">
+              <div class="pod-half pod-top">
+                <span class="pod-num">{{ current() }}</span>
+              </div>
+              <div class="pod-half pod-bottom">
+                <span class="pod-num">{{ previous() }}</span>
+              </div>
+              <div class="pod-flap pod-flap-top">
+                <span class="pod-num">{{ previous() }}</span>
+              </div>
+              <div class="pod-flap pod-flap-bot">
+                <span class="pod-num">{{ current() }}</span>
+              </div>
+              <div class="pod-seam" aria-hidden="true"></div>
+            </div>
+          </div>
+        }
+
+        @case ('filament_7seg') {
+          <div
+            class="seg7-row"
+            [class.is-louvers]="themeId === 'louvers'"
+            [class.is-edison]="themeId === 'edison'"
+          >
+            @for (ch of chars(); track $index) {
+              <svg class="seg7-svg" viewBox="0 0 100 160" aria-hidden="true">
+                @if (themeId === 'edison') {
+                  <line class="edison-post" x1="18" y1="150" x2="18" y2="128" />
+                  <line class="edison-post" x1="82" y1="150" x2="82" y2="128" />
+                }
+                @for (seg of seg7Segments(ch); track $index) {
+                  <line
+                    class="seg7-wire"
+                    [class.active]="seg.active"
+                    [attr.x1]="seg.x1"
+                    [attr.y1]="seg.y1"
+                    [attr.x2]="seg.x2"
+                    [attr.y2]="seg.y2"
+                  />
+                  @if (seg.active && themeId !== 'louvers') {
+                    <line
+                      class="seg7-core"
+                      [attr.x1]="seg.x1"
+                      [attr.y1]="seg.y1"
+                      [attr.x2]="seg.x2"
+                      [attr.y2]="seg.y2"
+                    />
+                  }
+                }
+              </svg>
+            }
+          </div>
+        }
+
+        @case ('vfd_7seg') {
+          <div
+            class="seg7-row is-vfd"
+            [class.is-mercury]="themeId === 'mercury'"
+            [class.is-murano]="themeId === 'murano'"
+          >
+            <div class="vfd-grid-mesh" aria-hidden="true"></div>
+            @for (ch of chars(); track $index) {
+              <svg class="seg7-svg" viewBox="0 0 100 160" aria-hidden="true">
+                @for (seg of seg7Segments(ch); track $index) {
+                  <line
+                    class="seg7-vfd-bar"
+                    [class.active]="seg.active"
+                    [attr.x1]="seg.x1"
+                    [attr.y1]="seg.y1"
+                    [attr.x2]="seg.x2"
+                    [attr.y2]="seg.y2"
+                  />
+                  @if (seg.active && themeId === 'mercury') {
+                    <line
+                      class="mercury-highlight"
+                      [attr.x1]="seg.x1"
+                      [attr.y1]="seg.y1"
+                      [attr.x2]="seg.x2"
+                      [attr.y2]="seg.y2"
+                    />
+                  }
+                }
+              </svg>
+            }
+          </div>
+        }
+
+        @case ('flip_dot') {
+          <div class="flipdot-row">
+            @for (ch of chars(); track $index) {
+              <div class="flipdot-matrix" aria-hidden="true">
+                @for (on of flipDotCells(ch); track $index) {
+                  <span class="flipdot-disc" [class.on]="on"></span>
+                }
+              </div>
+            }
+          </div>
+        }
+
+        @case ('ferrofluid') {
+          <div class="ferro-stage">
+            <div class="ferro-goo-layer" aria-hidden="true">
+              <div class="ferro-pool"></div>
+              @for (d of ferroDrops; track d) {
+                <span class="ferro-drop" [style.--drop-idx]="d"></span>
+              }
+            </div>
+            <div class="bulb-digit-text ferro-digit">{{ current() }}</div>
+          </div>
+        }
+
+        @case ('mbf_turbine') {
+          <div class="mbf-stage" [class.is-steampunk]="themeId === 'steampunk'">
+            <svg class="mbf-gears-svg" viewBox="0 0 120 120" aria-hidden="true">
+              <circle class="mbf-outer-ring" cx="60" cy="60" r="52" />
+              <circle class="mbf-escapement-ring" cx="60" cy="60" r="40" />
+              <circle class="mbf-balance-wheel" cx="60" cy="60" r="26" />
+              <circle class="mbf-ruby" cx="60" cy="20" r="3" />
+              <circle class="mbf-ruby" cx="60" cy="100" r="3" />
+            </svg>
+            <div class="bulb-digit-text mbf-digit">{{ current() }}</div>
+          </div>
+        }
+
+        @case ('biolum') {
+          <div class="biolum-stage" [class.is-cherenkov]="themeId === 'cherenkov'">
+            <div class="biolum-core-aura" aria-hidden="true"></div>
+            @for (s of spores; track s) {
+              <span class="biolum-spore" [style.--spore-idx]="s" aria-hidden="true"></span>
+            }
+            <div class="bulb-digit-text biolum-digit">{{ current() }}</div>
+          </div>
+        }
+
+        @case ('holocube') {
+          <div class="holo-stage">
+            <div class="holo-splitter-beam" aria-hidden="true"></div>
+            <div class="holo-wireframe" aria-hidden="true"></div>
+            <div class="bulb-digit-text holo-digit">{{ current() }}</div>
+          </div>
+        }
+
+        @case ('dyson_orb') {
+          <div class="dyson-stage" [class.is-quantum]="themeId === 'quantum'">
+            <div class="dyson-sun-halo" aria-hidden="true"></div>
+            <div class="dyson-ring ring-a" aria-hidden="true"></div>
+            <div class="dyson-ring ring-b" aria-hidden="true"></div>
+            @if (themeId === 'quantum') {
+              <div class="dyson-ring ring-c" aria-hidden="true"></div>
+            }
+            <div class="bulb-digit-text dyson-digit">{{ current() }}</div>
+          </div>
+        }
+
+        @case ('crt_scope') {
+          <div class="crt-stage">
+            <div class="crt-graticule" aria-hidden="true"></div>
+            <div class="crt-radar-sweep" aria-hidden="true"></div>
+            <div class="bulb-digit-text crt-digit">{{ current() }}</div>
+          </div>
+        }
+      }
+    </div>
+
+    <!-- Bottom Sub-Date Micro Filament Readout -->
+    @if (subText) {
+      <span class="bulb-sub-tag">{{ subText }}</span>
+    }
+
+    <!-- Borosilicate Curved Glass Specular Highlights -->
+    @if (showGlassDome) {
+      <div class="glass-specular-overlay" aria-hidden="true"></div>
+    }
+  </div>
+
+  <!-- Metallic Socket Collar -->
+  <div class="bulb-socket-ring" aria-hidden="true"></div>
+
+  <!-- Under-Glow Reflection -->
+  <div class="bulb-underglow" aria-hidden="true"></div>
+</div>

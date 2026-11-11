@@ -1,0 +1,505 @@
+@if (activeSpec(); as spec) {
+  <div
+    class="world-stage-host"
+    [style.--accent-primary]="spec.accent"
+    [style.--accent-secondary]="spec.secondary"
+  >
+    @switch (spec.engine) {
+      @case ('word_matrix') {
+        <div class="word-matrix-frame">
+          <div class="wm-header-bar">
+            <span class="wm-corner-dot" [class.lit]="qlockCornerDots()[0]"></span>
+            <span class="wm-date-title">{{ t().weekdayFull }} &bull; {{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</span>
+            <span class="wm-corner-dot" [class.lit]="qlockCornerDots()[1]"></span>
+          </div>
+          <div class="word-grid-11x10">
+            @for (cell of qlockCells(); track $index) {
+              <span class="word-cell" [class.lit]="cell.lit">{{ cell.char }}</span>
+            }
+          </div>
+          <div class="wm-footer-bar">
+            <span class="wm-corner-dot" [class.lit]="qlockCornerDots()[3]"></span>
+            <span class="wm-sec-pill">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</span>
+            <span class="wm-corner-dot" [class.lit]="qlockCornerDots()[2]"></span>
+          </div>
+        </div>
+      }
+
+      @case ('clock_of_clocks') {
+        <div class="million-times-board">
+          <div class="million-header">
+            <span>144 KINETIC STEPPER MOTORS &bull; STOCKHOLM</span>
+            <span class="million-date">{{ t().weekdayShort }} &bull; {{ t().dayNum }} / {{ t().monNum }} / {{ t().yearFull }}</span>
+          </div>
+          <div class="million-groups-row">
+            @for (pair of millionGroups(); track $index; let gIdx = $index) {
+              <div class="million-pair">
+                @for (matrix of pair; track $index) {
+                  <div class="digit-clock-matrix">
+                    @for (dial of matrix; track $index) {
+                      <div class="micro-dial">
+                        <span class="micro-hand hand-h" [style.transform]="'rotate(' + dial.hDeg + 'deg)'"></span>
+                        <span class="micro-hand hand-m" [style.transform]="'rotate(' + dial.mDeg + 'deg)'"></span>
+                      </div>
+                    }
+                  </div>
+                }
+              </div>
+              @if (gIdx < 2) {
+                <span class="million-colon">:</span>
+              }
+            }
+          </div>
+        </div>
+      }
+
+      @case ('urwerk_satellite') {
+        <div class="urwerk-housing">
+          <div class="urwerk-top-bar">
+            <span class="urwerk-chip lime">UR-220 SATELLITE</span>
+            <span class="urwerk-chip orange">{{ t().weekdayShort }} {{ t().dayNum }}-{{ t().monNum }}-{{ t().yearShort }}</span>
+          </div>
+          <div class="urwerk-center-deck">
+            <div class="urwerk-carousel">
+              <div class="urwerk-tourbillon" [style.transform]="'rotate(' + orbitalAngles().urwerkSec + 'deg)'">
+                <span class="urwerk-beacon"></span>
+              </div>
+              <div class="urwerk-hour-core">
+                <span class="urwerk-sub-lbl">WANDERING HOUR</span>
+                <div class="urwerk-hour-pod">{{ t().hh }}</div>
+                <span class="urwerk-minsec">:{{ t().mm }}:{{ t().ss }}</span>
+              </div>
+            </div>
+            <div class="urwerk-needle" [style.transform]="'rotate(' + orbitalAngles().urwerkMin + 'deg)'"></div>
+          </div>
+          <div class="urwerk-arc-scale">
+            <span>00</span><span>10</span><span>20</span>
+            <span class="urwerk-min-pill">MIN {{ t().mm }}</span>
+            <span>40</span><span>50</span><span>60</span>
+          </div>
+        </div>
+      }
+
+      @case ('orbital_rings') {
+        <div
+          class="orbital-dial"
+          [class.is-orloj]="spec.variant === 'orloj'"
+          [class.is-venetian]="spec.variant === 'venetian'"
+        >
+          <div class="orbital-dock-bar">
+            <span class="orbital-dock-left">{{ t().weekdayShort }} {{ t().dayNum }} {{ t().monthShort }}</span>
+            <span class="orbital-dock-right">{{ t().yearFull }}</span>
+          </div>
+          <div class="orbit-ring orbit-h" [style.transform]="'rotate(' + orbitalAngles().ringH + 'deg)'">
+            <span class="orbit-tag amber">XII / 24H</span>
+          </div>
+          <div class="orbit-ring orbit-m" [style.transform]="'rotate(' + orbitalAngles().ringM + 'deg)'">
+            <span class="orbit-tag sky">MIN 60</span>
+          </div>
+          <div class="orbit-ring orbit-s" [style.transform]="'rotate(' + orbitalAngles().ringS + 'deg)'">
+            <span class="orbit-sec-pip"></span>
+          </div>
+          <div class="orbital-core-box">
+            <span class="orbital-core-title">{{ activeTheme()?.name?.split(' ')?.[0] }}</span>
+            <div class="orbital-core-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</div>
+            <div class="orbital-core-date">{{ t().dayNum }} &bull; {{ t().monthShort }} &bull; {{ t().yearFull }}</div>
+          </div>
+        </div>
+      }
+
+      @case ('linear_vernier') {
+        <div class="vernier-viewport" [class.is-braun]="spec.variant === 'braun'">
+          <div class="vernier-cursor-bar"></div>
+          @for (col of vernierCols(); track $index) {
+            <div class="vernier-col">
+              <div class="vernier-strip" [style.transform]="'translateY(' + col.translateY + 'px)'">
+                @for (cell of col.cells; track $index) {
+                  <div class="vernier-cell" [class.active-mark]="cell.active">{{ cell.text }}</div>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('solari_board') {
+        <div class="solari-terminal-board">
+          <div class="solari-header">
+            <span>SOLARI &amp; C. UDINE &mdash; CIFRA TERMINAL</span>
+            <span>PARTENZE / DEPARTURES</span>
+          </div>
+          @for (row of solariRows(); track $index) {
+            <div class="solari-row">
+              @for (ch of row.chars; track $index) {
+                <span class="flap-tile" [attr.data-tone]="row.tone">{{ ch === ' ' ? '\u00A0' : ch }}</span>
+              }
+            </div>
+          }
+        </div>
+      }
+
+      @case ('ferro_tank') {
+        <svg class="world-svg-defs" width="0" height="0" aria-hidden="true">
+          <defs>
+            <filter id="gooeyFerro">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="6" result="blur" />
+              <feColorMatrix
+                in="blur"
+                mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 21 -9"
+                result="goo"
+              />
+              <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+          </defs>
+        </svg>
+        <div class="ferro-panoramic-tank">
+          <div class="ferro-blobs-layer" aria-hidden="true">
+            <div class="ferro-morph-blob blob-a"></div>
+            <div class="ferro-morph-blob blob-b"></div>
+            <div class="ferro-morph-blob blob-c"></div>
+          </div>
+          <div class="ferro-kicker">COLLOIDAL FERROFLUID FIELD &bull; {{ t().weekdayFull }}</div>
+          <div class="ferro-main-time">{{ t().hh }} : {{ t().mm }} : {{ t().ss }}</div>
+          <div class="ferro-date-pill">
+            MAGNETIC DATE DROPLETS: {{ t().dayNum }} &bull; {{ t().monthShort }} &bull; {{ t().yearFull }}
+          </div>
+        </div>
+      }
+
+      @case ('berlin_set') {
+        <div class="berlin-monolith">
+          <div class="berlin-sec-lamp" [class.lit]="berlinState().secEven"></div>
+          <div class="berlin-row-4">
+            @for (i of fourSlots; track i) {
+              <div class="berlin-block" [class.lit-red]="i <= berlinState().h5"></div>
+            }
+          </div>
+          <div class="berlin-row-4">
+            @for (i of fourSlots; track i) {
+              <div class="berlin-block" [class.lit-red]="i <= berlinState().h1"></div>
+            }
+          </div>
+          <div class="berlin-row-11">
+            @for (i of elevenSlots; track i) {
+              <div
+                class="berlin-block-sm"
+                [class.lit-red]="i <= berlinState().m5 && i % 3 === 0"
+                [class.lit-yellow]="i <= berlinState().m5 && i % 3 !== 0"
+              ></div>
+            }
+          </div>
+          <div class="berlin-row-4">
+            @for (i of fourSlots; track i) {
+              <div class="berlin-block" [class.lit-yellow]="i <= berlinState().m1"></div>
+            }
+          </div>
+          <div class="berlin-decoder">
+            <span class="berlin-dec-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</span>
+            <span>{{ t().weekdayFull }} &bull; {{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</span>
+          </div>
+        </div>
+      }
+
+      @case ('reel_to_reel') {
+        <div class="nagra-deck">
+          <div class="nagra-reels-row">
+            <div class="nagra-reel">
+              <div class="nagra-reel-ring spinning-reel"></div>
+              <div class="nagra-hub amber">
+                <span class="nagra-hub-lbl">REEL A</span>
+                <span class="nagra-hub-val">{{ t().hh }}:{{ t().mm }}</span>
+              </div>
+            </div>
+            <div class="nagra-center-head">
+              <span class="nagra-tape-tag">{{ t().weekdayShort }} {{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</span>
+              <div class="nagra-sec-box">:{{ t().ss }}</div>
+            </div>
+            <div class="nagra-reel">
+              <div class="nagra-reel-ring spinning-reel fast"></div>
+              <div class="nagra-hub green">
+                <span class="nagra-hub-lbl">DATE</span>
+                <span class="nagra-hub-val sm">{{ t().dayNum }}/{{ t().monNum }}</span>
+              </div>
+            </div>
+          </div>
+          <div class="nagra-vu-grid">
+            <div class="nagra-vu">
+              <span>CH 1 &bull; MINUTE LEVEL ({{ t().mm }})</span>
+              <div class="nagra-needle" [style.transform]="'rotate(' + nagraVu().left + 'deg)'"></div>
+            </div>
+            <div class="nagra-vu">
+              <span>CH 2 &bull; SECOND PEAK ({{ t().ss }})</span>
+              <div class="nagra-needle" [style.transform]="'rotate(' + nagraVu().right + 'deg)'"></div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @case ('water_siphon') {
+        <div class="siphon-rack">
+          @for (col of siphonCols(); track $index) {
+            <div class="siphon-col-wrap">
+              <div class="siphon-column">
+                <div class="siphon-ticks" aria-hidden="true"></div>
+                <div class="siphon-liquid" [class]="col.tone" [style.height.%]="col.pct"></div>
+                <div class="siphon-val">{{ col.val }}</div>
+              </div>
+              <span class="siphon-label">{{ col.label }}</span>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('nerv_hud') {
+        <div class="nerv-console" [class.is-cyber]="spec.variant === 'cyber'">
+          <div class="nerv-header">
+            <span>{{ spec.variant === 'cyber' ? 'NEO-TOKYO SECTOR 09 // KATAKANA HUD' : 'NERV TACTICAL CHRONOGRAPH // MAGI-01' }}</span>
+            <span>SYNC: 99.98%</span>
+          </div>
+          <div class="nerv-grid">
+            <div class="nerv-cell">
+              <span class="nerv-unit">HOURS / 時</span>
+              <span class="nerv-num">{{ t().hh }}</span>
+            </div>
+            <div class="nerv-cell">
+              <span class="nerv-unit">MINUTES / 分</span>
+              <span class="nerv-num">{{ t().mm }}</span>
+            </div>
+            <div class="nerv-cell">
+              <span class="nerv-unit">SECONDS / 秒</span>
+              <span class="nerv-num accent">{{ t().ss }}</span>
+            </div>
+          </div>
+          <div class="nerv-footer">
+            <span class="nerv-date">DATE: {{ t().yearFull }}.{{ t().monNum }}.{{ t().dayNum }} [{{ t().weekdayFull }}]</span>
+            <span class="nerv-alert-badge">INTERNAL POWER ACTIVE</span>
+          </div>
+        </div>
+      }
+
+      @case ('swiss_railway') {
+        <div class="sbb-stage">
+          <div class="sbb-analog-dial">
+            @for (hIdx of hoursTwelveArray; track hIdx) {
+              <div class="sbb-marker-arm" [style.transform]="'rotate(' + hIdx * 30 + 'deg)'">
+                <span class="sbb-baton"></span>
+              </div>
+            }
+            <div class="sbb-hand-h" [style.transform]="'translateX(-50%) rotate(' + sbbHands().hour + 'deg)'"></div>
+            <div class="sbb-hand-m" [style.transform]="'translateX(-50%) rotate(' + sbbHands().min + 'deg)'"></div>
+            <div class="sbb-hand-s" [style.transform]="'translateX(-50%) rotate(' + sbbHands().sec + 'deg)'">
+              <span class="sbb-lollipop"></span>
+            </div>
+            <span class="sbb-cap"></span>
+          </div>
+          <div class="sbb-platform-sign">
+            <div class="sbb-sign-top">
+              <span>SBB CFF FFS</span>
+              <span class="sbb-gleis">GLEIS 1</span>
+            </div>
+            <div class="sbb-sign-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</div>
+            <div class="sbb-sign-date">{{ t().weekdayFull }}<br>{{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</div>
+          </div>
+        </div>
+      }
+
+      @case ('dna_helix') {
+        <div class="dna-frame">
+          <div class="dna-title">GENOMIC NUCLEOTIDE SEQUENCE &bull; {{ t().weekdayFull }} {{ t().yearFull }}</div>
+          <div class="dna-grid">
+            @for (pair of dnaPairs(); track $index) {
+              <div class="dna-rung">
+                <span class="dna-node cyan"></span>
+                <span class="dna-strand top"></span>
+                <span class="dna-val">{{ pair.val }}</span>
+                <span class="dna-lbl">{{ pair.label }}</span>
+                <span class="dna-strand bottom"></span>
+                <span class="dna-node magenta"></span>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @case ('punch_card') {
+        <div class="ibm-card">
+          <div class="ibm-header">
+            <span>IBM 5081 HOLLERITH CHRONO-CARD</span>
+            <span>{{ t().hh }}:{{ t().mm }}:{{ t().ss }} // {{ t().dayNum }}-{{ t().monNum }}-{{ t().yearFull }}</span>
+          </div>
+          <div class="ibm-grid">
+            @for (col of punchCardCols(); track $index) {
+              <div class="ibm-col">
+                <span class="ibm-col-hdr">{{ col.header }}</span>
+                @for (r of zeroToNine; track r) {
+                  <div class="ibm-cell" [class.punched]="r === col.activeRow">{{ r }}</div>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @case ('abacus_frame') {
+        <div class="abacus-housing">
+          <div class="abacus-header">
+            <span>SOROBAN KINETIC BEAD FRAME</span>
+            <span>{{ t().weekdayShort }} &bull; {{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</span>
+          </div>
+          <div class="abacus-rods">
+            @for (rod of abacusRods(); track $index) {
+              <div class="abacus-rod">
+                <span class="abacus-rod-lbl">{{ rod.label }}:{{ rod.val }}</span>
+                <div class="abacus-heaven">
+                  <span class="abacus-wire" aria-hidden="true"></span>
+                  <div class="abacus-bead" [class.lit]="rod.heavenActive"></div>
+                </div>
+                <div class="abacus-earth">
+                  <span class="abacus-wire" aria-hidden="true"></span>
+                  @for (b of fourSlots; track b) {
+                    <div class="abacus-bead" [class.lit]="b <= rod.earthCount"></div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      @case ('retro_lcd') {
+        <div class="lcd-bezel">
+          <div class="lcd-inner-case">
+            <div class="lcd-brand">
+              <span>SEIKO QUARTZ LC</span>
+              <span>CHRONOGRAPH &bull; PERPETUAL</span>
+            </div>
+            <div class="lcd-screen">
+              <div class="lcd-meta">
+                <span>[{{ t().weekdayShort }}]</span>
+                <span>{{ t().dayNum }}-{{ t().monNum }}-{{ t().yearFull }}</span>
+                <span>{{ use24() ? '24H' : t().ampm }}</span>
+              </div>
+              <div class="lcd-digits">
+                <span class="lcd-hm">{{ t().hh }}:{{ t().mm }}</span>
+                <span class="lcd-sec">{{ t().ss }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      @case ('radar_scope') {
+        <div class="radar-scope">
+          <div class="radar-ring r-outer" aria-hidden="true"></div>
+          <div class="radar-ring r-inner" aria-hidden="true"></div>
+          <div class="radar-cross-h" aria-hidden="true"></div>
+          <div class="radar-cross-v" aria-hidden="true"></div>
+          <div class="radar-sweep-cone" aria-hidden="true"></div>
+          <div class="radar-core">
+            <span class="radar-badge">TRANSPONDER SQUAWK &bull; {{ t().weekdayShort }}</span>
+            <div class="radar-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</div>
+            <div class="radar-date">VEC-DATE: {{ t().dayNum }}/{{ t().monNum }}/{{ t().yearFull }}</div>
+          </div>
+        </div>
+      }
+
+      @case ('bauhaus_geo') {
+        <div class="bauhaus-canvas">
+          <div class="bauhaus-top">
+            <span>BAUHAUS WEIMAR &bull; DESSAU 1926</span>
+            <span class="bauhaus-date-chip">{{ t().weekdayShort }} {{ t().dayNum }}.{{ t().monNum }}.{{ t().yearShort }}</span>
+          </div>
+          <div class="bauhaus-stage">
+            <div class="bauhaus-circle" [style.transform]="'rotate(' + bauhausAngles().circle + 'deg)'">
+              <span class="bauhaus-dot"></span>
+            </div>
+            <div class="bauhaus-square" [style.transform]="'rotate(' + bauhausAngles().square + 'deg)'"></div>
+            <div class="bauhaus-center-disc">
+              <span class="bauhaus-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</span>
+            </div>
+          </div>
+        </div>
+      }
+
+      @case ('laser_galvo') {
+        <div class="laser-stage">
+          <div class="laser-kicker">
+            ILDA 40KPPS GALVO SCANNER &bull; {{ t().weekdayFull }} {{ t().dayNum }}/{{ t().monNum }}/{{ t().yearFull }}
+          </div>
+          <div class="laser-vector-glow">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</div>
+          <div class="laser-scanline" aria-hidden="true"></div>
+        </div>
+      }
+
+      @case ('bathyscaphe_gauges') {
+        <div class="bathy-panel">
+          @for (g of bathyGauges(); track $index) {
+            <div class="bathy-porthole">
+              <span class="bathy-title">{{ g.title }}</span>
+              <span class="bathy-val">{{ g.val }}</span>
+              <span class="bathy-sub">{{ g.sub }}</span>
+              <div class="bathy-needle" [style.transform]="'translateX(-50%) rotate(' + g.deg + 'deg)'"></div>
+            </div>
+          }
+        </div>
+      }
+
+      @case ('binary_morse') {
+        <div class="bletchley-rack">
+          <div class="bletchley-hdr">
+            <span>BLETCHLEY BCD + MORSE TELEGRAPH</span>
+            <span>{{ t().weekdayShort }} &bull; {{ t().dayNum }}/{{ t().monNum }}/{{ t().yearFull }}</span>
+          </div>
+          <div class="bcd-grid">
+            @for (col of bcdColumns(); track $index) {
+              <div class="bcd-col">
+                <span class="bcd-lbl">{{ col.label }}</span>
+                @for (bit of bcdBits; track bit) {
+                  <span class="bcd-bit" [class.on]="isBitSet(col.val, bit)">{{ bit }}</span>
+                }
+                <span class="bcd-val">{{ col.val }}</span>
+              </div>
+            }
+          </div>
+          <div class="morse-strip">MORSE: {{ morseText() }}</div>
+        </div>
+      }
+
+      @case ('art_deco_tower') {
+        <div class="chrysler-ziggurat">
+          <div class="chrysler-kicker">CHRYSLER SUNBURST CHRONOMETER</div>
+          <div class="chrysler-time">{{ t().hh }} : {{ t().mm }} : {{ t().ss }}</div>
+          <div class="chrysler-date">{{ t().weekdayFull }} &bull; {{ t().dayNum }} {{ t().monthShort }} {{ t().yearFull }}</div>
+        </div>
+      }
+
+      @case ('tesseract_5d') {
+        <div class="tesseract-box">
+          <div class="tesseract-grid-bg" aria-hidden="true"></div>
+          <span class="tesseract-kicker">GARGANTUA 5D GRAVITATIONAL HORIZON</span>
+          <div class="tesseract-time">{{ t().hh }}:{{ t().mm }}:{{ t().ss }}</div>
+          <div class="tesseract-epoch">
+            EPOCH COORD: {{ t().yearFull }}.{{ t().monNum }}.{{ t().dayNum }} // {{ t().weekdayFull }}
+          </div>
+        </div>
+      }
+
+      @case ('iso_monolith') {
+        <div class="iso-wall">
+          @for (block of isoBlocks(); track $index) {
+            <div
+              class="iso-digit-card"
+              [class.is-concrete]="spec.variant === 'concrete'"
+              [class.is-origami]="spec.variant === 'origami'"
+              [class.is-cubes]="spec.variant === 'cubes'"
+            >
+              <span class="iso-lbl">{{ block.label }}</span>
+              <span class="iso-val">{{ block.val }}</span>
+            </div>
+          }
+        </div>
+      }
+    }
+  </div>
+}

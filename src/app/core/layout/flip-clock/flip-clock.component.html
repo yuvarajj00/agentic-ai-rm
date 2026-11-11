@@ -1,5 +1,18 @@
-<div class="plain-clock-screen" [attr.data-clock-theme]="selectedTheme().id">
-  <!-- Main Workspace (Top Bar + Centered Split-Flap Clock & Date) -->
+<div
+  class="plain-clock-screen"
+  [attr.data-clock-theme]="selectedTheme().id"
+  [class.is-horology]="isHorology()"
+  [class.is-world-museum]="isWorldMuseum()"
+  [style.background-color]="isHorology() || isWorldMuseum() ? '#050508' : null"
+  [style.background-image]="
+    isHorology()
+      ? selectedTheme().horology!.bgRadial
+      : isWorldMuseum()
+        ? selectedTheme().world!.bgAura
+        : null
+  "
+>
+  <!-- Main Workspace (Top Bar + Centered Split-Flap or Horology Clock Stage) -->
   <div class="clock-workspace">
     <!-- Minimal Floating Corner Controls -->
     <div class="clock-top-bar">
@@ -14,7 +27,7 @@
       </button>
 
       <div class="clock-top-right">
-        <!-- 20 Architectural Themes Dropdown -->
+        <!-- 42 Architectural Clock Themes Dropdown -->
         <div class="theme-dropdown" #themeDropdownWrapper>
           <button
             type="button"
@@ -47,36 +60,39 @@
           </button>
 
           @if (isDropdownOpen()) {
-            <div class="theme-dropdown-menu" role="listbox" aria-label="20 Flip Clock Themes">
-              @for (theme of themes; track theme.id) {
-                <button
-                  type="button"
-                  role="option"
-                  class="theme-option"
-                  [class.is-active]="theme.id === selectedTheme().id"
-                  [attr.aria-selected]="theme.id === selectedTheme().id"
-                  (click)="selectTheme(theme.id)"
-                >
-                  <span
-                    class="theme-swatch"
-                    [style.background]="theme.swatchBg"
-                    [style.border-color]="theme.swatchBorder"
-                    [style.box-shadow]="theme.swatchGlow"
-                  ></span>
-                  <span class="theme-option-text">
-                    <span class="theme-option-title">{{ theme.num }}. {{ theme.name }}</span>
-                    <span class="theme-option-tag">{{ theme.tag }} &middot; {{ theme.font }}</span>
-                  </span>
-                  @if (theme.id === selectedTheme().id) {
-                    <svg class="theme-check" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                      <path
-                        fill-rule="evenodd"
-                        d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
-                        clip-rule="evenodd"
-                      />
-                    </svg>
-                  }
-                </button>
+            <div class="theme-dropdown-menu" role="listbox" aria-label="72 Clock Themes">
+              @for (group of themeGroups; track group.title) {
+                <div class="theme-group-label">{{ group.title }}</div>
+                @for (theme of group.items; track theme.id) {
+                  <button
+                    type="button"
+                    role="option"
+                    class="theme-option"
+                    [class.is-active]="theme.id === selectedTheme().id"
+                    [attr.aria-selected]="theme.id === selectedTheme().id"
+                    (click)="selectTheme(theme.id)"
+                  >
+                    <span
+                      class="theme-swatch"
+                      [style.background]="theme.swatchBg"
+                      [style.border-color]="theme.swatchBorder"
+                      [style.box-shadow]="theme.swatchGlow"
+                    ></span>
+                    <span class="theme-option-text">
+                      <span class="theme-option-title">{{ theme.num }}. {{ theme.name }}</span>
+                      <span class="theme-option-tag">{{ theme.tag }} &middot; {{ theme.font }}</span>
+                    </span>
+                    @if (theme.id === selectedTheme().id) {
+                      <svg class="theme-check" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path
+                          fill-rule="evenodd"
+                          d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                          clip-rule="evenodd"
+                        />
+                      </svg>
+                    }
+                  </button>
+                }
               }
             </div>
           }
@@ -103,40 +119,79 @@
       </div>
     </div>
 
-    <!-- Centered Pure 3D Split-Flap Clock & Date Stage -->
-    <main class="clock-main-stage" aria-label="Full screen split-flap clock">
-      <div
-        class="clock-stage"
-        [style.--group-gap.px]="gapPx()"
-        [style.--scale-factor]="scaleFactor()"
-      >
-        <app-flip-unit
-          [value]="hoursStr()"
-          [amPmBadge]="use24Hour() ? '' : period()"
-          [forceFlipCount]="manualFlipCount()"
-          [isGradientText]="selectedTheme().id === 'synthwave'"
-          aria-label="Hours"
-        />
+    <!-- Centered Clock & Date Stage -->
+    <main class="clock-main-stage" aria-label="Full screen clock">
+      @if (isWorldMuseum()) {
+        <div class="world-stage-wrapper" [style.transform]="'scale(' + scaleFactor() + ')'">
+          <app-world-horology
+            [now]="now()"
+            [use24Hour]="use24Hour()"
+            [theme]="selectedTheme()"
+            [spec]="selectedTheme().world!"
+          />
+        </div>
+      } @else if (isHorology()) {
+        <!-- Shared SVG Goo Filter for Ferrofluid Engine -->
+        <svg class="horology-svg-defs" width="0" height="0" aria-hidden="true">
+          <defs>
+            <filter id="ferroGooFilter">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur" />
+              <feColorMatrix
+                in="blur"
+                mode="matrix"
+                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 22 -9"
+                result="goo"
+              />
+              <feComposite in="SourceGraphic" in2="goo" operator="atop" />
+            </filter>
+          </defs>
+        </svg>
 
-        @if (dividerMode() > 0) {
-          <div
-            class="colon-separator"
-            [class.hairline-mode]="dividerMode() === 2"
-            aria-hidden="true"
-          >
-            <span class="colon-dot"></span>
-            <span class="colon-dot"></span>
+        <div class="horology-stage-wrapper" [style.transform]="'scale(' + scaleFactor() + ')'">
+          <div class="bulb-array-row" [style.--bulb-gap.px]="horologyGapPx()">
+            @for (bulb of horologyBulbs(); track $index) {
+              <app-horology-bulb
+                [value]="bulb.value"
+                [label]="bulb.label"
+                [subText]="bulb.subText"
+                [themeId]="horologyThemeId()"
+                [engine]="selectedTheme().horology!.engine"
+                [shape]="selectedTheme().horology!.shape"
+                [fontCss]="selectedTheme().horology!.fontCss"
+                [glowColor]="bulb.glowColor"
+                [secondaryGlow]="bulb.secondaryGlow"
+                [glassTint]="selectedTheme().horology!.glassTint"
+                [showGlassDome]="showGlassDome()"
+                [bulbIndex]="$index"
+                [isTwinMode]="!sixBulbMode()"
+                [forceFlipCount]="manualFlipCount()"
+              />
+            }
           </div>
-        }
 
-        <app-flip-unit
-          [value]="minutesStr()"
-          [forceFlipCount]="manualFlipCount()"
-          [isGradientText]="selectedTheme().id === 'synthwave'"
-          aria-label="Minutes"
-        />
+          <!-- Architectural Monolith Pedestal & Date Plate -->
+          <div
+            class="horology-pedestal"
+            [style.background]="selectedTheme().horology!.pedestalStyle"
+          >
+            <div class="pedestal-trim" aria-hidden="true"></div>
+            <div class="pedestal-date-plate">{{ dateFormatted() }}</div>
+          </div>
+        </div>
+      } @else {
+        <div
+          class="clock-stage"
+          [style.--group-gap.px]="gapPx()"
+          [style.--scale-factor]="scaleFactor()"
+        >
+          <app-flip-unit
+            [value]="hoursStr()"
+            [amPmBadge]="use24Hour() ? '' : period()"
+            [forceFlipCount]="manualFlipCount()"
+            [isGradientText]="selectedTheme().id === 'synthwave'"
+            aria-label="Hours"
+          />
 
-        @if (showSeconds()) {
           @if (dividerMode() > 0) {
             <div
               class="colon-separator"
@@ -149,20 +204,40 @@
           }
 
           <app-flip-unit
-            [value]="secondsStr()"
-            [isSeconds]="true"
+            [value]="minutesStr()"
             [forceFlipCount]="manualFlipCount()"
             [isGradientText]="selectedTheme().id === 'synthwave'"
-            aria-label="Seconds"
+            aria-label="Minutes"
           />
-        }
-      </div>
 
-      <div class="clock-date-readout">{{ dateFormatted() }}</div>
+          @if (showSeconds()) {
+            @if (dividerMode() > 0) {
+              <div
+                class="colon-separator"
+                [class.hairline-mode]="dividerMode() === 2"
+                aria-hidden="true"
+              >
+                <span class="colon-dot"></span>
+                <span class="colon-dot"></span>
+              </div>
+            }
+
+            <app-flip-unit
+              [value]="secondsStr()"
+              [isSeconds]="true"
+              [forceFlipCount]="manualFlipCount()"
+              [isGradientText]="selectedTheme().id === 'synthwave'"
+              aria-label="Seconds"
+            />
+          }
+        </div>
+
+        <div class="clock-date-readout">{{ dateFormatted() }}</div>
+      }
     </main>
   </div>
 
-  <!-- Azure DevOps-Style Collapsible Right Sidebar (Icons-only collapsed, Icon+Text expanded) -->
+  <!-- Middle-Right Collapsible Controls (Bare icons when collapsed; compact floating controls when expanded) -->
   <aside
     class="clock-right-sidebar"
     [class.is-expanded]="isSidebarExpanded()"
@@ -188,124 +263,231 @@
         }
       </button>
 
-      <!-- 2. Seconds (ON / OFF) -->
-      <button
-        type="button"
-        class="sidebar-nav-btn"
-        [class.is-active]="showSeconds()"
-        [class.is-accent-on]="showSeconds()"
-        (click)="toggleSeconds()"
-        [title]="'Seconds: ' + (showSeconds() ? 'ON' : 'OFF')"
-        [attr.aria-label]="'Seconds: ' + (showSeconds() ? 'ON' : 'OFF')"
-      >
-        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-          <path stroke-linecap="round" stroke-width="1.9" d="M10 2h4m-2 2v3" />
-          <circle cx="12" cy="13" r="8" stroke-width="1.9" />
-          <path stroke-linecap="round" stroke-width="1.9" d="M12 13l3-3" />
-        </svg>
-        @if (isSidebarExpanded()) {
-          <span class="sidebar-label">Seconds</span>
-          <span
-            class="sidebar-value-pill"
-            [class.text-on]="showSeconds()"
-            [class.text-off]="!showSeconds()"
-          >
-            {{ showSeconds() ? 'ON' : 'OFF' }}
-          </span>
-        }
-      </button>
-
-      <!-- 3. Divider (NONE / DOTS / LINE) -->
-      <button
-        type="button"
-        class="sidebar-nav-btn"
-        [class.is-active]="dividerMode() > 0"
-        [class.is-accent-on]="dividerMode() === 1"
-        [class.is-accent-cyan]="dividerMode() === 2"
-        (click)="cycleDivider()"
-        [title]="'Divider: ' + dividerLabel()"
-        [attr.aria-label]="'Divider: ' + dividerLabel()"
-      >
-        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-          <rect x="3.5" y="5.5" width="5.5" height="13" rx="1.5" stroke-width="1.8" />
-          <path stroke-linecap="round" stroke-width="1.8" d="M12 7v10" />
-          <rect x="15" y="5.5" width="5.5" height="13" rx="1.5" stroke-width="1.8" />
-        </svg>
-        @if (isSidebarExpanded()) {
-          <span class="sidebar-label">Divider</span>
-          <span
-            class="sidebar-value-pill"
-            [class.text-off]="dividerMode() === 0"
-            [class.text-on]="dividerMode() === 1"
-            [class.text-cyan]="dividerMode() === 2"
-          >
-            {{ dividerLabel() }}
-          </span>
-        }
-      </button>
-
-      <!-- 4. Trigger Flip Animation -->
-      <button
-        type="button"
-        class="sidebar-nav-btn sidebar-nav-flip"
-        (click)="triggerManualFlip()"
-        title="Trigger Flip Animation"
-        aria-label="Trigger Flip Animation"
-      >
-        <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="1.9"
-            d="M4 12a8 8 0 0114.93-4M20 4v4h-4m4 4a8 8 0 01-14.93 4M4 20v-4h4"
-          />
-        </svg>
-        @if (isSidebarExpanded()) {
-          <span class="sidebar-label">Trigger Flip Animation</span>
-        }
-      </button>
-
-      @if (isSidebarExpanded()) {
-        <div class="sidebar-divider" aria-hidden="true"></div>
-      }
-
-      <!-- 5. Card Gap -->
-      @if (isSidebarExpanded()) {
-        <div class="sidebar-slider-group">
-          <div class="sidebar-slider-header">
-            <span class="sidebar-slider-title">
-              <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-width="1.9" d="M5 4v16M19 4v16M9 12h6m-4-2l-2 2 2 2m4-4l2 2-2 2" />
-              </svg>
-              <span class="sidebar-label">Card Gap</span>
-            </span>
-            <span class="sidebar-value-readout">{{ gapPx() }}px</span>
-          </div>
-          <input
-            type="range"
-            class="sidebar-slider"
-            min="10"
-            max="56"
-            [value]="gapPx()"
-            (input)="onGapChange($event)"
-            aria-label="Card Gap"
-          />
-        </div>
-      } @else {
+      @if (isHorology()) {
+        <!-- Horology Control 2: Array (6-BULB / 3-TWIN) -->
         <button
           type="button"
           class="sidebar-nav-btn"
-          (click)="expandSidebar()"
-          [title]="'Card Gap: ' + gapPx() + 'px (Click to expand)'"
-          aria-label="Expand sidebar to adjust Card Gap"
+          [class.is-active]="!sixBulbMode()"
+          [class.is-accent-cyan]="!sixBulbMode()"
+          (click)="toggleArrayMode()"
+          [title]="'Array: ' + arrayModeLabel()"
+          [attr.aria-label]="'Array: ' + arrayModeLabel()"
         >
           <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
-            <path stroke-linecap="round" stroke-width="1.9" d="M5 4v16M19 4v16M9 12h6m-4-2l-2 2 2 2m4-4l2 2-2 2" />
+            <rect x="4" y="6" width="4" height="12" rx="2" stroke-width="1.8" />
+            <rect x="10" y="6" width="4" height="12" rx="2" stroke-width="1.8" />
+            <rect x="16" y="6" width="4" height="12" rx="2" stroke-width="1.8" />
           </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Array</span>
+            <span class="sidebar-value-pill text-cyan">{{ arrayModeLabel() }}</span>
+          }
+        </button>
+
+        <!-- Horology Control 3: Date Display (SUB / DATE / ALT) -->
+        <button
+          type="button"
+          class="sidebar-nav-btn"
+          [class.is-active]="bulbDateMode() !== 'sub'"
+          [class.is-accent-on]="bulbDateMode() === 'full_date'"
+          [class.is-accent-cyan]="bulbDateMode() === 'alternate'"
+          (click)="cycleBulbDateMode()"
+          [title]="'Display: ' + bulbDateModeLabel()"
+          [attr.aria-label]="'Display: ' + bulbDateModeLabel()"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <rect x="3" y="5" width="18" height="16" rx="2" stroke-width="1.8" />
+            <path stroke-linecap="round" stroke-width="1.8" d="M8 3v4M16 3v4M3 10h18" />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Display</span>
+            <span
+              class="sidebar-value-pill"
+              [class.text-off]="bulbDateMode() === 'sub'"
+              [class.text-on]="bulbDateMode() === 'full_date'"
+              [class.text-cyan]="bulbDateMode() === 'alternate'"
+            >
+              {{ bulbDateModeLabel() }}
+            </span>
+          }
+        </button>
+
+        <!-- Horology Control 4: Glass Dome (ON / OFF) -->
+        <button
+          type="button"
+          class="sidebar-nav-btn"
+          [class.is-active]="showGlassDome()"
+          [class.is-accent-on]="showGlassDome()"
+          (click)="toggleGlassDome()"
+          [title]="'Glass Dome: ' + (showGlassDome() ? 'ON' : 'OFF')"
+          [attr.aria-label]="'Glass Dome: ' + (showGlassDome() ? 'ON' : 'OFF')"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.8"
+              d="M6 19V11a6 6 0 1112 0v8M4 19h16"
+            />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Glass Dome</span>
+            <span
+              class="sidebar-value-pill"
+              [class.text-on]="showGlassDome()"
+              [class.text-off]="!showGlassDome()"
+            >
+              {{ showGlassDome() ? 'ON' : 'OFF' }}
+            </span>
+          }
+        </button>
+
+        <!-- Horology Control 5: Gamut -->
+        <button
+          type="button"
+          class="sidebar-nav-btn"
+          [class.is-active]="gamutMode() !== 'theme'"
+          [class.is-accent-cyan]="gamutMode() !== 'theme'"
+          (click)="cycleGamutMode()"
+          [title]="'Gamut: ' + gamutLabel()"
+          [attr.aria-label]="'Gamut: ' + gamutLabel()"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <circle cx="12" cy="12" r="8.5" stroke-width="1.8" />
+            <circle cx="12" cy="8.5" r="1.5" fill="currentColor" />
+            <circle cx="8.5" cy="13.5" r="1.5" fill="currentColor" />
+            <circle cx="15.5" cy="13.5" r="1.5" fill="currentColor" />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Gamut</span>
+            <span class="sidebar-value-pill text-cyan">{{ gamutLabel() }}</span>
+          }
+        </button>
+      } @else {
+        <!-- Split-Flap Control 2: Seconds (ON / OFF) -->
+        <button
+          type="button"
+          class="sidebar-nav-btn"
+          [class.is-active]="showSeconds()"
+          [class.is-accent-on]="showSeconds()"
+          (click)="toggleSeconds()"
+          [title]="'Seconds: ' + (showSeconds() ? 'ON' : 'OFF')"
+          [attr.aria-label]="'Seconds: ' + (showSeconds() ? 'ON' : 'OFF')"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path stroke-linecap="round" stroke-width="1.9" d="M10 2h4m-2 2v3" />
+            <circle cx="12" cy="13" r="8" stroke-width="1.9" />
+            <path stroke-linecap="round" stroke-width="1.9" d="M12 13l3-3" />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Seconds</span>
+            <span
+              class="sidebar-value-pill"
+              [class.text-on]="showSeconds()"
+              [class.text-off]="!showSeconds()"
+            >
+              {{ showSeconds() ? 'ON' : 'OFF' }}
+            </span>
+          }
+        </button>
+
+        <!-- Split-Flap Control 3: Divider (NONE / DOTS / LINE) -->
+        <button
+          type="button"
+          class="sidebar-nav-btn"
+          [class.is-active]="dividerMode() > 0"
+          [class.is-accent-on]="dividerMode() === 1"
+          [class.is-accent-cyan]="dividerMode() === 2"
+          (click)="cycleDivider()"
+          [title]="'Divider: ' + dividerLabel()"
+          [attr.aria-label]="'Divider: ' + dividerLabel()"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <rect x="3.5" y="5.5" width="5.5" height="13" rx="1.5" stroke-width="1.8" />
+            <path stroke-linecap="round" stroke-width="1.8" d="M12 7v10" />
+            <rect x="15" y="5.5" width="5.5" height="13" rx="1.5" stroke-width="1.8" />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">Divider</span>
+            <span
+              class="sidebar-value-pill"
+              [class.text-off]="dividerMode() === 0"
+              [class.text-on]="dividerMode() === 1"
+              [class.text-cyan]="dividerMode() === 2"
+            >
+              {{ dividerLabel() }}
+            </span>
+          }
         </button>
       }
 
-      <!-- 6. Scale -->
+      @if (!isWorldMuseum()) {
+        <!-- Trigger Animation / Surge -->
+        <button
+          type="button"
+          class="sidebar-nav-btn sidebar-nav-flip"
+          (click)="triggerManualFlip()"
+          [title]="isHorology() ? 'Trigger Surge' : 'Trigger Flip Animation'"
+          [attr.aria-label]="isHorology() ? 'Trigger Surge' : 'Trigger Flip Animation'"
+        >
+          <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.9"
+              d="M4 12a8 8 0 0114.93-4M20 4v4h-4m4 4a8 8 0 01-14.93 4M4 20v-4h4"
+            />
+          </svg>
+          @if (isSidebarExpanded()) {
+            <span class="sidebar-label">{{ isHorology() ? 'Trigger Surge' : 'Trigger Flip Animation' }}</span>
+          }
+        </button>
+
+        @if (isSidebarExpanded()) {
+          <div class="sidebar-divider" aria-hidden="true"></div>
+        }
+
+        <!-- Card Gap / Spacing -->
+        @if (isSidebarExpanded()) {
+          <div class="sidebar-slider-group">
+            <div class="sidebar-slider-header">
+              <span class="sidebar-slider-title">
+                <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+                  <path stroke-linecap="round" stroke-width="1.9" d="M5 4v16M19 4v16M9 12h6m-4-2l-2 2 2 2m4-4l2 2-2 2" />
+                </svg>
+                <span class="sidebar-label">{{ isHorology() ? 'Bulb Gap' : 'Card Gap' }}</span>
+              </span>
+              <span class="sidebar-value-readout">{{ isHorology() ? horologyGapPx() : gapPx() }}px</span>
+            </div>
+            <input
+              type="range"
+              class="sidebar-slider"
+              min="10"
+              max="56"
+              [value]="gapPx()"
+              (input)="onGapChange($event)"
+              [attr.aria-label]="isHorology() ? 'Bulb Gap' : 'Card Gap'"
+            />
+          </div>
+        } @else {
+          <button
+            type="button"
+            class="sidebar-nav-btn"
+            (click)="expandSidebar()"
+            [title]="(isHorology() ? 'Bulb Gap: ' + horologyGapPx() : 'Card Gap: ' + gapPx()) + 'px (Click to expand)'"
+            [attr.aria-label]="'Expand sidebar to adjust ' + (isHorology() ? 'Bulb Gap' : 'Card Gap')"
+          >
+            <svg class="sidebar-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
+              <path stroke-linecap="round" stroke-width="1.9" d="M5 4v16M19 4v16M9 12h6m-4-2l-2 2 2 2m4-4l2 2-2 2" />
+            </svg>
+          </button>
+        }
+      } @else if (isSidebarExpanded()) {
+        <div class="sidebar-divider" aria-hidden="true"></div>
+      }
+
+      <!-- Scale -->
       @if (isSidebarExpanded()) {
         <div class="sidebar-slider-group">
           <div class="sidebar-slider-header">
@@ -325,7 +507,7 @@
           <input
             type="range"
             class="sidebar-slider"
-            min="70"
+            min="65"
             max="115"
             [value]="scalePct()"
             (input)="onScaleChange($event)"
@@ -352,7 +534,7 @@
       }
     </nav>
 
-    <!-- Bottom Collapse / Expand Bar (Azure DevOps style) -->
+    <!-- Collapse / Expand Toggle -->
     <div class="sidebar-footer">
       <button
         type="button"
