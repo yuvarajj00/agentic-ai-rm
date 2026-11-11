@@ -998,21 +998,24 @@
 }
 
 .clock-right-sidebar.is-expanded {
-  position: sticky;
-  right: 0;
-  top: 0;
-  transform: none;
-  width: 256px;
-  height: 100vh;
-  flex-shrink: 0;
+  position: fixed;
+  right: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 232px;
+  height: auto;
+  max-height: calc(100vh - 32px);
   align-items: stretch;
-  justify-content: space-between;
+  justify-content: flex-start;
   gap: 0;
-  background: rgba(12, 12, 16, 0.92);
+  padding: 8px;
+  border-radius: 14px;
+  background: rgba(12, 12, 16, 0.88);
   backdrop-filter: blur(22px);
   -webkit-backdrop-filter: blur(22px);
-  border-left: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: -12px 0 36px rgba(0, 0, 0, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.65);
+  z-index: 70;
 }
 
 .sidebar-nav-list {
@@ -1025,8 +1028,8 @@
 
 .clock-right-sidebar.is-expanded .sidebar-nav-list {
   align-items: stretch;
-  gap: 4px;
-  padding: 16px 8px;
+  gap: 2px;
+  padding: 0;
   overflow-y: auto;
 }
 
@@ -1054,7 +1057,7 @@
 .clock-right-sidebar.is-expanded .sidebar-nav-btn {
   width: 100%;
   height: auto;
-  min-height: 40px;
+  min-height: 36px;
   border-radius: 8px;
   justify-content: flex-start;
   padding: 0 10px;
@@ -1166,18 +1169,18 @@
 
 .sidebar-divider {
   height: 1px;
-  margin: 6px 4px;
-  background: rgba(255, 255, 255, 0.1);
+  margin: 4px 6px;
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-slider-group {
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  padding: 8px 10px 10px;
+  gap: 6px;
+  padding: 6px 10px 8px;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: transparent;
+  border: none;
 }
 
 .sidebar-slider-header {
@@ -1214,8 +1217,9 @@
 }
 
 .clock-right-sidebar.is-expanded .sidebar-footer {
-  padding: 10px 8px 14px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 4px;
+  padding: 4px 0 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .sidebar-toggle-btn {
@@ -1239,12 +1243,13 @@
 
 .clock-right-sidebar.is-expanded .sidebar-toggle-btn {
   width: 100%;
+  height: 34px;
   justify-content: flex-start;
   padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: none;
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.05);
-  color: #d4d4d8;
+  background: transparent;
+  color: #a1a1aa;
 }
 
 .sidebar-toggle-btn:hover {
@@ -1253,7 +1258,8 @@
 }
 
 .clock-right-sidebar.is-expanded .sidebar-toggle-btn:hover {
-  border-color: rgba(255, 255, 255, 0.22);
+  background: rgba(255, 255, 255, 0.08);
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {
@@ -1270,11 +1276,7 @@
   }
 
   .clock-right-sidebar.is-expanded {
-    position: fixed;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    width: 244px;
-    z-index: 70;
+    right: 8px;
+    width: 224px;
   }
 }
