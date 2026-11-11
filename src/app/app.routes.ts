@@ -31,6 +31,12 @@ export const routes: Routes = [
     title: 'Tech Stack Matrix | Agentic AI Flight Deck'
   },
   {
+    path: 'clock',
+    loadComponent: () =>
+      import('./core/layout/flip-clock/flip-clock.component').then(m => m.FlipClockComponent),
+    title: 'Flip Clock | Agentic AI Flight Deck'
+  },
+  {
     path: 'detailedview/:day',
     loadComponent: () =>
       import('./features/detailed-view/detailed-view.component').then(m => m.DetailedViewComponent),

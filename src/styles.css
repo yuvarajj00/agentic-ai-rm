@@ -340,6 +340,10 @@ body::before {
   transition: opacity 0.25s ease;
 }
 
+body.plain-clock-mode::before {
+  display: none;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 6px;

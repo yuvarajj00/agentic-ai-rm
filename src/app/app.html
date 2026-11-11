@@ -1,7 +1,11 @@
-<app-navbar />
-<main class="app-container">
+@if (!isClockRoute()) {
+  <app-navbar />
+}
+<main [class.app-container]="!isClockRoute()" [class.clock-shell]="isClockRoute()">
   <router-outlet />
 </main>
-<app-footer />
-<app-sprint-calendar />
-<app-appearance-settings />
+@if (!isClockRoute()) {
+  <app-footer />
+  <app-sprint-calendar />
+  <app-appearance-settings />
+}

@@ -8,6 +8,13 @@
   box-sizing: border-box;
 }
 
+.clock-shell {
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+}
+
 @media (max-width: 768px) {
   .app-container {
     padding: 1.5rem 1rem 3rem;

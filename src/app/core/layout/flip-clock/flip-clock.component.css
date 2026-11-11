@@ -1,0 +1,308 @@
+/* ==========================================================================
+   STANDALONE RETRO FLIP CLOCK VIEW (/clock)
+   Clean Plain Background • Faithful Vintage Mechanical Clock Proportions
+   ========================================================================== */
+
+:host {
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+
+.plain-clock-screen {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background: #0d0e11;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.25rem;
+  box-sizing: border-box;
+}
+
+:root[data-theme="light"] .plain-clock-screen {
+  background: #f2f4f7;
+}
+
+/* Ghost controls: unobtrusive at rest, crisp on hover */
+.clock-ghost-controls {
+  position: fixed;
+  top: 1.25rem;
+  right: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.25;
+  transition: opacity 0.2s ease;
+  z-index: 20;
+}
+
+.clock-ghost-controls:hover,
+.clock-ghost-controls:focus-within {
+  opacity: 1;
+}
+
+.ghost-btn {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 0.76rem;
+  font-weight: 500;
+  letter-spacing: 0.03em;
+  color: #cbd5e1;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 6px;
+  padding: 0.38rem 0.72rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+}
+
+.ghost-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.28);
+}
+
+:root[data-theme="light"] .ghost-btn {
+  color: #334155;
+  background: rgba(15, 23, 42, 0.06);
+  border-color: rgba(15, 23, 42, 0.14);
+}
+
+:root[data-theme="light"] .ghost-btn:hover {
+  background: rgba(15, 23, 42, 0.12);
+  color: #0f172a;
+}
+
+/* Main Clock Sculpture Container */
+.clock-assembly {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.65rem;
+}
+
+.clock-drums-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Top Chrome T-Bracket Overhang matching photo */
+.chrome-top-bracket {
+  position: relative;
+  z-index: 12;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  width: 146px;
+  height: 16px;
+  margin-bottom: -6px;
+  margin-right: 170px; /* Centered squarely above the HRS | MIN chrome column */
+  pointer-events: none;
+}
+
+.bracket-finger {
+  flex: 1;
+  height: 8px;
+  background: linear-gradient(180deg, #f8fafc 0%, #9ca3af 55%, #374151 100%);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.55);
+}
+
+.bracket-left {
+  border-radius: 4px 0 0 2px;
+}
+
+.bracket-right {
+  border-radius: 0 4px 2px 0;
+}
+
+.bracket-head {
+  width: 34px;
+  height: 15px;
+  background: linear-gradient(90deg, #374151 0%, #e5e7eb 35%, #ffffff 50%, #9ca3af 70%, #1f2937 100%);
+  border-radius: 3px 3px 0 0;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.65);
+}
+
+/* Three Mechanical Drums Row */
+.clock-drums-row {
+  position: relative;
+  z-index: 4;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Polished Cylindrical Chrome Spine between Hours & Minutes */
+.chrome-center-pillar {
+  position: relative;
+  width: 22px;
+  height: 192px;
+  margin-top: -10px;
+  margin-bottom: -8px;
+  border-radius: 3px;
+  background: linear-gradient(
+    90deg,
+    #181b22 0%,
+    #6b7280 20%,
+    #f3f4f6 42%,
+    #ffffff 50%,
+    #cbd5e1 68%,
+    #4b5563 86%,
+    #111827 100%
+  );
+  box-shadow:
+    0 12px 26px rgba(0, 0, 0, 0.65),
+    inset 0 1px 0 rgba(255, 255, 255, 0.85);
+  z-index: 10;
+}
+
+.pillar-pin {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 30% 30%, #ffffff 0%, #4b5563 85%);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.pin-top { top: 28px; }
+.pin-bottom { bottom: 32px; }
+
+/* Clean gap separating Minutes and Seconds drums */
+.drum-spacer {
+  width: 18px;
+  height: 10px;
+}
+
+/* Matte Solid Walnut Desk Pedestal Block matching photo */
+.walnut-pedestal {
+  position: relative;
+  z-index: 2;
+  margin-top: -6px;
+  width: calc(100% + 26px);
+  height: 30px;
+  border-radius: 3px 3px 5px 5px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(255, 210, 170, 0.03) 0px,
+      rgba(255, 210, 170, 0.03) 2px,
+      transparent 2px,
+      transparent 14px
+    ),
+    linear-gradient(
+      180deg,
+      #784629 0%,
+      #5c331b 24%,
+      #422210 78%,
+      #271307 100%
+    );
+  border-top: 1px solid rgba(255, 215, 180, 0.28);
+  border-bottom: 3px solid #1a0b04;
+  box-shadow:
+    0 22px 42px rgba(0, 0, 0, 0.65),
+    0 8px 14px rgba(0, 0, 0, 0.45);
+}
+
+:root[data-theme="light"] .walnut-pedestal {
+  box-shadow:
+    0 18px 34px rgba(15, 23, 42, 0.22),
+    0 6px 12px rgba(15, 23, 42, 0.14);
+}
+
+/* Minimalist Date Display [dd/mm/yyyy] */
+.clock-date-readout {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif !important;
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  color: #8b93a1;
+  font-variant-numeric: tabular-nums;
+  user-select: none;
+}
+
+:root[data-theme="light"] .clock-date-readout {
+  color: #475569;
+}
+
+/* Responsive Proportions */
+@media (max-width: 720px) {
+  .chrome-top-bracket {
+    width: 108px;
+    height: 12px;
+    margin-right: 118px;
+  }
+
+  .bracket-head {
+    width: 26px;
+    height: 11px;
+  }
+
+  .bracket-finger {
+    height: 6px;
+  }
+
+  .chrome-center-pillar {
+    width: 16px;
+    height: 136px;
+  }
+
+  .drum-spacer {
+    width: 12px;
+  }
+
+  .walnut-pedestal {
+    height: 24px;
+    width: calc(100% + 16px);
+  }
+
+  .clock-date-readout {
+    font-size: 0.98rem;
+    letter-spacing: 0.18em;
+  }
+}
+
+@media (max-width: 480px) {
+  .chrome-top-bracket {
+    width: 88px;
+    height: 10px;
+    margin-right: 94px;
+  }
+
+  .bracket-head {
+    width: 22px;
+    height: 10px;
+  }
+
+  .chrome-center-pillar {
+    width: 13px;
+    height: 112px;
+  }
+
+  .pin-top { top: 18px; }
+  .pin-bottom { bottom: 20px; }
+
+  .drum-spacer {
+    width: 9px;
+  }
+
+  .walnut-pedestal {
+    height: 20px;
+    width: calc(100% + 12px);
+  }
+
+  .clock-date-readout {
+    font-size: 0.88rem;
+    letter-spacing: 0.16em;
+  }
+
+  .clock-ghost-controls {
+    top: 0.85rem;
+    right: 0.9rem;
+    opacity: 0.55;
+  }
+}

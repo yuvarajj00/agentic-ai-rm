@@ -1,0 +1,53 @@
+<div class="plain-clock-screen">
+  <!-- Discreet ghost controls tucked cleanly in corner (stay unobtrusive until hover) -->
+  <div class="clock-ghost-controls">
+    <button type="button" class="ghost-btn" (click)="goBack()" title="Return to Dashboard (Esc)">
+      ← Back
+    </button>
+    <button type="button" class="ghost-btn" (click)="toggle24Hour()" title="Switch 12H / 24H format">
+      {{ is24Hour() ? '24H' : '12H' }}
+    </button>
+  </div>
+
+  <!-- Centered Vintage Mechanical Flip Clock -->
+  <div class="clock-assembly" role="timer" aria-live="off">
+    <div class="clock-drums-wrapper">
+      <!-- Sleek top chrome bracket over central pillar -->
+      <div class="chrome-top-bracket" aria-hidden="true">
+        <div class="bracket-finger bracket-left"></div>
+        <div class="bracket-head"></div>
+        <div class="bracket-finger bracket-right"></div>
+      </div>
+
+      <!-- Hours · Chrome Spine · Minutes · Seconds -->
+      <div class="clock-drums-row">
+        <app-flip-unit
+          [value]="hoursText()"
+          [badge]="amPm()"
+        />
+
+        <div class="chrome-center-pillar" aria-hidden="true">
+          <div class="pillar-pin pin-top"></div>
+          <div class="pillar-pin pin-bottom"></div>
+        </div>
+
+        <app-flip-unit
+          [value]="minutesText()"
+        />
+
+        <div class="drum-spacer" aria-hidden="true"></div>
+
+        <app-flip-unit
+          [value]="secondsText()"
+          [showFanEdge]="true"
+        />
+      </div>
+
+      <!-- Matte solid walnut wooden desk block matching photo -->
+      <div class="walnut-pedestal" aria-hidden="true"></div>
+    </div>
+
+    <!-- Clean minimalist [dd/mm/yyyy] date readout -->
+    <div class="clock-date-readout">{{ dateFormatted() }}</div>
+  </div>
+</div>
